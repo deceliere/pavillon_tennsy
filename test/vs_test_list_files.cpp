@@ -22,6 +22,8 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <SD.h>
+#include "Adafruit_TPA2016.h"
+// #include <cmath>
 
 // Connect SCLK, MISO and MOSI to standard hardware SPI pins.
 #define SCLK 13       // SPI Clock shared with SD card
@@ -104,6 +106,10 @@ uint8_t vs1053SpiRead();
 void vs1053SciWrite(uint8_t addr, uint16_t data);
 uint16_t vs1053SciRead(uint8_t addr);
 void vs1053Interrupt();
+int pot_debounce(int threshold);
+void listFiles(const char *path);
+void playFilesInLoop(const char *path);
+bool hasExtension(const char *filename, const char *extension);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -403,97 +409,125 @@ void printDirectory(File dir, int numTabs) {
 }
 
 
-int volume = 20;
+int8_t  volume = 0;
+int     amp_gain = 20;
+int     volume_pot;
+Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
+const char*   soundfile;
+// float   volFloat;
+// float   logVol;
+
+
+
+
+
+#include <SPI.h>
+#include <SD.h>
+// #include <Adafruit_VS1053.h>
+
+// #define VS1053_RESET_PIN  -1  // Pin de réinitialisation du module VS1053B
+// #define VS1053_CS_PIN     10  // Pin CS du module VS1053B
+// #define VS1053_DCS_PIN    9   // Pin DCS du module VS1053B
+// #define VS1053_DREQ_PIN   3   // Pin DREQ du module VS1053B
+
+// Adafruit_VS1053_FilePlayer musicPlayer =
+    // Adafruit_VS1053_FilePlayer(VS1053_RESET_PIN, VS1053_CS_PIN, VS1053_DCS_PIN, VS1053_DREQ_PIN, CARDCS);
 
 void setup() {
   Serial.begin(9600);
-  // while (!Serial) ; // wait for Arduino Serial Monitor
-  Serial.println("Adafruit vs1053B SDCard Music Player Test");
+  while (!Serial) ; // wait for Arduino Serial Monitor
 
-  if (! vs1053Begin()) { // initialise the music player
-    Serial.println(F("Couldn't find vs1053"));
-    while (1);
-  }
-  Serial.println(F("vs1053 found"));
-
-  SD.begin(SDCS);    // initialise the SD card
-
-  // Set volume for left, right channels. lower numbers is higher volume
-  vs1053SetVolume(20, 20);
-
-  // If XDREQ is on an interrupt pin (any Teensy pin) can do background audio playing
-  vs1053Interrupt();  // XDREQ int
-
-  // Play one file, don't return until complete - i.e. serial "s" or "p" will not interrupt
-  //Serial.println(F("Playing track 001"));
-  //vs1053PlayFullFile("track001.mp3");
-  //  Serial.println(F("Playing track 008"));
-  //  vs1053PlayFullFile("track008.wav");
-  //  Serial.println(F("Playing SDTEST with super long file name.wav"));
-  //  vs1053PlayFullFile("/SDTEST with super long file name.wav");
-
-
-  // Play another file in the background, use interrupt serial "s" or "p" will interrupt
-  // Can only do one buffer feed at a time
-  //Serial.println(F("Playing track 002 - press p to pause, s to stop"));
-  //vs1053StartPlayingFile("track002.mp3");
-  //  Serial.println(F("Playing track 010 - press p to pause, s to stop"));
-  //  vs1053StartPlayingFile("track010.wav");
-
-  Serial.println(F("Playing jurg.mp3 - press p to pause, s to stop"));
-
-  if (playingMusic) {
-    Serial.println("Playback started");
-  }
-  else {
-    Serial.println("Playback failed");
+  // Initialise le module VS1053B
+  if (!vs1053Begin()) {
+    Serial.println("Erreur lors de l'initialisation du module VS1053B");
+    while (1);  // En cas d'erreur, on arrête l'exécution
   }
 
+  // Initialise la communication avec la carte SD
+  if (!SD.begin(SDCS)) {
+    Serial.println("Erreur lors de l'initialisation de la carte SD");
+    while (1);  // En cas d'erreur, on arrête l'exécution
+  }
+
+  Serial.println("Liste des fichiers MP3 :");
+  listFiles("/");
 }
 
 void loop() {
-  // File is playing in the background
-  // if (vs1053Stopped()) {
-  //   Serial.println("Terminated");
-  //   while (1);
-  // }
-  if (Serial.available()) {
-    char c = Serial.read();
+  // Lecture des fichiers en boucle
+  playFilesInLoop("/");
+}
 
-    // if we get an 's' on the serial console, stop!
-    if (c == 's') {
-      vs1053StopPlaying();
-    }
-    if (c == 'r') {
-        // vs1053StartPlayingFile("jurg.mp3");
-        vs1053StartPlayingFile("jurg.mp3");
-    }
+void listFiles(const char *path) {
+  File directory = SD.open(path);
 
-    // if we get an 'p' on the serial console, pause/unpause!
-    if (c == 'p') {
-      if (! vs1053Paused()) {
-        Serial.println("Pause - press p to pause, s to stop");
-        vs1053PausePlaying(true);
-      } else {
-        Serial.println("Resumed - press p to pause, s to stop");
-        vs1053PausePlaying(false);
-      }
-    }
-    if (c == 'q')
-          printDirectory(SD.open("/"), 0);
-    if (c == '-')
-    {
-      volume++;
-        vs1053SetVolume(volume, volume);
-    }
-    if (c == '+')
-    {
-      volume--;
-        vs1053SetVolume(volume, volume);
-    }
+  if (!directory) {
+    return;
   }
 
-  // Serial.println("Loop running");
+  if (!directory.isDirectory()) {
+    directory.close();
+    return;
+  }
 
-  delay(100);
+  File file = directory.openNextFile();
+
+  while (file) {
+    if (file.isDirectory()) {
+      listFiles(file.name());
+    } 
+    else if (!file.isDirectory() && hasExtension(file.name(), ".mp3"))  {
+      Serial.println(file.name());
+    }
+    file = directory.openNextFile();
+  }
+  directory.close();
+}
+
+void playFilesInLoop(const char *path) {
+  File directory = SD.open(path);
+
+  if (!directory) {
+    return;
+  }
+
+  if (!directory.isDirectory()) {
+    directory.close();
+    return;
+  }
+
+  File file = directory.openNextFile();
+
+  while (file) {
+    if (!file.isDirectory() && hasExtension(file.name(), ".mp3")) {
+      Serial.print("Lecture du fichier : ");
+      Serial.println(file.name());
+
+      // Lecture du fichier MP3
+      if (!vs1053PlayFullFile(file.name())) {
+        Serial.println("Erreur lors de la lecture du fichier");
+      }
+
+      // Attente de la fin de la lecture
+      // while (!vs1053Stopped) {
+        // Ajoutez ici d'autres traitements ou fonctionnalités si nécessaire
+      // }
+
+      Serial.println("Lecture terminée");
+    }
+
+    file = directory.openNextFile();
+  }
+
+  directory.close();
+}
+
+bool hasExtension(const char *filename, const char *extension) {
+  const char *ext = strrchr(filename, '.');
+
+  if (ext != nullptr && *filename != '.') {
+    return strcmp(ext, extension) == 0;
+  }
+
+  return false;
 }
