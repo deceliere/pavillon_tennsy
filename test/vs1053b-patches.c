@@ -1,35 +1,15 @@
+/* VS1053b vorbis patch */
 
-/* ID3 */ //WIP
-#define TRACK_TITLE              3
-#define TRACK_ARTIST            33
-#define TRACK_ALBUM             63
+#include "pavillon.h"
 
-/* PINS */
-#define FET 23 // PWM pin > FET
-
-/* OLED */
-#define FONT_NORMAL u8g2_font_helvR08_tr
-
-
-
-struct s_id3{
-    char title[31];
-    char artist[31];
-    char album[31];
-
-} ;
-
-
-void setup_oled(void);
-void loop_oled(s_id3 id3);
-void message_oled( const char *soundfile);
-void loop_oled_scroll(s_id3 id3);
-void LoadUserCode(void);
-void vs1053getTrackInfo(uint8_t offset, char* info);
-
-// void draw(int is_blank);
-// void draw_m0_h_with_extra_blank();
-
+#if 0
+void LoadUserCode(void) {
+  int i;
+  for (i=0;i<CODE_SIZE;i++) {
+    WriteVS10xxRegister(atab[i], dtab[i]);
+  }
+}
+#endif
 
 #define CODE_SIZE 4676
 const unsigned char atab[4676] = { /* Register addresses */

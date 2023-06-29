@@ -24,6 +24,7 @@
 #include <SD.h>
 #include "Adafruit_TPA2016.h"
 #include <cmath>
+#include <limits.h>
 #include "pavillon.h"
 
 // Connect SCLK, MISO and MOSI to standard hardware SPI pins.
@@ -109,6 +110,15 @@ uint16_t vs1053SciRead(uint8_t addr);
 void vs1053Interrupt();
 int pot_debounce(int threshold);
 
+/* TBC pour le Vu metre*/
+ union twobyte {
+   uint16_t word;
+   uint8_t  byte[2];
+ } ;
+
+ #define SCI_AICTRL3 0x0F
+ #define SS_VU_ENABLE 0x0200
+ #define SCI_STATUS 0x01
 
 ////////////////////////////////////////////////////////////////////////////////
 // vs1053B.cpp
@@ -227,7 +237,8 @@ void vs1053FeedBuffer() { //debugging this function causes memory overruns
 
   // Send buffer
   while (vs1053ReadyForData())
-  { int bytesread = currentTrack.read(SoundBuffer, vs1053_DATABUFFERLEN);
+  { 
+    int bytesread = currentTrack.read(SoundBuffer, vs1053_DATABUFFERLEN);
     if (bytesread == 0)           // End of File
     { playingMusic = false;
       currentTrack.close();
@@ -245,6 +256,29 @@ boolean vs1053ReadyForData()
 { return digitalRead(XDREQ);
 }
 
+int8_t vs1053getVUmeter() {
+   if(vs1053SciRead(SCI_STATUS) & SS_VU_ENABLE) {
+     return 1;
+   }
+   return 0;
+  }
+
+  int8_t vs1053setVUmeter(int8_t enable) {
+  uint16_t MP3Status = vs1053SciRead(SCI_STATUS);
+
+  if(enable) {
+    vs1053SciWrite(SCI_STATUS, MP3Status | SS_VU_ENABLE);
+  } else {
+    vs1053SciWrite(SCI_STATUS, MP3Status & ~SS_VU_ENABLE);
+  }
+  return 1; // in future return if not available, if patch not applied.
+}
+
+uint16_t vs1053VuLevel()
+{
+  return (vs1053SciRead(SCI_AICTRL3));
+}
+
 void vs1053PlayData(uint8_t *buffer, uint8_t buffsiz)
 { SPI.beginTransaction(vs1053_DATA_SPI_SETTING);
   digitalWrite(XDCS, LOW);
@@ -252,7 +286,6 @@ void vs1053PlayData(uint8_t *buffer, uint8_t buffsiz)
   for (uint8_t i = 0; i < buffsiz; i++) {
     vs1053SpiWrite(buffer[i]);  // buffsiz = 32
   }
-
   digitalWrite(XDCS, HIGH);
   SPI.endTransaction();
 }
@@ -375,6 +408,78 @@ void vs1053SpiWrite(uint8_t c)
   //*clkportreg &= ~clkpin;   // Make sure clock ends low
 }
 
+
+///////////////////////////////
+void LoadUserCode(void) {
+  int i;
+  for (i=0;i<CODE_SIZE;i++) {
+    vs1053SciWrite(atab[i], dtab[i]);
+  }
+}
+
+
+char* strip_nonalpha_inplace(char *s) {
+   for ( ; *s && !isalpha(*s); ++s)
+     ; // skip leading non-alpha chars
+   if(*s == '\0')
+     return s; // there are no alpha characters
+ 
+   char *tail = s + strlen(s);
+   for ( ; !isalpha(*tail); --tail)
+     ; // skip trailing non-alpha chars
+   *++tail = '\0'; // truncate after the last alpha
+ 
+   return s;
+ }
+ 
+ bool isFnMusic(char* filename) {
+   int8_t len = strlen(filename);
+   bool result;
+   if (  strstr(strlwr(filename + (len - 4)), ".mp3")
+      || strstr(strlwr(filename + (len - 4)), ".aac")
+      || strstr(strlwr(filename + (len - 4)), ".wma")
+      || strstr(strlwr(filename + (len - 4)), ".wav")
+      || strstr(strlwr(filename + (len - 4)), ".fla")
+      || strstr(strlwr(filename + (len - 4)), ".mid")
+     ) {
+     result = true;
+   } else {
+     result = false;
+   }
+   return result;
+ }
+
+
+// static SdFile track;
+
+///////////////////////////////
+void  vs1053getTrackInfo(uint8_t offset, char* info){
+ 
+  const int fileSize = currentTrack.size();
+  //disable interupts
+  noInterrupts();
+
+  //record current file position
+  // uint32_t currentPos = currentTrack.curPosition();
+
+  //skip to end
+  currentTrack.seek(fileSize - 128 + offset);
+
+  // currentTrack.seekEnd((-128 + offset));
+
+  //read 30 bytes of tag informat at -128 + offset
+  currentTrack.read(info, 30);
+  info[30] = 0;
+  Serial.println(info);
+  // infobuffer = strip_nonalpha_inplace(infobuffer);
+  // Serial.println(infobuffer);
+    //seek back to saved file position
+  currentTrack.seek(0);
+
+  //renable interupt
+  interrupts();
+ 
+ }
 /////////////////////////////////////
 // End .cpp
 /////////////////////////////////////
@@ -384,7 +489,9 @@ int8_t  volume = 0;
 int     amp_gain = 20;
 int     volume_pot;
 Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
-const char*   soundfile;
+char*   soundfile;
+s_id3 id3;
+
 
 
 /// File listing helper
@@ -429,7 +536,7 @@ int  check_serial() {
     if (c == 'p') {
       if (vs1053Stopped()) {
         vs1053StartPlayingFile(soundfile);
-        loop_oled(soundfile);
+        loop_oled(id3);
         return 1;
       }
       if (! vs1053Paused()) {
@@ -510,9 +617,8 @@ int  check_serial() {
 
 void setup() {
   Serial.begin(9600);
-  // while (!Serial) ; // wait for Arduino Serial Monitor
-  // Wire.setSDA(18);
-  // Wire.setSCL(19);
+  while (!Serial) ; // wait for Arduino Serial Monitor
+  
   audioamp.begin();
     if (! audioamp.begin()) { // initialise the music player
       Serial.println(F("Couldn't find amp"));
@@ -533,6 +639,7 @@ void setup() {
     Serial.println(F("Couldn't find vs1053"));
     while (1);
   }
+  LoadUserCode(); // patch pour avoir le Vu metre
   soundfile = "jurg_1_test1_2.mp3";
   Serial.println(F("vs1053 found"));
   Serial.print("sounfile is ");
@@ -563,8 +670,8 @@ void setup() {
 
   pinMode(22, INPUT);
   volume_pot = analogRead(22);
-  Serial.println(volume_pot);
-  Serial.println(volume);
+  // Serial.println(volume_pot);
+  // Serial.println(volume);
   setup_oled();
   vs1053StartPlayingFile(soundfile);
   Serial.println(F("Playing - press p to pause, s to stop"));
@@ -573,12 +680,41 @@ void setup() {
   else
     Serial.println("Playback failed");
   pinMode(FET, OUTPUT);
+  vs1053setVUmeter(1);
+  vs1053getTrackInfo(TRACK_TITLE, id3.title);
+  Serial.println(id3.title);
+  vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
+  Serial.println(id3.artist);
+  vs1053getTrackInfo(TRACK_ALBUM, id3.album);
+  Serial.println(id3.album);
+  // artist = vs1053getTrackInfo(TRACK_ARTIST, soundfile);
+  // album = vs1053getTrackInfo(TRACK_ALBUM, soundfile);
 }
 
+
+
+
+int currentMilliVU = millis();
+int previousMilliVU = currentMilliVU;
+static int vu_level = 0;
+
 void loop() {
+
+  currentMilliVU = millis();
+  if (currentMilliVU - previousMilliVU >= 20) {
+    vu_level = vs1053VuLevel();
+    Serial.println(vu_level);
+    previousMilliVU = currentMilliVU;
+  }
+  // for (int i = 0; i < 20; i++)
+  // {
+  //   vu_level += vs1053VuLevel();
+  // }
+  // vu_level /= 20;
   // File is playing in the background
   if (vs1053Stopped()) {
     message_oled("playback stopped");
+    analogWrite(FET, 0);
     Serial.println("Terminated");
     while (!check_serial()) {
     }
@@ -610,12 +746,23 @@ void loop() {
     vs1053StartPlayingFile(soundfile);
   }
   */
-  loop_oled(soundfile);
-  // loop_oled_scroll(soundfile);
-  analogWrite(FET, 120);
-  delay(1000);
-  analogWrite(FET, 10);
-  delay(1000);
+  loop_oled(id3);
+  // loop_oled_scroll(soundfile); // not working
+
+  // Serial.println(vu_level);
+  if (vu_level >= 9000 && vu_level <= 20000)
+    vu_level = map(vu_level, 9000, 20000, 0, 80);
+  if (vu_level >= 20001 && vu_level <= 23000)
+    vu_level = map(vu_level, 20001, 23000, 81, 255);
+  if (vu_level <= 0) vu_level = 0;
+
+  // Serial.println(vu_level);
+  // Serial.println(vs1053getVUmeter());
+
+  analogWrite(FET, vu_level);
+  // delay(1000);
+  // analogWrite(FET, 10);
+  // delay(1000);
 
 }
 
