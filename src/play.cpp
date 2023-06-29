@@ -257,11 +257,11 @@ boolean vs1053ReadyForData()
 }
 
 int8_t vs1053getVUmeter() {
-   if(vs1053SciRead(SCI_STATUS) & SS_VU_ENABLE) {
-     return 1;
-   }
-   return 0;
+  if(vs1053SciRead(SCI_STATUS) & SS_VU_ENABLE) {
+    return 1;
   }
+  return 0;
+}
 
   int8_t vs1053setVUmeter(int8_t enable) {
   uint16_t MP3Status = vs1053SciRead(SCI_STATUS);
@@ -472,7 +472,6 @@ void  vs1053getTrackInfo(uint8_t offset, char* info){
   info[30] = 0;
   Serial.println(info);
   // infobuffer = strip_nonalpha_inplace(infobuffer);
-  // Serial.println(infobuffer);
     //seek back to saved file position
   currentTrack.seek(0);
 
@@ -490,7 +489,7 @@ int     amp_gain = 20;
 int     volume_pot;
 Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
 char*   soundfile;
-s_id3 id3;
+s_id3   id3;
 
 
 
@@ -614,6 +613,16 @@ int  check_serial() {
   return 0;
 }
 
+s_id3  parse_id3(s_id3 id3_tag) {
+
+  vs1053getTrackInfo(TRACK_TITLE, id3_tag.title);
+  // Serial.println(id3.title);
+  vs1053getTrackInfo(TRACK_ARTIST, id3_tag.artist);
+  // Serial.println(id3.artist);
+  vs1053getTrackInfo(TRACK_ALBUM, id3_tag.album);
+  // Serial.println(id3.album);
+  return(id3_tag);
+}
 
 void setup() {
   Serial.begin(9600);
@@ -673,7 +682,9 @@ void setup() {
   // Serial.println(volume_pot);
   // Serial.println(volume);
   setup_oled();
+
   vs1053StartPlayingFile(soundfile);
+  id3 = parse_id3(id3);
   Serial.println(F("Playing - press p to pause, s to stop"));
   if (playingMusic)
     Serial.println("Playback started");
@@ -681,14 +692,6 @@ void setup() {
     Serial.println("Playback failed");
   pinMode(FET, OUTPUT);
   vs1053setVUmeter(1);
-  vs1053getTrackInfo(TRACK_TITLE, id3.title);
-  Serial.println(id3.title);
-  vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
-  Serial.println(id3.artist);
-  vs1053getTrackInfo(TRACK_ALBUM, id3.album);
-  Serial.println(id3.album);
-  // artist = vs1053getTrackInfo(TRACK_ARTIST, soundfile);
-  // album = vs1053getTrackInfo(TRACK_ALBUM, soundfile);
 }
 
 
@@ -701,9 +704,9 @@ static int vu_level = 0;
 void loop() {
 
   currentMilliVU = millis();
-  if (currentMilliVU - previousMilliVU >= 20) {
+  if (currentMilliVU - previousMilliVU >= 50) {
     vu_level = vs1053VuLevel();
-    Serial.println(vu_level);
+    // Serial.println(vu_level);
     previousMilliVU = currentMilliVU;
   }
   // for (int i = 0; i < 20; i++)
@@ -718,7 +721,7 @@ void loop() {
     Serial.println("Terminated");
     while (!check_serial()) {
     }
-      // check_serial();
+      check_serial();
   }
   
   check_serial();
@@ -728,7 +731,7 @@ void loop() {
   // Serial.println(analogRead(22));;
   
   
-  pot_debounce(25);
+  pot_debounce(50);
     // logVol = pow(10, volume_pot / 1023.0) - 1;
     // logVol = (int) map(logVol, 0, 9, 100, 0);
     // read = (int) logVol;
@@ -746,7 +749,6 @@ void loop() {
     vs1053StartPlayingFile(soundfile);
   }
   */
-  loop_oled(id3);
   // loop_oled_scroll(soundfile); // not working
 
   // Serial.println(vu_level);
@@ -758,6 +760,7 @@ void loop() {
 
   // Serial.println(vu_level);
   // Serial.println(vs1053getVUmeter());
+  loop_oled(id3);
 
   analogWrite(FET, vu_level);
   // delay(1000);

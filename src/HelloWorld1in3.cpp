@@ -486,7 +486,7 @@ void loop_oled(s_id3 id3) {
     previousMilli_oled = currentMillli_oled;
   }
 
-  // delay(1000);
+  delay(10);
   // Serial.println(str);
   // Serial.println(count);
 }

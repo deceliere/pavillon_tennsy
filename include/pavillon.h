@@ -20,12 +20,14 @@ struct s_id3{
 } ;
 
 
-void setup_oled(void);
-void loop_oled(s_id3 id3);
-void message_oled( const char *soundfile);
-void loop_oled_scroll(s_id3 id3);
-void LoadUserCode(void);
-void vs1053getTrackInfo(uint8_t offset, char* info);
+void    setup_oled(void);
+void    loop_oled(s_id3 id3);
+void    message_oled( const char *soundfile);
+void    loop_oled_scroll(s_id3 id3);
+void    LoadUserCode(void);
+void    vs1053getTrackInfo(uint8_t offset, char* info);
+s_id3     parse_id3(s_id3 id3_tag);
+
 
 // void draw(int is_blank);
 // void draw_m0_h_with_extra_blank();
