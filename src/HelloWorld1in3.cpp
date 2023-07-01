@@ -468,7 +468,6 @@ void message_oled(const char *message) {
 }
 
 void loop_oled(s_id3 id3) {
-  // Serial.println("coucou loop");
   u8g2.firstPage();
   do {
     u8g2.setFont(FONT_NORMAL);
