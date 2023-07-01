@@ -196,7 +196,7 @@ boolean vs1053StartPlayingFile(const char *trackname)  {
 		Serial.print("Opened from SD: ");
 		Serial.println(trackname);
 	}
-	id3 = parse_id3(id3);
+	parse_id3();
 	playingMusic = true;
 	while (!vs1053ReadyForData() );                                    // wait for ready for data
 	while (playingMusic && vs1053ReadyForData()) vs1053FeedBuffer();   // then send data
@@ -487,6 +487,8 @@ void	vs1053getTrackInfo(uint8_t offset, char *info){
 int8_t  volume = 0;
 int     amp_gain = 20;
 int     volume_pot;
+int		fileCount = 0;
+int		trackNumber = 1;
 Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
 char*   soundfile;
 
@@ -495,7 +497,6 @@ char*   soundfile;
 const char* folderPath = "/"; // Chemin du dossier à la racine
 const int MAX_FILES = 100; // Nombre maximal de fichiers à stocker
 char* fileNames[MAX_FILES]; // Tableau de pointeurs de caractères pour stocker les noms des fichiers
-
 
 
 
@@ -541,7 +542,7 @@ int  check_serial() {
 		if (c == 'p') {
 			if (vs1053Stopped()) {
 				vs1053StartPlayingFile(soundfile);
-				loop_oled(id3);
+				loop_oled(id3, soundfile);
 				return 1;
 			}
 			if (! vs1053Paused()) {
@@ -619,15 +620,16 @@ int  check_serial() {
 	return 0;
 }
 
-s_id3  parse_id3(s_id3 id3_tag) {
-	vs1053getTrackInfo(TRACK_TITLE, id3_tag.title);
-	Serial.println(id3_tag.title);
-	vs1053getTrackInfo(TRACK_ARTIST, id3_tag.artist);
-	Serial.println(id3_tag.artist);
-	vs1053getTrackInfo(TRACK_ALBUM, id3_tag.album);
-	Serial.println(id3_tag.album);
-	return(id3_tag);
+void parse_id3() {
+	vs1053getTrackInfo(TRACK_TITLE, id3.title);
+	Serial.println(id3.title);
+	vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
+	Serial.println(id3.artist);
+	vs1053getTrackInfo(TRACK_ALBUM, id3.album);
+	Serial.println(id3.album);
+	// return(id3_tag);
 }
+
 
 void setup() {
 	Serial.begin(9600);
@@ -659,7 +661,9 @@ void setup() {
 	vs1053setVUmeter(1); // allumer les infos du Vu metre
 	// soundfile = "jurg_1_test1_2.mp3";
 	SD.begin(SDCS);    // initialise the SD card
-	listFiles();
+	fileCount = listFiles();
+	Serial.print(F("fileCount:"));
+	Serial.println(fileCount);
 	Serial.println(F("vs1053 found"));
 	// Serial.print("sounfile is ");
 	// Serial.println(fileNames[0]);
@@ -694,12 +698,12 @@ void setup() {
 	// Serial.println(volume_pot);
 	// Serial.println(volume);
 	setup_oled();
-	soundfile = fileNames[2];
+	soundfile = fileNames[trackNumber];
 
 	Serial.print("soundfile:");
 	Serial.println(soundfile);
-	Serial.print("fileNames[2]:");
-	Serial.println(fileNames[2]);
+	Serial.print("fileNames[trackNumber]:");
+	Serial.println(fileNames[trackNumber]);
 	//  playFilesInLoop("/");
 	// id3 = parse_id3(id3);
 	vs1053StartPlayingFile(soundfile);
@@ -716,9 +720,10 @@ void setup() {
 
 int currentMilliVU = millis();
 int previousMilliVU = currentMilliVU;
-static int vu_level = 0;
+int vu_level = 0;
 
 void loop() {
+
 
 	currentMilliVU = millis();
 	if (currentMilliVU - previousMilliVU >= 50) {
@@ -732,15 +737,45 @@ void loop() {
 	// }
 	// vu_level /= 20;
 	// File is playing in the background
-	if (vs1053Stopped()) {
-		message_oled("playback stopped");
-		analogWrite(FET, 0);
-		Serial.println("Terminated");
-	   while (!check_serial()) {
-		}
-	  check_serial();
-  	}
+
+
+	// if (vs1053Stopped()) {
+	// 	message_oled("playback stopped");
+	// 	analogWrite(FET, 0);
+	// 	Serial.println("Terminated");
+	//    while (!check_serial()) {
+	// 	}
+	//   check_serial();
+  	// }
 	
+
+	if (vs1053Stopped()) {
+		if (trackNumber < fileCount - 1)
+			trackNumber++;
+		else if (trackNumber == fileCount - 1)
+			trackNumber = 0;
+		Serial.print("trackNumber");
+		Serial.println(trackNumber);
+		soundfile = fileNames[trackNumber];
+		vs1053StartPlayingFile(soundfile);
+	}
+
+	// if (vs1053Stopped() && trackNumber < fileCount - 1) {
+	// 	soundfile = fileNames[++trackNumber];
+	// 	Serial.print("trackNumber");
+	// 	Serial.println(trackNumber);
+	// 	vs1053StartPlayingFile(soundfile);
+
+	// }
+	// else if (vs1053Stopped() && trackNumber == fileCount - 1) {
+	// 	trackNumber = 0;
+	// 	Serial.print("trackNumber");
+	// 	Serial.println(trackNumber);
+	// 	soundfile = fileNames[trackNumber];
+	// 	vs1053StartPlayingFile(soundfile);
+	// }
+
+
 	check_serial();
 
 	// Serial.println("Loop running");
@@ -777,7 +812,7 @@ void loop() {
 
 	// Serial.println(vu_level);
 	// Serial.println(vs1053getVUmeter());
-	loop_oled(id3);
+	loop_oled(id3, soundfile);
 
 	analogWrite(FET, vu_level);
 	// delay(1000);
@@ -818,10 +853,10 @@ int compareNames(const void* a, const void* b) {
   return strcmp(*(const char**)a, *(const char**)b);
 }
 
-void listFiles() {
+int listFiles() {
 	File root = SD.open(folderPath);
+	int count = 0;
 	if (root) {
-		int count = 0;
 		while (true) {
 			File entry = root.openNextFile();
 			if (!entry) {
@@ -852,7 +887,7 @@ void listFiles() {
 	} else {
 		Serial.println("Impossible d'ouvrir le dossier.");
 	}
-
+	return (count);
 }
 
 
@@ -881,10 +916,10 @@ void playFilesInLoop(const char *path) {
 	  if (!vs1053StartPlayingFile(currentTrack.name())) {
 		Serial.println("Erreur lors de la lecture du fichier");
 	  }
-		id3 = parse_id3(id3);
+		parse_id3();
 	//   Attente de la fin de la lecture
 	  while (!vs1053Stopped) {
-		loop_oled(id3);
+		loop_oled(id3, soundfile);
 		// Ajoutez ici d'autres traitements ou fonctionnalités si nécessaire
 	  }
 

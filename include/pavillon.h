@@ -21,15 +21,15 @@ struct s_id3{
 
 
 void	setup_oled(void);
-void	loop_oled(s_id3 id3);
-void	message_oled( const char *soundfile);
+void	loop_oled(s_id3 id3, const char *soundfile);
+void	message_oled(const char *soundfile);
 void	loop_oled_scroll(s_id3 id3);
 void	LoadUserCode(void);
 void	vs1053getTrackInfo(uint8_t offset, char* info);
-s_id3	parse_id3(s_id3 id3_tag);
-void	listFiles();
-void playFilesInLoop(const char *path);
-bool hasExtension(const char *filename, const char *extension);
+void	parse_id3(void);
+int		listFiles();
+void 	playFilesInLoop(const char *path);
+bool 	hasExtension(const char *filename, const char *extension);
 
 
 

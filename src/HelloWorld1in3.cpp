@@ -467,14 +467,23 @@ void message_oled(const char *message) {
   } while ( u8g2.nextPage() );
 }
 
-void loop_oled(s_id3 id3) {
+void loop_oled(s_id3 id3, const char *soundfile) {
   u8g2.firstPage();
   do {
     u8g2.setFont(FONT_NORMAL);
-    u8g2.drawStr(0, 8, id3.title);
-    u8g2.drawStr(0, 20,id3.artist);
-    u8g2.drawStr(0, 33,id3.album);
-    u8g2.drawStr(0, 53,itoa(count, str, 10));
+    if (!isAlphaNumeric(id3.title[0]))
+      u8g2.drawStr(0, 8, soundfile);
+    else
+      u8g2.drawStr(0, 8, id3.title);
+    if (!isAlphaNumeric(id3.artist[0]))
+      u8g2.drawStr(0, 20, "n/a");
+    else
+      u8g2.drawStr(0, 20, id3.artist);
+    if (!isAlphaNumeric(id3.album[0]))
+      u8g2.drawStr(0, 33, "n/a");
+    else
+      u8g2.drawStr(0, 33, id3.album);
+    u8g2.drawStr(0, 53, itoa(count, str, 10));
   } while ( u8g2.nextPage() );
   
   currentMillli_oled = millis();
@@ -485,7 +494,7 @@ void loop_oled(s_id3 id3) {
     previousMilli_oled = currentMillli_oled;
   }
 
-  delay(10);
+  // delay(10);
   // Serial.println(str);
   // Serial.println(count);
 }
