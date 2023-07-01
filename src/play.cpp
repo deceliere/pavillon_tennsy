@@ -22,6 +22,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 #include <SD.h>
+#include <cctype>
 #include "Adafruit_TPA2016.h"
 #include <cmath>
 #include <limits.h>
@@ -117,9 +118,9 @@ int pot_debounce(int threshold);
 	 uint8_t  byte[2];
  } ;
 
- #define SCI_AICTRL3 0x0F
- #define SS_VU_ENABLE 0x0200
- #define SCI_STATUS 0x01
+ #define SCI_AICTRL3 0x0F // address du Vu metre
+ #define SS_VU_ENABLE 0x0200 // address pour activer le Vu metre
+ #define SCI_STATUS 0x01 // adress du status du Vu metre
 
 ////////////////////////////////////////////////////////////////////////////////
 // vs1053B.cpp
@@ -187,18 +188,31 @@ boolean vs1053Stopped()
 boolean vs1053StartPlayingFile(const char *trackname)  {
 	Serial.println("vs1053StartPlayingFile");
 	currentTrack = SD.open(trackname);
+	message_oled("soundfile is");
+	delay(500);
+	message_oled(currentTrack.name());
+	delay(500);
 	if (!currentTrack) {
+		message_oled("Failed to open file");
+		delay(500);
 		Serial.print("Failed to open from SD: ");
 		Serial.println(trackname);
 		return false;
 	}
 	else {
+		message_oled(strcat("opened: ", trackname));
+		delay(500);
 		Serial.print("Opened from SD: ");
 		Serial.println(trackname);
 	}
 	parse_id3();
 	playingMusic = true;
-	while (!vs1053ReadyForData() );                                    // wait for ready for data
+	while (!vs1053ReadyForData()) {                                    // wait for ready for data
+		message_oled("waiting for data...");
+		// delay(1000);
+	}
+	message_oled("data ready");
+	delay(1000);
 	while (playingMusic && vs1053ReadyForData()) vs1053FeedBuffer();   // then send data
 	return true;
 }
@@ -345,9 +359,9 @@ uint8_t vs1053Begin()
 	pinMode(XDREQ, INPUT);
 
 	SPI.begin();
-	//  SPI.setDataMode(SPI_MODE0);
-	//  SPI.setBitOrder(MSBFIRST);
-	//  SPI.setClockDivider(SPI_CLOCK_DIV128);
+	 SPI.setDataMode(SPI_MODE0); // TBC pour test 23.7.1
+	 SPI.setBitOrder(MSBFIRST); // TBC pour test 23.7.1
+	 SPI.setClockDivider(SPI_CLOCK_DIV128); // TBC pour test 23.7.1
 
 	vs1053Reset();
 
@@ -633,17 +647,29 @@ void parse_id3() {
 
 void setup() {
 	Serial.begin(9600);
-	while (!Serial) ; // wait for Arduino Serial Monitor
-	
+	// while (!Serial) ; // wait for Arduino Serial Monitor
 	// listFiles();
-
+	// vs1053Reset(); // TBC pour tenter de regler le probleme de l-allumage qui plante apres debranche	
+	pinMode(FET, OUTPUT);
+	pinMode(BUTTON_PREV, INPUT_PULLUP);
+	pinMode(BUTTON_PLAY, INPUT_PULLUP);
+	pinMode(BUTTON_NEXT, INPUT_PULLUP);
+	while(!setup_oled());
+	delay(500);
+	vs1053DisableCard();
+	message_oled("vs1053 should be disabled");
+	delay(500);	
 	audioamp.begin();
-		if (! audioamp.begin()) { // initialise the music player
-			Serial.println(F("Couldn't find amp"));
+		if (!audioamp.begin()) { // initialise the music player
+			// Serial.println(F("Couldn't find amp"));
 			while (1);
 		}
 		else
-			Serial.println(F("Amp found"));
+		{
+			message_oled("audio amp ok");
+			delay(500);
+		}
+			// Serial.println(F("Amp found"));
 	audioamp.setAGCCompression(TPA2016_AGC_OFF);
 	audioamp.setReleaseControl(0);
 	audioamp.setAttackControl(0);
@@ -653,15 +679,27 @@ void setup() {
 
 	Serial.println("Adafruit vs1053B SDCard Music Player Test");
 
-	if (! vs1053Begin()) { // initialise the music player
+	if (!vs1053Begin()) { // initialise the music player
 		Serial.println(F("Couldn't find vs1053"));
+		message_oled("vs1053 not found");
 		while (1);
 	}
+	else
+		message_oled("vs1053 found");
+	delay(500);
 	LoadUserCode(); // patch pour avoir le Vu metre
 	vs1053setVUmeter(1); // allumer les infos du Vu metre
 	// soundfile = "jurg_1_test1_2.mp3";
-	SD.begin(SDCS);    // initialise the SD card
+	while(!SD.begin(SDCS)) {
+		message_oled("SD card not found");
+	}    // initialise the SD card
+	message_oled("SD card found");
+	delay(500);
 	fileCount = listFiles();
+	char buf[2];
+	itoa(fileCount, buf, 10);
+	message_oled(strcat("filecount= ", buf));
+	delay(500);
 	Serial.print(F("fileCount:"));
 	Serial.println(fileCount);
 	Serial.println(F("vs1053 found"));
@@ -670,9 +708,14 @@ void setup() {
 
 	// Set volume for left, right channels. lower numbers is higher volume
 	vs1053SetVolume(volume, volume);
+	message_oled("set volume ok");
+	delay(500);
+	// delay(500);
 
 	// If XDREQ is on an interrupt pin (any Teensy pin) can do background audio playing
 	vs1053Interrupt();  // XDREQ int
+	message_oled("set vs1053 Interrupt OK");
+	delay(1000);
 
 	// Play one file, don't return until complete - i.e. serial "s" or "p" will not interrupt
 	// Serial.println(F("jurg"));
@@ -697,9 +740,7 @@ void setup() {
 	volume_pot = analogRead(22);
 	// Serial.println(volume_pot);
 	// Serial.println(volume);
-	setup_oled();
 	soundfile = fileNames[trackNumber];
-
 	Serial.print("soundfile:");
 	Serial.println(soundfile);
 	Serial.print("fileNames[trackNumber]:");
@@ -707,12 +748,13 @@ void setup() {
 	//  playFilesInLoop("/");
 	// id3 = parse_id3(id3);
 	vs1053StartPlayingFile(soundfile);
+	message_oled("start playingfile OK");
+	delay(500);
 	Serial.println(F("Playing - press p to pause, s to stop"));
 	if (playingMusic)
 		Serial.println("Playback started");
 	else
 		Serial.println("Playback failed");
-	pinMode(FET, OUTPUT);
 }
 
 
@@ -721,6 +763,9 @@ void setup() {
 int currentMilliVU = millis();
 int previousMilliVU = currentMilliVU;
 int vu_level = 0;
+int	currentMilliPrev = millis();
+int	previousMilliPrec = currentMilliPrev;
+
 
 void loop() {
 
@@ -759,6 +804,13 @@ void loop() {
 		soundfile = fileNames[trackNumber];
 		vs1053StartPlayingFile(soundfile);
 	}
+
+	if (!digitalRead(BUTTON_PREV)) 
+		Serial.println("coucou prev");
+	if (!digitalRead(BUTTON_PLAY))
+		Serial.println("coucou play");
+	if (!digitalRead(BUTTON_NEXT))
+		Serial.println("coucou next");
 
 	// if (vs1053Stopped() && trackNumber < fileCount - 1) {
 	// 	soundfile = fileNames[++trackNumber];

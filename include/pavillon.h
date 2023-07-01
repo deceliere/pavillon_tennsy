@@ -6,6 +6,9 @@
 
 /* PINS */
 #define FET 23 // PWM pin > FET
+#define BUTTON_PREV 0
+#define BUTTON_PLAY 1
+#define BUTTON_NEXT 2
 
 /* OLED */
 #define FONT_NORMAL u8g2_font_helvR08_tr
@@ -20,7 +23,7 @@ struct s_id3{
 } ;
 
 
-void	setup_oled(void);
+bool	setup_oled(void);
 void	loop_oled(s_id3 id3, const char *soundfile);
 void	message_oled(const char *soundfile);
 void	loop_oled_scroll(s_id3 id3);

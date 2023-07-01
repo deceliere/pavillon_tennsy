@@ -416,7 +416,7 @@ int previousMilli_oled;
 // u8g2_uint_t width;			// pixel width of the scrolling text (must be lesser than 128 unless U8G2_16BIT is defined
 
 
-void setup_oled(void) {
+bool setup_oled(void) {
   Serial.begin(115200);
   // while(!Serial) ;
 
@@ -448,12 +448,16 @@ void setup_oled(void) {
   // SPI1.setMOSI(26);
   // SPI1.setSCK(27);
 
-  if (!u8g2.begin())
-    Serial.println("oled not found");
-  else 
-    Serial.println("oled init ok  ");
   currentMillli_oled = millis();
   previousMilli_oled = currentMillli_oled;
+  if (!u8g2.begin())
+    return(false);
+    // Serial.println("oled not found");
+  else {
+		message_oled("oled setup ok");
+    return(true);
+  }
+    // Serial.println("oled init ok  ");
 
 }
 
