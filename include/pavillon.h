@@ -1,3 +1,56 @@
+/* from vs1053_SdFat.h */
+/* Arduino Library for VS10xx shield*/
+
+#define SCI_MODE              0x00
+#define SCI_STATUS            0x01
+#define SCI_BASS              0x02
+#define SCI_CLOCKF            0x03
+#define SCI_DECODE_TIME       0x04
+#define SCI_AUDATA            0x05
+#define SCI_WRAM              0x06
+#define SCI_WRAMADDR          0x07
+#define SCI_HDAT0             0x08
+#define SCI_HDAT1             0x09
+#define SCI_AIADDR            0x0A
+#define SCI_VOL               0x0B
+#define SCI_AICTRL0           0x0C
+#define SCI_AICTRL1           0x0D
+#define SCI_AICTRL2           0x0E
+#define SCI_AICTRL3           0x0F
+ //------------------------------------------------------------------------------
+#define SM_DIFF             0x0001
+#define SM_LAYER12          0x0002
+#define SM_RESET            0x0004
+#define SM_CANCEL           0x0008
+#define SM_EARSPEAKER_LO    0x0010
+#define SM_TESTS            0x0020
+#define SM_STREAM           0x0040
+#define SM_EARSPEAKER_HI    0x0080
+#define SM_DACT             0x0100
+#define SM_SDIORD           0x0200
+#define SM_SDISHARE         0x0400
+#define SM_SDINEW           0x0800
+#define SM_ADPCM            0x1000
+#define SM_PAUSE            0x2000  // note: Only availble with patch. This only quickly pauses the VS's internal buffer, when canceling quickly. It won't unpause.
+#define SM_LINE1            0x4000
+#define SM_CLK_RANGE        0x8000
+ 
+// configure Line1 as single ended, otherwise as differential 10x gain for microphones.
+#define VS_LINE1_MODE
+//------------------------------------------------------------------------------
+#define SS_VU_ENABLE        0x0200
+//------------------------------------------------------------------------------
+#define para_chipID_0       0x1E00
+#define para_chipID_1       0x1E01
+#define para_version        0x1E02
+#define para_config1        0x1E03
+#define para_playSpeed      0x1E04
+#define para_byteRate       0x1E05
+#define para_endFillByte    0x1E06
+#define para_MonoOutput     0x1E09
+#define para_positionMsec_0 0x1E27
+#define para_positionMsec_1 0x1E28
+#define para_resync         0x1E29
 
 /* ID3 */ //WIP
 #define TRACK_TITLE              3
