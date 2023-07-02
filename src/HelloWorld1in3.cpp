@@ -405,7 +405,7 @@ U8G2_SH1107_64X128_1_4W_SW_SPI u8g2(U8G2_R1, /* clock=*/ 27, /* data=*/ 26, /* c
 
 // End of constructor list
 
-static u_int16_t count = 0;
+u_int32_t count = 0;
 char str[33];
 int currentMillli_oled;
 int previousMilli_oled;
@@ -491,9 +491,9 @@ void loop_oled(s_id3 id3, const char *soundfile) {
   } while ( u8g2.nextPage() );
   
   currentMillli_oled = millis();
-  if(currentMillli_oled - previousMilli_oled > 1000)
+  if(currentMillli_oled - previousMilli_oled > 100)
   {
-    count++;
+    count = vs1053getPosition();
     // Serial.println(count);
     previousMilli_oled = currentMillli_oled;
   }

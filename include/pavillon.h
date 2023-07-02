@@ -62,6 +62,8 @@
 #define BUTTON_PREV 0
 #define BUTTON_PLAY 1
 #define BUTTON_NEXT 2
+#define DEBOUNCE 	20
+
 
 /* OLED */
 #define FONT_NORMAL u8g2_font_helvR08_tr
@@ -76,22 +78,35 @@ struct s_id3{
 } ;
 
 
+/* VS1053 */
+void 		vs1053FeedBuffer();
+boolean 	vs1053StartPlayingFile(const char *trackname);
+boolean 	vs1053ReadyForData();
+void 		vs1053PlayData(uint8_t *buffer, uint8_t buffsiz);
+void 		vs1053SetVolume(uint8_t left, uint8_t right);
+uint16_t 	vs1053DecodeTime();
+void 		vs1053SoftReset();
+void 		vs1053Reset();
+uint8_t 	vs1053Begin();
+void 		vs1053SpiWrite(uint8_t c);
+uint8_t 	vs1053SpiRead();
+void 		vs1053SciWrite(uint8_t addr, uint16_t data);
+uint16_t 	vs1053SciRead(uint8_t addr);
+void 		vs1053Interrupt();
+int 		pot_debounce(int threshold);
+uint32_t 	vs1053getPosition();
+void		LoadUserCode(void);
+void		vs1053getTrackInfo(uint8_t offset, char* info);
+int			listFiles();
+void		parse_id3(void);
+// void 		playFilesInLoop(const char *path);
+bool 		hasExtension(const char *filename, const char *extension);
+
+/* OLD */
 bool	setup_oled(void);
 void	loop_oled(s_id3 id3, const char *soundfile);
 void	message_oled(const char *soundfile);
 void	loop_oled_scroll(s_id3 id3);
-void	LoadUserCode(void);
-void	vs1053getTrackInfo(uint8_t offset, char* info);
-void	parse_id3(void);
-int		listFiles();
-void 	playFilesInLoop(const char *path);
-bool 	hasExtension(const char *filename, const char *extension);
-
-
-
-
-// void draw(int is_blank);
-// void draw_m0_h_with_extra_blank();
 
 
 #define CODE_SIZE 4676
