@@ -19,13 +19,6 @@
 	BSD license, all text above must be included in any redistribution
  ****************************************************/
 
-#include <Arduino.h>
-#include <SPI.h>
-#include <SD.h>
-#include <cctype>
-#include "Adafruit_TPA2016.h"
-#include <cmath>
-#include <limits.h>
 #include "pavillon.h"
 
 // Connect SCLK, MISO and MOSI to standard hardware SPI pins.
@@ -681,12 +674,21 @@ int check_serial()
 
 void parse_id3()
 {
+	// char *display;
+	
+	// display = new char[12];
 	vs1053getTrackInfo(TRACK_TITLE, id3.title);
-	Serial.println(id3.title);
+	// Serial.println(id3.title);
 	vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
-	Serial.println(id3.artist);
+	// Serial.println(id3.artist);
 	vs1053getTrackInfo(TRACK_ALBUM, id3.album);
-	Serial.println(id3.album);
+	// Serial.println(id3.album);
+	itoa(trackNumber + 1, id3.fileCurrent, 10); // pour que la piste 0 s affiche comme etant la piste 1
+	strcpy(id3.trackDisplay, id3.fileCurrent);
+	strcat(id3.trackDisplay, " / ");
+	strcat(id3.trackDisplay, id3.fileTotal);
+	// strcpy(id3.trackDisplay, display);
+	// delete[] display;
 	// return(id3_tag);
 }
 
@@ -760,26 +762,18 @@ void buttonCheck()
 void setup()
 {
 	Serial.begin(9600);
-	while (!Serial)
-		; // wait for Arduino Serial Monitor
-	// listFiles();
-	// vs1053Reset(); // TBC pour tenter de regler le probleme de l-allumage qui plante apres debranche
+	// while (!Serial); // wait for Arduino Serial Monitor
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP);
 	pinMode(BUTTON_NEXT, INPUT_PULLUP);
-	while (!setup_oled())
-		;
-	delay(500);
-	// vs1053DisableCard();
-	message_oled("vs1053 should be disabled");
+	while (!setup_oled());
 	delay(500);
 	audioamp.begin();
 	if (!audioamp.begin())
 	{ // initialise the music player
 		// Serial.println(F("Couldn't find amp"));
-		while (1)
-			;
+		while (1);
 	}
 	else
 	{
@@ -793,14 +787,12 @@ void setup()
 	audioamp.setHoldControl(0);
 	audioamp.setLimitLevelOff();
 	audioamp.setGain(amp_gain);
-
 	// if (vs1053vs_init()) { // initialise the music player
 	if (!vs1053Begin())
 	{ // initialise the music player
 		Serial.println(F("Couldn't find vs1053"));
 		message_oled("vs1053 not found");
-		while (1)
-			;
+		while (1);
 	}
 	else
 		message_oled("vs1053 found");
@@ -824,9 +816,8 @@ void setup()
 		delay(500);
 	}
 	fileCount = listFiles();
-	char buf[2];
-	itoa(fileCount, buf, 10);
-	message_oled(strcat("filecount= ", buf));
+	itoa(fileCount, id3.fileTotal, 10);
+	message_oled(strcat("filecount= ", id3.fileTotal));
 	delay(500);
 	Serial.print(F("fileCount:"));
 	Serial.println(fileCount);
@@ -842,8 +833,8 @@ void setup()
 
 	// If XDREQ is on an interrupt pin (any Teensy pin) can do background audio playing
 	vs1053Interrupt(); // XDREQ int
-	message_oled("set vs1053 Interrupt OK");
-	delay(800);
+	// message_oled("set vs1053 Interrupt OK");
+	// delay(800);
 
 	// Play one file, don't return until complete - i.e. serial "s" or "p" will not interrupt
 	// Serial.println(F("jurg"));
@@ -871,15 +862,15 @@ void setup()
 	// Serial.print("SCI mode after change 0x");
 	// Serial.println(vs1053SciRead(0x00), HEX);
 
-	message_oled("start playingfile OK");
+	// message_oled("start playingfile OK");
 	pinMode(22, INPUT);
 	volume_pot = analogRead(22);
 	// Serial.println(volume_pot);
 	// Serial.println(volume);
 	soundfile = fileNames[trackNumber];
-	Serial.print("soundfile:");
-	Serial.println(soundfile);
-	Serial.print("fileNames[trackNumber]:");
+	// Serial.print("soundfile:");
+	// Serial.println(soundfile);
+	Serial.print("fileNames[trackNumber]: ");
 	Serial.println(fileNames[trackNumber]);
 	//  playFilesInLoop("/");
 	// id3 = parse_id3(id3);
@@ -1081,53 +1072,53 @@ int listFiles()
 	return (count);
 }
 
-void playFilesInLoop(const char *path)
-{
-	File directory = SD.open(path);
+// void playFilesInLoop(const char *path)
+// {
+// 	File directory = SD.open(path);
 
-	if (!directory)
-	{
-		return;
-	}
+// 	if (!directory)
+// 	{
+// 		return;
+// 	}
 
-	if (!directory.isDirectory())
-	{
-		directory.close();
-		return;
-	}
+// 	if (!directory.isDirectory())
+// 	{
+// 		directory.close();
+// 		return;
+// 	}
 
-	currentTrack = directory.openNextFile();
-	Serial.println("current track@854");
-	Serial.println(currentTrack);
+// 	currentTrack = directory.openNextFile();
+// 	Serial.println("current track@854");
+// 	Serial.println(currentTrack);
 
-	while (currentTrack)
-	{
-		if (!currentTrack.isDirectory() && hasExtension(currentTrack.name(), ".mp3"))
-		{
-			Serial.print("Lecture du fichier : ");
-			Serial.println(currentTrack.name());
+// 	while (currentTrack)
+// 	{
+// 		if (!currentTrack.isDirectory() && hasExtension(currentTrack.name(), ".mp3"))
+// 		{
+// 			Serial.print("Lecture du fichier : ");
+// 			Serial.println(currentTrack.name());
 
-			// Lecture du fichier MP3
-			if (!vs1053StartPlayingFile(currentTrack.name()))
-			{
-				Serial.println("Erreur lors de la lecture du fichier");
-			}
-			parse_id3();
-			//   Attente de la fin de la lecture
-			while (!vs1053Stopped)
-			{
-				loop_oled(id3, soundfile);
-				// Ajoutez ici d'autres traitements ou fonctionnalités si nécessaire
-			}
+// 			// Lecture du fichier MP3
+// 			if (!vs1053StartPlayingFile(currentTrack.name()))
+// 			{
+// 				Serial.println("Erreur lors de la lecture du fichier");
+// 			}
+// 			parse_id3();
+// 			//   Attente de la fin de la lecture
+// 			while (!vs1053Stopped)
+// 			{
+// 				loop_oled(id3, soundfile);
+// 				// Ajoutez ici d'autres traitements ou fonctionnalités si nécessaire
+// 			}
 
-			Serial.println("Lecture terminée");
-		}
+// 			Serial.println("Lecture terminée");
+// 		}
 
-		currentTrack = directory.openNextFile();
-	}
+// 		currentTrack = directory.openNextFile();
+// 	}
 
-	directory.close();
-}
+// 	directory.close();
+// }
 
 bool hasExtension(const char *filename, const char *extension)
 {

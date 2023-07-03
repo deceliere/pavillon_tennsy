@@ -51,7 +51,7 @@
    
 */
 
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <U8g2lib.h>
 #include "pavillon.h"
 
@@ -406,9 +406,10 @@ U8G2_SH1107_64X128_1_4W_SW_SPI u8g2(U8G2_R1, /* clock=*/ 27, /* data=*/ 26, /* c
 // End of constructor list
 
 u_int32_t count = 0;
-char str[33];
-int currentMillli_oled;
-int previousMilli_oled;
+char      str[33];
+int       currentMillli_oled;
+int       previousMilli_oled;
+
 
 
 /* pour le scrolling - WIP */
@@ -423,7 +424,7 @@ bool setup_oled(void) {
  
   
   // u8g2.setBusClock(400000);
-  /* U8g2 Project: SSD1306 Test Board */
+  /* U8g2 Project: SSD1306 Test Board */  
   //pinMode(10, OUTPUT);
   //pinMode(9, OUTPUT);
   //digitalWrite(10, 0);
@@ -450,6 +451,7 @@ bool setup_oled(void) {
 
   currentMillli_oled = millis();
   previousMilli_oled = currentMillli_oled;
+  
   if (!u8g2.begin())
     return(false);
     // Serial.println("oled not found");
@@ -458,7 +460,6 @@ bool setup_oled(void) {
     return(true);
   }
     // Serial.println("oled init ok  ");
-
 }
 
 void message_oled(const char *message) {
@@ -487,7 +488,12 @@ void loop_oled(s_id3 id3, const char *soundfile) {
       u8g2.drawStr(0, 33, "n/a");
     else
       u8g2.drawStr(0, 33, id3.album);
+    // trackDisplay = strcat(id3.fileCurrent, " / ");
     u8g2.drawStr(0, 53, itoa(count, str, 10));
+    // strcat(trackDisplay, id3.fileCurrent);
+    // strcat(trackDisplay, " / ");
+    // strcat(trackDisplay, id3.fileTotal);
+    u8g2.drawStr(98, 53, id3.trackDisplay);
   } while ( u8g2.nextPage() );
   
   currentMillli_oled = millis();
@@ -501,6 +507,7 @@ void loop_oled(s_id3 id3, const char *soundfile) {
   // delay(10);
   // Serial.println(str);
   // Serial.println(count);
+
 }
 
 

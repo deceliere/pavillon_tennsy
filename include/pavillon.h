@@ -69,12 +69,23 @@
 #define FONT_NORMAL u8g2_font_helvR08_tr
 
 
+#include <Arduino.h>
+#include <SPI.h>
+#include <SD.h>
+#include <cctype>
+#include "Adafruit_TPA2016.h"
+#include <cmath>
+#include <limits.h>
+#include <strings.h>
+
 
 struct s_id3{
 	char title[31];
-	char artist[31];
-	char album[31];
-
+	char 	artist[31];
+	char 	album[31];
+	char	fileTotal[4];
+	char	fileCurrent[4];
+	char  	trackDisplay[12];
 } ;
 
 
@@ -102,11 +113,17 @@ void		parse_id3(void);
 // void 		playFilesInLoop(const char *path);
 bool 		hasExtension(const char *filename, const char *extension);
 
+/* libft */
+void	ft_bzero(void *s, size_t n);
+
 /* OLD */
 bool	setup_oled(void);
 void	loop_oled(s_id3 id3, const char *soundfile);
 void	message_oled(const char *soundfile);
 void	loop_oled_scroll(s_id3 id3);
+
+
+
 
 
 #define CODE_SIZE 4676
