@@ -490,7 +490,7 @@ void loop_oled(s_id3 id3, const char *soundfile) {
       u8g2.drawStr(0, 33, id3.album);
     u8g2.drawStr(0, 53, itoa(count, str, 10));
 
-    // u8g2.drawStr(98, 53, id3.trackDisplay);
+    u8g2.drawStr(98, 53, id3.trackDisplay);
   } while ( u8g2.nextPage() );
   
   currentMillli_oled = millis();

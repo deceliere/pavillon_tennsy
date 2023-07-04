@@ -689,17 +689,16 @@ void parse_id3()
 	vs1053getTrackInfo(TRACK_ALBUM, id3.album);
 	// Serial.println(id3.album);
 	
-	// itoa(trackNumber + 1, id3.fileCurrent, 10); // + 1 pour que la piste 0 s affiche comme etant la piste 1
-	// strcpy(id3.trackDisplay, id3.fileCurrent);
-	// strcat(id3.trackDisplay, " / ");
-	// strcat(id3.trackDisplay, id3.fileTotal);
+	itoa(trackNumber + 1, id3.fileCurrent, 10); // + 1 pour que la piste 0 s affiche comme etant la piste 1
+	strcpy(id3.trackDisplay, id3.fileCurrent);
+	strcat(id3.trackDisplay, " / ");
+	strcat(id3.trackDisplay, id3.fileTotal);
 
-	// Serial.print("trackDisplay=");
-	// Serial.println(id3.trackDisplay);
+	Serial.print("trackDisplay=");
+	Serial.println(id3.trackDisplay);
 
 	// strcpy(id3.trackDisplay, display);
 	// delete[] display;
-	// return(id3_tag);
 }
 
 		// trackNumber--;
@@ -780,14 +779,7 @@ void buttonCheck()
 			{
 				previousMillis = millis();
 				playPrevious();
-				// trackNumber--;
-				// if (trackNumber < 0)
-				// 	trackNumber = fileCount - 1; 
-				// vs1053StopPlaying();
-				// soundfile = fileNames[trackNumber];
-				// vs1053StartPlayingFile(soundfile);
 				Serial.println("prevButton pushed");
-				
 			}
 		}
 	}
@@ -806,7 +798,6 @@ void buttonCheck()
 				nextMillis = millis();
 				playNext();
 				Serial.println("nextButton pushed");
-				
 			}
 		}
 	}
