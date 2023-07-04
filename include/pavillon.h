@@ -121,6 +121,7 @@ void dcs_low();
 void dcs_high();
 uint16_t vs1053Mp3ReadWRAM(uint16_t addressbyte);
 void vs1053flush_cancel(flush_m mode);
+void vs1053resetPosition();
 
 
 

@@ -155,6 +155,7 @@ void vs1053StopPlaying()
 	playingMusic = false;
 	currentTrack.close();
 	vs1053flush_cancel(none);
+	vs1053resetPosition();
 }
 
 ///////////////////////////////////////
@@ -401,13 +402,9 @@ int8_t vs1053setVUmeter(int8_t enable)
 	uint16_t MP3Status = vs1053SciRead(SCI_STATUS);
 
 	if (enable)
-	{
 		vs1053SciWrite(SCI_STATUS, MP3Status | SS_VU_ENABLE);
-	}
 	else
-	{
 		vs1053SciWrite(SCI_STATUS, MP3Status & ~SS_VU_ENABLE);
-	}
 	return 1; // in future return if not available, if patch not applied.
 }
 
@@ -419,6 +416,14 @@ uint16_t vs1053VuLevel()
 uint32_t vs1053getPosition()
 {
 	return (vs1053SciRead(SCI_DECODE_TIME));
+}
+
+void vs1053resetPosition()
+{
+	vs1053SciWrite(SCI_DECODE_TIME, 0);
+	delayNanoseconds(10);
+	vs1053SciWrite(SCI_DECODE_TIME, 0);
+	// return (vs1053SciRead(SCI_DECODE_TIME));
 }
 
 void vs1053PlayData(uint8_t *buffer, uint8_t buffsiz)
@@ -925,8 +930,8 @@ void buttonCheck()
 void setup()
 {
 	Serial.begin(9600);
-	while (!Serial)
-		; // wait for Arduino Serial Monitor
+	// while (!Serial)
+		// ; // wait for Arduino Serial Monitor
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP);
@@ -1063,9 +1068,21 @@ void loop()
 	currentMilliVU = millis();
 	if (currentMilliVU - previousMilliVU >= 50)
 	{
-		vu_level = vs1053VuLevel();
-		// Serial.println(vu_level);
+		vu_level = vs1053VuLevel() >> 8;
+		Serial.println(vu_level);
+		Serial.print("left=");
+		Serial.println(vu_level >> 8);
+		Serial.print("right=");
+		Serial.println(vu_level & 0xFF);
 		previousMilliVU = currentMilliVU;
+		if (vu_level >= 20 && vu_level <= 70)
+			vu_level = map(vu_level, 30, 70, 0, 80);
+		if (vu_level >= 70 && vu_level <= 90)
+			vu_level = map(vu_level, 70, 90, 81, 255);
+		if (vu_level <= 0)
+			vu_level = 0;
+		Serial.println(vu_level);
+		analogWrite(FET, vu_level);
 	}
 	// for (int i = 0; i < 20; i++)
 	// {
@@ -1085,6 +1102,7 @@ void loop()
 
 	if (vs1053Stopped())
 	{
+		vs1053resetPosition();
 		analogWrite(FET, 0);
 		Serial.print("SCI mode at stop 0x");
 		Serial.println(vs1053SciRead(0x00), HEX);
@@ -1142,18 +1160,12 @@ void loop()
 	// loop_oled_scroll(soundfile); // not working
 
 	// Serial.println(vu_level);
-	if (vu_level >= 9000 && vu_level <= 20000)
-		vu_level = map(vu_level, 9000, 20000, 0, 80);
-	if (vu_level >= 20001 && vu_level <= 23000)
-		vu_level = map(vu_level, 20001, 23000, 81, 255);
-	if (vu_level <= 0)
-		vu_level = 0;
-
+	
 	// Serial.println(vu_level);
 	// Serial.println(vs1053getVUmeter());
 	loop_oled(id3, soundfile);
 
-	analogWrite(FET, vu_level);
+
 	// delay(1000);
 	// analogWrite(FET, 10);
 	// delay(1000);
