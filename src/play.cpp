@@ -87,6 +87,14 @@ File currentTrack;
 boolean playingMusic;
 uint8_t SoundBuffer[vs1053_DATABUFFERLEN];
 s_id3 id3;
+int trackNumber = 1;
+
+uint8_t volume = 0;
+int amp_gain = 20;
+uint16_t volume_pot;
+uint8_t fileCount = 0;
+Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
+char *soundfile;
 
 /* TBC pour le Vu metre*/
 union twobyte
@@ -177,8 +185,8 @@ boolean vs1053StartPlayingFile(const char *trackname)
 {
 	Serial.println("vs1053StartPlayingFile");
 	currentTrack = SD.open(trackname);
-	message_oled(strcat("soundfile is ", trackname));
-	delay(500);
+	// message_oled(trackname);
+	// delay(500);
 	if (!currentTrack)
 	{
 		message_oled("Failed to open file");
@@ -189,25 +197,28 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	}
 	else
 	{
-		message_oled(strcat("opened: ", trackname));
-		delay(500);
+		// message_oled(strcat("opened: ", trackname));
+		// delay(500);
 		Serial.print("Opened from SD: ");
 		Serial.println(trackname);
 	}
 	parse_id3();
+	Serial.println("parse id3");
+	Serial.println(trackNumber);
 	playingMusic = true;
 	while (!vs1053ReadyForData())
 	{ // wait for ready for data
-		message_oled("ready for data... waiting");
+		// message_oled("ready for data... waiting");
 		// delay(1000);
 	}
-	message_oled("data ready");
+	// message_oled("data ready");
 	Serial.println("data ready");
-	delay(1000);
+	// delay(1000);
 	while (playingMusic && vs1053ReadyForData())
 	{
+		Serial.println("feeding buffer");
 		vs1053FeedBuffer(); // then send data
-		message_oled("feeding buffer");
+		// message_oled("feeding buffer");
 	}
 	return true;
 }
@@ -492,8 +503,8 @@ void vs1053getTrackInfo(uint8_t offset, char *info)
 
 	// skip to end
 	currentTrack.seek(fileSize - 128 + offset);
-	Serial.print("currentTrack position after seek:");
-	Serial.println(currentTrack.position());
+	// Serial.print("currentTrack position after seek:");
+	// Serial.println(currentTrack.position());
 
 	// currentTrack.seekEnd((-128 + offset));
 
@@ -517,13 +528,7 @@ void vs1053getTrackInfo(uint8_t offset, char *info)
 // End .cpp
 /////////////////////////////////////
 
-int8_t volume = 0;
-int amp_gain = 20;
-int volume_pot;
-int fileCount = 0;
-int trackNumber = 1;
-Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
-char *soundfile;
+
 
 // variable pour test pour obtenir tous les nom de fichier du repertoire
 
@@ -683,20 +688,53 @@ void parse_id3()
 	// Serial.println(id3.artist);
 	vs1053getTrackInfo(TRACK_ALBUM, id3.album);
 	// Serial.println(id3.album);
-	itoa(trackNumber + 1, id3.fileCurrent, 10); // pour que la piste 0 s affiche comme etant la piste 1
-	strcpy(id3.trackDisplay, id3.fileCurrent);
-	strcat(id3.trackDisplay, " / ");
-	strcat(id3.trackDisplay, id3.fileTotal);
+	
+	// itoa(trackNumber + 1, id3.fileCurrent, 10); // + 1 pour que la piste 0 s affiche comme etant la piste 1
+	// strcpy(id3.trackDisplay, id3.fileCurrent);
+	// strcat(id3.trackDisplay, " / ");
+	// strcat(id3.trackDisplay, id3.fileTotal);
+
+	// Serial.print("trackDisplay=");
+	// Serial.println(id3.trackDisplay);
+
 	// strcpy(id3.trackDisplay, display);
 	// delete[] display;
 	// return(id3_tag);
 }
 
+		// trackNumber--;
+				// if (trackNumber < 0)
+				// 	trackNumber = fileCount - 1; 
+				// vs1053StopPlaying();
+				// soundfile = fileNames[trackNumber];
+				// vs1053StartPlayingFile(soundfile);
+
+void	playPrevious() {
+	// if (!vs1053Stopped)
+	vs1053StopPlaying();
+	trackNumber--;
+	if (trackNumber < 0)
+		trackNumber = fileCount - 1; 
+	soundfile = fileNames[trackNumber];
+	Serial.print("soundfile playNext= ");
+	Serial.println(soundfile);
+	while(!vs1053StartPlayingFile(soundfile));
+}
+
+void	playNext() {
+	// if (!vs1053Stopped)
+	vs1053StopPlaying();
+	trackNumber++;
+	if (trackNumber > fileCount - 1)
+		trackNumber = 0; 
+	soundfile = fileNames[trackNumber];
+	Serial.print("soundfile playNext= ");
+	Serial.println(soundfile);
+	while(!vs1053StartPlayingFile(soundfile));
+	// vs1053StartPlayingFile(soundfile);
+}
+
 /* push buttons */
-// Broches des boutons
-// const int previousButtonPin = 2;
-// const int nextButtonPin = 3;
-// const int playButtonPin = 4;
 
 // Délai de debounce en millisecondes
 const unsigned long debounceDelay = 50;
@@ -705,22 +743,16 @@ const unsigned long debounceDelay = 50;
 unsigned long previousMillis = 0;
 int previousButtonState = HIGH;
 int lastPreviousButtonState = HIGH;
-
+unsigned long nextMillis = 0;
 int nextButtonState = HIGH;
+int lastNextButtonState = HIGH;
 int playButtonState = HIGH;
+int lastPlayButtonState = HIGH;
+
+// int nextButtonState = HIGH;
 int releasedTime;
 int pressedTime;
-long startMillis = millis();
-
-void	playPrevious() {
-	if (!vs1053Stopped)
-		vs1053StopPlaying();
-	trackNumber--;
-	if (trackNumber < 0)
-		trackNumber = fileCount - 1; 
-	soundfile = fileNames[trackNumber];
-	vs1053StartPlayingFile(soundfile);
-}
+// long startMillis = millis();
 
 void buttonCheck()
 {
@@ -732,37 +764,59 @@ void buttonCheck()
 	//     Serial.println("coucou next");
 	// Lecture de l'état des boutons avec debounce
 
-	int reading = digitalRead(BUTTON_PREV);
-	if (reading != lastPreviousButtonState)
+	int readingPrevious = digitalRead(BUTTON_PREV);
+	int readingNext = digitalRead(BUTTON_NEXT);
+
+	if (readingPrevious != lastPreviousButtonState)
 	{
 		previousMillis = millis();
 	}
 	if ((millis() - previousMillis) >= debounceDelay)
 	{
-		if (reading != previousButtonState)
+		if (readingPrevious != previousButtonState)
 		{
-			previousButtonState = reading;
+			previousButtonState = readingPrevious;
 			if (previousButtonState == HIGH)
 			{
 				previousMillis = millis();
-				trackNumber--;
-				if (trackNumber < 0)
-					trackNumber = fileCount - 1; 
-				vs1053StopPlaying();
-				soundfile = fileNames[trackNumber];
-				vs1053StartPlayingFile(soundfile);
+				playPrevious();
+				// trackNumber--;
+				// if (trackNumber < 0)
+				// 	trackNumber = fileCount - 1; 
+				// vs1053StopPlaying();
+				// soundfile = fileNames[trackNumber];
+				// vs1053StartPlayingFile(soundfile);
 				Serial.println("prevButton pushed");
 				
 			}
 		}
 	}
-	lastPreviousButtonState = reading;
+	lastPreviousButtonState = readingPrevious;
+	if (readingNext != lastNextButtonState)
+	{
+		nextMillis = millis();
+	}
+	if ((millis() - nextMillis) >= debounceDelay)
+	{
+		if (readingNext != nextButtonState)
+		{
+			nextButtonState = readingNext;
+			if (nextButtonState == HIGH)
+			{
+				nextMillis = millis();
+				playNext();
+				Serial.println("nextButton pushed");
+				
+			}
+		}
+	}
+	lastNextButtonState = readingNext;
 }
 
 void setup()
 {
 	Serial.begin(9600);
-	// while (!Serial); // wait for Arduino Serial Monitor
+	while (!Serial); // wait for Arduino Serial Monitor
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP);
