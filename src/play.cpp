@@ -210,7 +210,7 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	playingMusic = true;
 	while (!vs1053ReadyForData())
 	{ // wait for ready for data
-	  // message_oled("ready for data... waiting");
+	  message_oled("waiting for data...");
 	  // delay(1000);
 	}
 	// message_oled("data ready");
@@ -218,8 +218,9 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	// delay(1000);
 	while (playingMusic && vs1053ReadyForData())
 	{
-		Serial.println("feeding buffer");
+		// Serial.println("feeding buffer");
 		vs1053FeedBuffer(); // then send data
+	  	message_oled("feeding buffer");
 							// message_oled("feeding buffer");
 	}
 	return true;
@@ -230,7 +231,7 @@ void vs1053FeedBuffer()
 	//  Serial.println("vs1053FeedBuffer");
 
 	static uint8_t running = 0;
-	uint8_t sregsave;
+	// uint8_t sregsave;
 
 	// Do not allow 2 FeedBuffer instances to run concurrently
 	// SREG bit 7 = OFF => no interrupts until bit 7 = ON
@@ -835,7 +836,7 @@ void playPrevious()
 	if (trackNumber < 0)
 		trackNumber = fileCount - 1;
 	soundfile = fileNames[trackNumber];
-	Serial.print("soundfile playNext= ");
+	Serial.print("soundfile playPrevious= ");
 	Serial.println(soundfile);
 	while (!vs1053StartPlayingFile(soundfile))
 		;
@@ -1069,11 +1070,11 @@ void loop()
 	if (currentMilliVU - previousMilliVU >= 50)
 	{
 		vu_level = vs1053VuLevel() >> 8;
-		Serial.println(vu_level);
-		Serial.print("left=");
-		Serial.println(vu_level >> 8);
-		Serial.print("right=");
-		Serial.println(vu_level & 0xFF);
+		// Serial.println(vu_level);
+		// Serial.print("left=");
+		// Serial.println(vu_level >> 8);
+		// Serial.print("right=");
+		// Serial.println(vu_level & 0xFF);
 		previousMilliVU = currentMilliVU;
 		if (vu_level >= 20 && vu_level <= 70)
 			vu_level = map(vu_level, 30, 70, 0, 80);
@@ -1081,7 +1082,7 @@ void loop()
 			vu_level = map(vu_level, 70, 90, 81, 255);
 		if (vu_level <= 0)
 			vu_level = 0;
-		Serial.println(vu_level);
+		// Serial.println(vu_level);
 		analogWrite(FET, vu_level);
 	}
 	// for (int i = 0; i < 20; i++)
@@ -1102,20 +1103,23 @@ void loop()
 
 	if (vs1053Stopped())
 	{
-		vs1053resetPosition();
-		analogWrite(FET, 0);
-		Serial.print("SCI mode at stop 0x");
-		Serial.println(vs1053SciRead(0x00), HEX);
-		Serial.print("SCI Clock");
-		Serial.println(vs1053SciRead(SCI_CLOCKF));
-		if (trackNumber < fileCount - 1)
-			trackNumber++;
-		else if (trackNumber == fileCount - 1)
-			trackNumber = 0;
-		Serial.print("trackNumber= ");
-		Serial.println(trackNumber);
-		soundfile = fileNames[trackNumber];
-		vs1053StartPlayingFile(soundfile);
+		playNext();
+		
+		
+		// vs1053resetPosition();
+		// analogWrite(FET, 0);
+		// Serial.print("SCI mode at stop 0x");
+		// Serial.println(vs1053SciRead(0x00), HEX);
+		// Serial.print("SCI Clock");
+		// Serial.println(vs1053SciRead(SCI_CLOCKF));
+		// if (trackNumber < fileCount - 1)
+			// trackNumber++;
+		// else if (trackNumber == fileCount - 1)
+			// trackNumber = 0;
+		// Serial.print("trackNumber= ");
+		// Serial.println(trackNumber);
+		// soundfile = fileNames[trackNumber];
+		// vs1053StartPlayingFile(soundfile);
 	}
 
 	// if (vs1053Stopped() && trackNumber < fileCount - 1) {

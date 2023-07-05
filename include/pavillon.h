@@ -84,6 +84,7 @@ struct s_id3
 	char fileTotal[4];
 	char fileCurrent[4];
 	char trackDisplay[12];
+	char time[12];
 };
 
 enum flush_m
