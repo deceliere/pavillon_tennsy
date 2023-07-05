@@ -138,8 +138,8 @@ void vs1053DisableCard()
 /////////////////////////////////////////////////////////////////////////
 boolean vs1053PlayFullFile(const char *trackname)
 {
-	Serial.print("Playing ");
-	Serial.println(trackname);
+	DPRINT("Playing ");
+	DPRINTLN(trackname);
 	if (!vs1053StartPlayingFile(trackname))
 		return false;
 	while (playingMusic)
@@ -185,7 +185,7 @@ boolean vs1053Stopped()
 //////////////////////////////////////////////////////
 boolean vs1053StartPlayingFile(const char *trackname)
 {
-	Serial.println("vs1053StartPlayingFile");
+	DPRINTLN("vs1053StartPlayingFile");
 	currentTrack = SD.open(trackname);
 	// message_oled(trackname);
 	// delay(500);
@@ -193,20 +193,20 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	{
 		message_oled("Failed to open file");
 		delay(500);
-		Serial.print("Failed to open from SD: ");
-		Serial.println(trackname);
+		DPRINT("Failed to open from SD: ");
+		DPRINTLN(trackname);
 		return false;
 	}
 	else
 	{
 		// message_oled(strcat("opened: ", trackname));
 		// delay(500);
-		Serial.print("Opened from SD: ");
-		Serial.println(trackname);
+		DPRINT("Opened from SD: ");
+		DPRINTLN(trackname);
 	}
 	parse_id3();
-	Serial.println("parse id3");
-	Serial.println(trackNumber);
+	DPRINTLN("parse id3");
+	DPRINTLN(trackNumber);
 	playingMusic = true;
 	while (!vs1053ReadyForData())
 	{ // wait for ready for data
@@ -214,11 +214,11 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	  // delay(1000);
 	}
 	// message_oled("data ready");
-	Serial.println("data ready");
+	DPRINTLN("data ready");
 	// delay(1000);
 	while (playingMusic && vs1053ReadyForData())
 	{
-		// Serial.println("feeding buffer");
+		// DPRINTLN("feeding buffer");
 		vs1053FeedBuffer(); // then send data
 	  	message_oled("feeding buffer");
 							// message_oled("feeding buffer");
@@ -228,7 +228,7 @@ boolean vs1053StartPlayingFile(const char *trackname)
 
 void vs1053FeedBuffer()
 { // debugging this function causes memory overruns
-	//  Serial.println("vs1053FeedBuffer");
+	//  DPRINTLN("vs1053FeedBuffer");
 
 	static uint8_t running = 0;
 	// uint8_t sregsave;
@@ -247,19 +247,19 @@ void vs1053FeedBuffer()
 	}
 	interrupts();
 	//  if (!playingMusic){
-	//    Serial.println("Paused or stopped");
+	//    DPRINTLN("Paused or stopped");
 	//    running = 0; return;
 	//  }
 	//  if (!currentTrack){
-	//    Serial.println("No track open from SD card");
+	//    DPRINTLN("No track open from SD card");
 	//    running = 0; return;
 	//  }
 	//  if(!vs1053ReadyForData()){
-	//    Serial.println("XDREQ=0 receive buffer full");
+	//    DPRINTLN("XDREQ=0 receive buffer full");
 	//    running = 0; return;
 	//  }
 
-	//  Serial.println("Ready to send buffer");
+	//  DPRINTLN("Ready to send buffer");
 
 	// Send buffer
 	while (vs1053ReadyForData())
@@ -391,7 +391,7 @@ void vs1053flush_cancel(flush_m mode)
 		}
 	}
 	// Cancel has not succeeded.
-	// Serial.println(F("Warning: VS10XX chip did not cancel, reseting chip!"));
+	// DPRINTLN(F("Warning: VS10XX chip did not cancel, reseting chip!"));
 	//  Mp3WriteRegister(SCI_MODE, SM_LINE1 | SM_SDINEW | SM_RESET); // old way of SCI_MODE WRITE.
 	vs1053SciWrite(SCI_MODE, (vs1053SciRead(SCI_MODE) | SM_RESET)); // software reset. but vs_init will HW reset anyways.
 																	//  vs_init(); // perform hardware reset followed by re-initializing.
@@ -610,13 +610,13 @@ void vs1053getTrackInfo(uint8_t offset, char *info)
 {
 
 	const int fileSize = currentTrack.size();
-	// Serial.println("IN TRACK INFO:");
-	// Serial.print("fileSize: ");
-	// Serial.println(fileSize);
-	// Serial.print("currentTrack:");
-	// Serial.println(currentTrack.name());
-	// Serial.print("currentTrack position:");
-	// Serial.println(currentTrack.position());
+	// DPRINTLN("IN TRACK INFO:");
+	// DPRINT("fileSize: ");
+	// DPRINTLN(fileSize);
+	// DPRINT("currentTrack:");
+	// DPRINTLN(currentTrack.name());
+	// DPRINT("currentTrack position:");
+	// DPRINTLN(currentTrack.position());
 	// disable interupts
 	noInterrupts();
 
@@ -625,8 +625,8 @@ void vs1053getTrackInfo(uint8_t offset, char *info)
 
 	// skip to end
 	currentTrack.seek(fileSize - 128 + offset);
-	// Serial.print("currentTrack position after seek:");
-	// Serial.println(currentTrack.position());
+	// DPRINT("currentTrack position after seek:");
+	// DPRINTLN(currentTrack.position());
 
 	// currentTrack.seekEnd((-128 + offset));
 
@@ -637,8 +637,8 @@ void vs1053getTrackInfo(uint8_t offset, char *info)
 	// 	info = strcpy(info, "no tag id3");
 	// 	info[10] = 0;
 	// }
-	// Serial.print("id3 from get info:");
-	// Serial.println(info);
+	// DPRINT("id3 from get info:");
+	// DPRINTLN(info);
 	// infobuffer = strip_nonalpha_inplace(infobuffer);
 	// seek back to saved file position
 	currentTrack.seek(0); /// TBC
@@ -666,24 +666,24 @@ void printDirectory(File dir, int numTabs)
 		if (!entry)
 		{
 			// no more files
-			// Serial.println("**nomorefiles**");
+			// DPRINTLN("**nomorefiles**");
 			break;
 		}
 		for (uint8_t i = 0; i < numTabs; i++)
 		{
-			Serial.print('\t');
+			DPRINT('\t');
 		}
-		Serial.print(entry.name());
+		DPRINT(entry.name());
 		if (entry.isDirectory())
 		{
-			Serial.println("/");
+			DPRINTLN("/");
 			printDirectory(entry, numTabs + 1);
 		}
 		else
 		{
 			// files have sizes, directories do not
-			Serial.print("\t\t");
-			Serial.println(entry.size(), DEC);
+			DPRINT("\t\t");
+			DPRINTLN(entry.size(), DEC);
 		}
 		entry.close();
 	}
@@ -716,12 +716,12 @@ int check_serial()
 			}
 			if (!vs1053Paused())
 			{
-				Serial.println("Pause - press p to pause, s to stop");
+				DPRINTLN("Pause - press p to pause, s to stop");
 				vs1053PausePlaying(true);
 			}
 			else
 			{
-				Serial.println("Resumed - press p to pause, s to stop");
+				DPRINTLN("Resumed - press p to pause, s to stop");
 				vs1053PausePlaying(false);
 			}
 		}
@@ -738,8 +738,8 @@ int check_serial()
 			// interrupts();
 			// delay(100);
 			// vs1053PausePlaying(false);
-			Serial.print("gain = ");
-			Serial.println(audioamp.getGain());
+			DPRINT("gain = ");
+			DPRINTLN(audioamp.getGain());
 		}
 		if (c == '2')
 		{
@@ -754,19 +754,19 @@ int check_serial()
 			interrupts();
 			// delay(100);
 			// vs1053PausePlaying(false);
-			Serial.print("gain = ");
-			Serial.println(audioamp.getGain());
+			DPRINT("gain = ");
+			DPRINTLN(audioamp.getGain());
 		}
 		if (c == '3')
 		{
 			audioamp.enableChannel(false, false);
-			// Serial.print("gain = ");
-			Serial.println("Amp mute");
+			// DPRINT("gain = ");
+			DPRINTLN("Amp mute");
 		}
 		if (c == '4')
 		{
 			audioamp.enableChannel(true, true);
-			Serial.println("Amp unmute");
+			DPRINTLN("Amp unmute");
 			for (int i = 0; i < 5; i++)
 			{
 				noInterrupts();
@@ -774,8 +774,8 @@ int check_serial()
 				interrupts();
 				// delay(10);
 			}
-			Serial.print("gain = ");
-			Serial.println(audioamp.getGain());
+			DPRINT("gain = ");
+			DPRINTLN(audioamp.getGain());
 		}
 		if (c == 'q')
 			printDirectory(SD.open("/"), 0);
@@ -783,15 +783,15 @@ int check_serial()
 		{
 			volume++;
 			vs1053SetVolume(volume, volume);
-			Serial.print("volume= ");
-			Serial.println(volume);
+			DPRINT("volume= ");
+			DPRINTLN(volume);
 		}
 		if (c == '+')
 		{
 			volume--;
 			vs1053SetVolume(volume, volume);
-			Serial.print("volume= ");
-			Serial.println(volume);
+			DPRINT("volume= ");
+			DPRINTLN(volume);
 		}
 	}
 	return 0;
@@ -803,19 +803,19 @@ void parse_id3()
 
 	// display = new char[12];
 	vs1053getTrackInfo(TRACK_TITLE, id3.title);
-	// Serial.println(id3.title);
+	// DPRINTLN(id3.title);
 	vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
-	// Serial.println(id3.artist);
+	// DPRINTLN(id3.artist);
 	vs1053getTrackInfo(TRACK_ALBUM, id3.album);
-	// Serial.println(id3.album);
+	// DPRINTLN(id3.album);
 
 	itoa(trackNumber + 1, id3.fileCurrent, 10); // + 1 pour que la piste 0 s affiche comme etant la piste 1
 	strcpy(id3.trackDisplay, id3.fileCurrent);
 	strcat(id3.trackDisplay, " / ");
 	strcat(id3.trackDisplay, id3.fileTotal);
 
-	Serial.print("trackDisplay=");
-	Serial.println(id3.trackDisplay);
+	DPRINT("trackDisplay=");
+	DPRINTLN(id3.trackDisplay);
 
 	// strcpy(id3.trackDisplay, display);
 	// delete[] display;
@@ -836,8 +836,8 @@ void playPrevious()
 	if (trackNumber < 0)
 		trackNumber = fileCount - 1;
 	soundfile = fileNames[trackNumber];
-	Serial.print("soundfile playPrevious= ");
-	Serial.println(soundfile);
+	DPRINT("soundfile playPrevious= ");
+	DPRINTLN(soundfile);
 	while (!vs1053StartPlayingFile(soundfile))
 		;
 }
@@ -850,8 +850,8 @@ void playNext()
 	if (trackNumber > fileCount - 1)
 		trackNumber = 0;
 	soundfile = fileNames[trackNumber];
-	Serial.print("soundfile playNext= ");
-	Serial.println(soundfile);
+	DPRINT("soundfile playNext= ");
+	DPRINTLN(soundfile);
 	while (!vs1053StartPlayingFile(soundfile))
 		;
 	// vs1053StartPlayingFile(soundfile);
@@ -880,11 +880,11 @@ int pressedTime;
 void buttonCheck()
 {
 	// if (!digitalRead(BUTTON_PREV))
-	//     Serial.println("coucou prev");
+	//     DPRINTLN("coucou prev");
 	// if (!digitalRead(BUTTON_PLAY))
-	//     Serial.println("coucou play");
+	//     DPRINTLN("coucou play");
 	// if (!digitalRead(BUTTON_NEXT))
-	//     Serial.println("coucou next");
+	//     DPRINTLN("coucou next");
 	// Lecture de l'état des boutons avec debounce
 
 	int readingPrevious = digitalRead(BUTTON_PREV);
@@ -903,7 +903,7 @@ void buttonCheck()
 			{
 				previousMillis = millis();
 				playPrevious();
-				Serial.println("prevButton pushed");
+				DPRINTLN("prevButton pushed");
 			}
 		}
 	}
@@ -921,7 +921,7 @@ void buttonCheck()
 			{
 				nextMillis = millis();
 				playNext();
-				Serial.println("nextButton pushed");
+				DPRINTLN("nextButton pushed");
 			}
 		}
 	}
@@ -930,9 +930,11 @@ void buttonCheck()
 
 void setup()
 {
+	#ifdef DEBUG
 	Serial.begin(9600);
-	// while (!Serial)
-		// ; // wait for Arduino Serial Monitor
+	while (!Serial)
+		; // wait for Arduino Serial Monitor
+	#endif
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP);
@@ -943,7 +945,7 @@ void setup()
 	audioamp.begin();
 	if (!audioamp.begin())
 	{ // initialise the music player
-		// Serial.println(F("Couldn't find amp"));
+		// DPRINTLN(F("Couldn't find amp"));
 		while (1)
 			;
 	}
@@ -952,17 +954,23 @@ void setup()
 		message_oled("audio amp ok");
 		delay(500);
 	}
-	// Serial.println(F("Amp found"));
+	// DPRINTLN(F("Amp found"));
 	audioamp.setAGCCompression(TPA2016_AGC_OFF);
 	audioamp.setReleaseControl(0);
 	audioamp.setAttackControl(0);
 	audioamp.setHoldControl(0);
 	audioamp.setLimitLevelOff();
 	audioamp.setGain(amp_gain);
+	while(audioamp.getGain() != amp_gain)
+	;
+	message_oled("amp gain ok");
+	delay(500);
+	
+
 	// if (vs1053vs_init()) { // initialise the music player
 	if (!vs1053Begin())
 	{ // initialise the music player
-		Serial.println(F("Couldn't find vs1053"));
+		DPRINTLN(F("Couldn't find vs1053"));
 		message_oled("vs1053 not found");
 		while (1)
 			;
@@ -992,11 +1000,11 @@ void setup()
 	itoa(fileCount, id3.fileTotal, 10);
 	message_oled(strcat("filecount= ", id3.fileTotal));
 	delay(500);
-	Serial.print(F("fileCount:"));
-	Serial.println(fileCount);
-	Serial.println(F("vs1053 found"));
-	// Serial.print("sounfile is ");
-	// Serial.println(fileNames[0]);
+	DPRINT(F("fileCount:"));
+	DPRINTLN(fileCount);
+	DPRINTLN(F("vs1053 found"));
+	// DPRINT("sounfile is ");
+	// DPRINTLN(fileNames[0]);
 
 	// Set volume for left, right channels. lower numbers is higher volume
 	vs1053SetVolume(volume, volume);
@@ -1010,51 +1018,51 @@ void setup()
 	// delay(800);
 
 	// Play one file, don't return until complete - i.e. serial "s" or "p" will not interrupt
-	// Serial.println(F("jurg"));
+	// DPRINTLN(F("jurg"));
 	// vs1053PlayFullFile("jurg.mp3");
-	//  Serial.println(F("Playing track 008"));
+	//  DPRINTLN(F("Playing track 008"));
 	//  vs1053PlayFullFile("track008.wav");
-	//  Serial.println(F("Playing SDTEST with super long file name.wav"));
+	//  DPRINTLN(F("Playing SDTEST with super long file name.wav"));
 	//  vs1053PlayFullFile("/SDTEST with super long file name.wav");
 
 	// Play another file in the background, use interrupt serial "s" or "p" will interrupt
 	// Can only do one buffer feed at a time
-	// Serial.println(F("Playing track 002 - press p to pause, s to stop"));
+	// DPRINTLN(F("Playing track 002 - press p to pause, s to stop"));
 	// vs1053StartPlayingFile("track002.mp3");
-	//  Serial.println(F("Playing track 010 - press p to pause, s to stop"));
+	//  DPRINTLN(F("Playing track 010 - press p to pause, s to stop"));
 	//  vs1053StartPlayingFile("track010.wav");
 
 	vs1053SciWrite(0x00, SM_SDINEW | SM_LINE1); // new mode + line in
-	Serial.print("SCI mode 0x");
-	Serial.println(vs1053SciRead(0x00), HEX);
+	DPRINT("SCI mode 0x");
+	DPRINTLN(vs1053SciRead(0x00), HEX);
 	char str2[10];
 	itoa(vs1053SciRead(0x00), str2, 16);
 	message_oled(strcat("SCI mode 0x", str2));
 	delay(500);
 
-	// Serial.print("SCI mode after change 0x");
-	// Serial.println(vs1053SciRead(0x00), HEX);
+	// DPRINT("SCI mode after change 0x");
+	// DPRINTLN(vs1053SciRead(0x00), HEX);
 
 	// message_oled("start playingfile OK");
 	pinMode(22, INPUT);
 	volume_pot = analogRead(22);
-	// Serial.println(volume_pot);
-	// Serial.println(volume);
+	// DPRINTLN(volume_pot);
+	// DPRINTLN(volume);
 	soundfile = fileNames[trackNumber];
-	// Serial.print("soundfile:");
-	// Serial.println(soundfile);
-	Serial.print("fileNames[trackNumber]: ");
-	Serial.println(fileNames[trackNumber]);
+	// DPRINT("soundfile:");
+	// DPRINTLN(soundfile);
+	DPRINT("fileNames[trackNumber]: ");
+	DPRINTLN(fileNames[trackNumber]);
 	//  playFilesInLoop("/");
 	// id3 = parse_id3(id3);
 	vs1053StartPlayingFile(soundfile);
 	message_oled("start playingfile OK");
 	delay(500);
-	Serial.println(F("Playing - press p to pause, s to stop"));
+	DPRINTLN(F("Playing - press p to pause, s to stop"));
 	if (playingMusic)
-		Serial.println("Playback started");
+		DPRINTLN("Playback started");
 	else
-		Serial.println("Playback failed");
+		DPRINTLN("Playback failed");
 }
 
 int currentMilliVU = millis();
@@ -1070,11 +1078,11 @@ void loop()
 	if (currentMilliVU - previousMilliVU >= 50)
 	{
 		vu_level = vs1053VuLevel() >> 8;
-		// Serial.println(vu_level);
-		// Serial.print("left=");
-		// Serial.println(vu_level >> 8);
-		// Serial.print("right=");
-		// Serial.println(vu_level & 0xFF);
+		// DPRINTLN(vu_level);
+		// DPRINT("left=");
+		// DPRINTLN(vu_level >> 8);
+		// DPRINT("right=");
+		// DPRINTLN(vu_level & 0xFF);
 		previousMilliVU = currentMilliVU;
 		if (vu_level >= 20 && vu_level <= 70)
 			vu_level = map(vu_level, 30, 70, 0, 80);
@@ -1082,7 +1090,7 @@ void loop()
 			vu_level = map(vu_level, 70, 90, 81, 255);
 		if (vu_level <= 0)
 			vu_level = 0;
-		// Serial.println(vu_level);
+		// DPRINTLN(vu_level);
 		analogWrite(FET, vu_level);
 	}
 	// for (int i = 0; i < 20; i++)
@@ -1095,7 +1103,7 @@ void loop()
 	// if (vs1053Stopped()) {
 	// 	message_oled("playback stopped");
 	// 	analogWrite(FET, 0);
-	// 	Serial.println("Terminated");
+	// 	DPRINTLN("Terminated");
 	//    while (!check_serial()) {
 	// 	}
 	//   check_serial();
@@ -1108,47 +1116,47 @@ void loop()
 		
 		// vs1053resetPosition();
 		// analogWrite(FET, 0);
-		// Serial.print("SCI mode at stop 0x");
-		// Serial.println(vs1053SciRead(0x00), HEX);
-		// Serial.print("SCI Clock");
-		// Serial.println(vs1053SciRead(SCI_CLOCKF));
+		// DPRINT("SCI mode at stop 0x");
+		// DPRINTLN(vs1053SciRead(0x00), HEX);
+		// DPRINT("SCI Clock");
+		// DPRINTLN(vs1053SciRead(SCI_CLOCKF));
 		// if (trackNumber < fileCount - 1)
 			// trackNumber++;
 		// else if (trackNumber == fileCount - 1)
 			// trackNumber = 0;
-		// Serial.print("trackNumber= ");
-		// Serial.println(trackNumber);
+		// DPRINT("trackNumber= ");
+		// DPRINTLN(trackNumber);
 		// soundfile = fileNames[trackNumber];
 		// vs1053StartPlayingFile(soundfile);
 	}
 
 	// if (vs1053Stopped() && trackNumber < fileCount - 1) {
 	// 	soundfile = fileNames[++trackNumber];
-	// 	Serial.print("trackNumber");
-	// 	Serial.println(trackNumber);
+	// 	DPRINT("trackNumber");
+	// 	DPRINTLN(trackNumber);
 	// 	vs1053StartPlayingFile(soundfile);
 
 	// }
 	// else if (vs1053Stopped() && trackNumber == fileCount - 1) {
 	// 	trackNumber = 0;
-	// 	Serial.print("trackNumber");
-	// 	Serial.println(trackNumber);
+	// 	DPRINT("trackNumber");
+	// 	DPRINTLN(trackNumber);
 	// 	soundfile = fileNames[trackNumber];
 	// 	vs1053StartPlayingFile(soundfile);
 	// }
 
 	check_serial();
 
-	// Serial.println("Loop running");
-	// Serial.print("pot= ");
-	// Serial.println(analogRead(22));;
+	// DPRINTLN("Loop running");
+	// DPRINT("pot= ");
+	// DPRINTLN(analogRead(22));;
 
 	pot_debounce(50);
 	// logVol = pow(10, volume_pot / 1023.0) - 1;
 	// logVol = (int) map(logVol, 0, 9, 100, 0);
 	// read = (int) logVol;
-	// Serial.print("logVol mapped=");
-	// Serial.println(logVol);
+	// DPRINT("logVol mapped=");
+	// DPRINTLN(logVol);
 	if (volume_pot >= 0 && volume_pot <= 400)
 		volume = (unsigned int)map(volume_pot, 0, 400, 200, 30);
 	if (volume_pot > 400)
@@ -1157,16 +1165,16 @@ void loop()
 	// delay(10);
 	/*
 	if (vs1053Stopped()) {
-		Serial.println("lecture terminee");
+		DPRINTLN("lecture terminee");
 		vs1053StartPlayingFile(soundfile);
 	}
 	*/
 	// loop_oled_scroll(soundfile); // not working
 
-	// Serial.println(vu_level);
+	// DPRINTLN(vu_level);
 	
-	// Serial.println(vu_level);
-	// Serial.println(vs1053getVUmeter());
+	// DPRINTLN(vu_level);
+	// DPRINTLN(vs1053getVUmeter());
 	loop_oled(id3, soundfile);
 
 
@@ -1183,18 +1191,18 @@ int pot_debounce(int threshold)
 	read = analogRead(22);
 	if (read > volume_pot + threshold || read < volume_pot - threshold)
 	{
-		Serial.print("volum_pot= ");
-		Serial.println(volume_pot);
-		Serial.print("volume ");
-		Serial.println(volume);
+		DPRINT("volum_pot= ");
+		DPRINTLN(volume_pot);
+		DPRINT("volume ");
+		DPRINTLN(volume);
 
 		// volFloat = (float) volume_pot;
 		// logVol = log(volFloat / 1023);
 
-		// Serial.print("volFloat=");
-		// Serial.println(volFloat);
-		// Serial.print("logVol=");
-		// Serial.println(logVol);
+		// DPRINT("volFloat=");
+		// DPRINTLN(volFloat);
+		// DPRINT("logVol=");
+		// DPRINTLN(logVol);
 		return (volume_pot = read);
 	}
 	else
@@ -1245,12 +1253,12 @@ int listFiles()
 		// Affichage des noms des fichiers
 		for (int i = 0; i < count; i++)
 		{
-			Serial.println(fileNames[i]);
+			DPRINTLN(fileNames[i]);
 		}
 	}
 	else
 	{
-		Serial.println("Impossible d'ouvrir le dossier.");
+		DPRINTLN("Impossible d'ouvrir le dossier.");
 	}
 	return (count);
 }
@@ -1271,20 +1279,20 @@ int listFiles()
 // 	}
 
 // 	currentTrack = directory.openNextFile();
-// 	Serial.println("current track@854");
-// 	Serial.println(currentTrack);
+// 	DPRINTLN("current track@854");
+// 	DPRINTLN(currentTrack);
 
 // 	while (currentTrack)
 // 	{
 // 		if (!currentTrack.isDirectory() && hasExtension(currentTrack.name(), ".mp3"))
 // 		{
-// 			Serial.print("Lecture du fichier : ");
-// 			Serial.println(currentTrack.name());
+// 			DPRINT("Lecture du fichier : ");
+// 			DPRINTLN(currentTrack.name());
 
 // 			// Lecture du fichier MP3
 // 			if (!vs1053StartPlayingFile(currentTrack.name()))
 // 			{
-// 				Serial.println("Erreur lors de la lecture du fichier");
+// 				DPRINTLN("Erreur lors de la lecture du fichier");
 // 			}
 // 			parse_id3();
 // 			//   Attente de la fin de la lecture
@@ -1294,7 +1302,7 @@ int listFiles()
 // 				// Ajoutez ici d'autres traitements ou fonctionnalités si nécessaire
 // 			}
 
-// 			Serial.println("Lecture terminée");
+// 			DPRINTLN("Lecture terminée");
 // 		}
 
 // 		currentTrack = directory.openNextFile();

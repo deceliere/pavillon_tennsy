@@ -1,6 +1,16 @@
 /* from vs1053_SdFat.h */
 /* Arduino Library for VS10xx shield*/
 
+// #define DEBUG
+
+#ifdef DEBUG
+#define DPRINT(...) Serial.print(__VA_ARGS__)
+#define DPRINTLN(...) Serial.println(__VA_ARGS__)
+#else 
+#define DPRINT(...)
+#define DPRINTLN(...)
+#endif
+
 #define SCI_MODE 0x00
 #define SCI_STATUS 0x01
 #define SCI_BASS 0x02

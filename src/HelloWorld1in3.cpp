@@ -450,18 +450,18 @@ bool setup_oled(void)
 
   if (!u8g2.begin())
     return (false);
-  // Serial.println("oled not found");
+  // DPRINTLN("oled not found");
   else
   {
     message_oled("oled setup ok");
     return (true);
   }
-  // Serial.println("oled init ok  ");
+  // DPRINTLN("oled init ok  ");
 }
 
 void message_oled(const char *message)
 {
-  // Serial.println("coucou loop");
+  // DPRINTLN("coucou loop");
   u8g2.firstPage();
   do
   {
@@ -496,8 +496,8 @@ void loop_oled(s_id3 id3, const char *soundfile)
       strcat(minSecStr, "0");
     strcat(minSecStr, secStr);
 
-    // Serial.print("id3.time=");
-    // Serial.println(id3.time);
+    // DPRINT("id3.time=");
+    // DPRINTLN(id3.time);
     previousMilli_oled = currentMillli_oled;
   }
   strcpy(id3.time, minSecStr);
@@ -522,11 +522,11 @@ void loop_oled(s_id3 id3, const char *soundfile)
 
     u8g2.drawStr(98, 53, id3.trackDisplay);
   } while (u8g2.nextPage());
-    // Serial.println(id3.time);
+    // DPRINTLN(id3.time);
 
   // delay(10);
-  // Serial.println(str);
-  // Serial.println(count);
+  // DPRINTLN(str);
+  // DPRINTLN(count);
 }
 
 /*
