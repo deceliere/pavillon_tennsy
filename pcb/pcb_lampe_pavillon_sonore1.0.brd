@@ -75,6 +75,7 @@
 <layer number="96" name="Values" color="7" fill="1" visible="no" active="no"/>
 <layer number="97" name="Info" color="7" fill="1" visible="no" active="no"/>
 <layer number="98" name="Guide" color="6" fill="1" visible="no" active="no"/>
+<layer number="99" name="SpiceOrder" color="5" fill="1" visible="no" active="no"/>
 <layer number="100" name="Muster" color="7" fill="1" visible="no" active="no"/>
 <layer number="101" name="Patch_Top" color="12" fill="4" visible="no" active="yes"/>
 <layer number="102" name="Vscore" color="7" fill="1" visible="yes" active="yes"/>
@@ -141,49 +142,49 @@
 <board>
 <plain>
 <wire x1="0" y1="0" x2="160" y2="0" width="0" layer="20"/>
-<wire x1="160" y1="0" x2="160" y2="100" width="0" layer="20"/>
-<wire x1="160" y1="100" x2="0" y2="100" width="0" layer="20"/>
-<wire x1="0" y1="100" x2="0" y2="0" width="0" layer="20"/>
-<text x="72.263" y="34.1122" size="1.016" layer="21" ratio="15">RX</text>
-<text x="72.517" y="36.3474" size="1.016" layer="21" ratio="15">TX</text>
-<text x="72.2376" y="32.1056" size="1.016" layer="21" ratio="15">SD</text>
-<text x="72.263" y="38.989" size="1.016" layer="21" ratio="15">7</text>
-<text x="72.263" y="41.656" size="1.016" layer="21" ratio="15">6</text>
-<text x="72.263" y="44.196" size="1.016" layer="21" ratio="15">5</text>
-<text x="72.263" y="46.736" size="1.016" layer="21" ratio="15">4</text>
-<text x="72.263" y="49.149" size="1.016" layer="21" ratio="15">3</text>
-<text x="72.263" y="51.689" size="1.016" layer="21" ratio="15">2</text>
-<text x="72.263" y="54.356" size="1.016" layer="21" ratio="15">1</text>
-<text x="72.263" y="56.896" size="1.016" layer="21" ratio="15">0</text>
-<text x="72.26973125" y="59.71809375" size="1.016" layer="21" ratio="15">3V3</text>
-<text x="72.317" y="61.92400625" size="1.016" layer="21" ratio="15">AGND</text>
-<text x="72.29" y="64.62900625" size="1.016" layer="21" ratio="15">MIC-</text>
-<text x="92.793" y="32.375" size="1.016" layer="21" ratio="15" rot="R180">XDCS</text>
-<text x="92.757" y="35.077" size="1.016" layer="21" ratio="15" rot="R180">SDCS</text>
-<text x="92.8026" y="37.375" size="1.016" layer="21" ratio="15" rot="R180">CS</text>
-<text x="92.8116" y="39.8526" size="1.016" layer="21" ratio="15" rot="R180">RST</text>
-<text x="92.837" y="45.212" size="1.016" layer="21" ratio="15" rot="R180">MOSI</text>
-<text x="92.837" y="42.672" size="1.016" layer="21" ratio="15" rot="R180">SCLK</text>
-<text x="93.037" y="70.572" size="1.016" layer="21" ratio="15" rot="R180">ROUT</text>
-<text x="93.137" y="68.012" size="1.016" layer="21" ratio="15" rot="R180">LOUT</text>
-<text x="92.964" y="65.532" size="1.016" layer="21" ratio="15" rot="R180">AGND</text>
-<text x="92.8116" y="57.6834" size="1.016" layer="21" ratio="15" rot="R180">DREQ</text>
-<text x="92.9132" y="60.3504" size="1.016" layer="21" ratio="15" rot="R180">GND</text>
-<text x="92.837" y="47.879" size="1.016" layer="21" ratio="15" rot="R180">MISO</text>
-<text x="92.837" y="50.165" size="1.016" layer="21" ratio="15" rot="R180">GND</text>
-<text x="92.71" y="52.6796" size="1.016" layer="21" ratio="15" rot="R180">3V3</text>
-<text x="92.71" y="54.991" size="1.016" layer="21" ratio="15" rot="R180">VCC</text>
-<text x="91.44" y="27.94" size="1.016" layer="21" ratio="15">5V</text>
-<text x="90.424" y="26.67" size="1.016" layer="21" ratio="15">SAFE</text>
-<wire x1="89.535" y1="30.099" x2="89.535" y2="29.337" width="0.254" layer="21"/>
-<wire x1="89.535" y1="29.337" x2="94.869" y2="29.337" width="0.254" layer="21"/>
-<wire x1="94.869" y1="29.337" x2="94.869" y2="30.099" width="0.254" layer="21"/>
-<text x="72.317" y="66.896003125" size="1.016" layer="21" ratio="15">MIC+</text>
-<text x="92.964" y="62.8396" size="1.016" layer="21" ratio="15" rot="R180">AGND</text>
-<text x="72.2376" y="30.8864" size="1.016" layer="21" ratio="15">CD</text>
-<text x="75.7364" y="76.3794" size="1.27" layer="21" ratio="16">VS1053B AUDIO</text>
-<text x="72.317" y="69.182003125" size="1.016" layer="21" ratio="15">LINE2</text>
-<text x="75.819" y="74.295" size="1.016" layer="21" ratio="10">v2</text>
+<wire x1="160" y1="0" x2="160" y2="149.53" width="0" layer="20"/>
+<wire x1="160" y1="149.53" x2="0" y2="149.53" width="0" layer="20"/>
+<wire x1="0" y1="149.53" x2="0" y2="0" width="0" layer="20"/>
+<text x="6.223" y="26.4922" size="1.016" layer="21" ratio="15" grouprefs="VS1053">RX</text>
+<text x="6.477" y="28.7274" size="1.016" layer="21" ratio="15" grouprefs="VS1053">TX</text>
+<text x="6.1976" y="24.4856" size="1.016" layer="21" ratio="15" grouprefs="VS1053">SD</text>
+<text x="6.223" y="31.369" size="1.016" layer="21" ratio="15" grouprefs="VS1053">7</text>
+<text x="6.223" y="34.036" size="1.016" layer="21" ratio="15" grouprefs="VS1053">6</text>
+<text x="6.223" y="36.576" size="1.016" layer="21" ratio="15" grouprefs="VS1053">5</text>
+<text x="6.223" y="39.116" size="1.016" layer="21" ratio="15" grouprefs="VS1053">4</text>
+<text x="6.223" y="41.529" size="1.016" layer="21" ratio="15" grouprefs="VS1053">3</text>
+<text x="6.223" y="44.069" size="1.016" layer="21" ratio="15" grouprefs="VS1053">2</text>
+<text x="6.223" y="46.736" size="1.016" layer="21" ratio="15" grouprefs="VS1053">1</text>
+<text x="6.223" y="49.276" size="1.016" layer="21" ratio="15" grouprefs="VS1053">0</text>
+<text x="6.22973125" y="52.09809375" size="1.016" layer="21" ratio="15" grouprefs="VS1053">3V3</text>
+<text x="6.277" y="54.30400625" size="1.016" layer="21" ratio="15" grouprefs="VS1053">AGND</text>
+<text x="6.25" y="57.00900625" size="1.016" layer="21" ratio="15" grouprefs="VS1053">MIC-</text>
+<text x="45.803" y="24.755" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">XDCS</text>
+<text x="45.767" y="27.457" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">SDCS</text>
+<text x="45.8126" y="29.755" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">CS</text>
+<text x="45.8216" y="32.2326" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">RST</text>
+<text x="45.847" y="37.592" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">MOSI</text>
+<text x="45.847" y="35.052" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">SCLK</text>
+<text x="46.047" y="62.952" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">ROUT</text>
+<text x="46.147" y="60.392" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">LOUT</text>
+<text x="45.974" y="57.912" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">AGND</text>
+<text x="45.8216" y="50.0634" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">DREQ</text>
+<text x="45.9232" y="52.7304" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">GND</text>
+<text x="45.847" y="40.259" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">MISO</text>
+<text x="45.847" y="42.545" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">GND</text>
+<text x="45.72" y="45.0596" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">3V3</text>
+<text x="45.72" y="47.371" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">VCC</text>
+<text x="43.18" y="20.32" size="1.016" layer="21" ratio="15" grouprefs="VS1053">5V</text>
+<text x="42.164" y="19.05" size="1.016" layer="21" ratio="15" grouprefs="VS1053">SAFE</text>
+<wire x1="32.385" y1="22.479" x2="32.385" y2="21.717" width="0.254" layer="21" grouprefs="VS1053"/>
+<wire x1="32.385" y1="21.717" x2="37.719" y2="21.717" width="0.254" layer="21" grouprefs="VS1053"/>
+<wire x1="37.719" y1="21.717" x2="37.719" y2="22.479" width="0.254" layer="21" grouprefs="VS1053"/>
+<text x="6.277" y="59.276003125" size="1.016" layer="21" ratio="15" grouprefs="VS1053">MIC+</text>
+<text x="45.974" y="55.2196" size="1.016" layer="21" ratio="15" rot="R180" grouprefs="VS1053">AGND</text>
+<text x="6.1976" y="23.2664" size="1.016" layer="21" ratio="15" grouprefs="VS1053">CD</text>
+<text x="18.5864" y="68.7594" size="1.27" layer="21" ratio="16" grouprefs="VS1053">VS1053B AUDIO</text>
+<text x="6.277" y="61.562003125" size="1.016" layer="21" ratio="15" grouprefs="VS1053">LINE2</text>
+<text x="18.669" y="66.675" size="1.016" layer="21" ratio="10" grouprefs="VS1053">v2</text>
 </plain>
 <libraries>
 <library name="SamacSys_Parts">
@@ -242,6 +243,201 @@
 <wire x1="-26.273" y1="9.128" x2="-26.273" y2="-50.53" width="0.1" layer="51"/>
 <wire x1="-26.273" y1="-50.53" x2="3.413" y2="-50.53" width="0.1" layer="51"/>
 <wire x1="3.413" y1="-50.53" x2="3.413" y2="9.128" width="0.1" layer="51"/>
+<text x="-21.717" y="-35.7378" size="1.016" layer="21" ratio="15">RX</text>
+<text x="-21.463" y="-33.5026" size="1.016" layer="21" ratio="15">TX</text>
+<text x="-21.7424" y="-37.7444" size="1.016" layer="21" ratio="15">SD</text>
+<text x="-21.717" y="-30.861" size="1.016" layer="21" ratio="15">7</text>
+<text x="-21.717" y="-28.194" size="1.016" layer="21" ratio="15">6</text>
+<text x="-21.717" y="-25.654" size="1.016" layer="21" ratio="15">5</text>
+<text x="-21.717" y="-23.114" size="1.016" layer="21" ratio="15">4</text>
+<text x="-21.717" y="-20.701" size="1.016" layer="21" ratio="15">3</text>
+<text x="-21.717" y="-18.161" size="1.016" layer="21" ratio="15">2</text>
+<text x="-21.717" y="-15.494" size="1.016" layer="21" ratio="15">1</text>
+<text x="-21.717" y="-12.954" size="1.016" layer="21" ratio="15">0</text>
+<text x="-21.71026875" y="-10.13190625" size="1.016" layer="21" ratio="15">3V3</text>
+<text x="-21.663" y="-7.92599375" size="1.016" layer="21" ratio="15">AGND</text>
+<text x="-21.69" y="-5.22099375" size="1.016" layer="21" ratio="15">MIC-</text>
+<text x="-1.187" y="-37.475" size="1.016" layer="21" ratio="15" rot="R180">XDCS</text>
+<text x="-1.223" y="-34.773" size="1.016" layer="21" ratio="15" rot="R180">SDCS</text>
+<text x="-1.1774" y="-32.475" size="1.016" layer="21" ratio="15" rot="R180">CS</text>
+<text x="-1.1684" y="-29.9974" size="1.016" layer="21" ratio="15" rot="R180">RST</text>
+<text x="-1.143" y="-24.638" size="1.016" layer="21" ratio="15" rot="R180">MOSI</text>
+<text x="-1.143" y="-27.178" size="1.016" layer="21" ratio="15" rot="R180">SCLK</text>
+<text x="-0.943" y="0.722" size="1.016" layer="21" ratio="15" rot="R180">ROUT</text>
+<text x="-0.843" y="-1.838" size="1.016" layer="21" ratio="15" rot="R180">LOUT</text>
+<text x="-1.016" y="-4.318" size="1.016" layer="21" ratio="15" rot="R180">AGND</text>
+<text x="-1.1684" y="-12.1666" size="1.016" layer="21" ratio="15" rot="R180">DREQ</text>
+<text x="-1.0668" y="-9.4996" size="1.016" layer="21" ratio="15" rot="R180">GND</text>
+<text x="-1.143" y="-21.971" size="1.016" layer="21" ratio="15" rot="R180">MISO</text>
+<text x="-1.143" y="-19.685" size="1.016" layer="21" ratio="15" rot="R180">GND</text>
+<text x="-1.27" y="-17.1704" size="1.016" layer="21" ratio="15" rot="R180">3V3</text>
+<text x="-1.27" y="-14.859" size="1.016" layer="21" ratio="15" rot="R180">VCC</text>
+<text x="-2.54" y="-41.91" size="1.016" layer="21" ratio="15">5V</text>
+<text x="-3.556" y="-43.18" size="1.016" layer="21" ratio="15">SAFE</text>
+<text x="-21.663" y="-2.953996875" size="1.016" layer="21" ratio="15">MIC+</text>
+<text x="-1.016" y="-7.0104" size="1.016" layer="21" ratio="15" rot="R180">AGND</text>
+<text x="-21.7424" y="-38.9636" size="1.016" layer="21" ratio="15">CD</text>
+<text x="-18.2436" y="6.5294" size="1.27" layer="21" ratio="16">VS1053B AUDIO</text>
+<text x="-21.663" y="-0.667996875" size="1.016" layer="21" ratio="15">LINE2</text>
+<text x="-18.161" y="4.445" size="1.016" layer="21" ratio="10">v2</text>
+</package>
+<package name="SJ13525NGGR">
+<description>&lt;b&gt;SJ1-3525NG-GR-1&lt;/b&gt;&lt;br&gt;
+</description>
+<pad name="1" x="0" y="0" drill="1.7" diameter="2.55" shape="square"/>
+<pad name="2" x="5" y="-5" drill="1.7" diameter="2.35"/>
+<pad name="3" x="5" y="5" drill="1.7" diameter="2.35"/>
+<pad name="4" x="5" y="-2.5" drill="1.7" diameter="2.35"/>
+<pad name="5" x="5" y="2.5" drill="1.7" diameter="2.35"/>
+<hole x="5" y="0" drill="1.2"/>
+<hole x="0" y="-5" drill="1.2"/>
+<hole x="0" y="5" drill="1.2"/>
+<hole x="-2.5" y="-5" drill="1.2"/>
+<hole x="-2.5" y="5" drill="1.2"/>
+<text x="0.5" y="0" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="0.5" y="0" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-7.5" y1="7.275" x2="8.5" y2="7.275" width="0.1" layer="51"/>
+<wire x1="8.5" y1="7.275" x2="8.5" y2="-7.275" width="0.1" layer="51"/>
+<wire x1="8.5" y1="-7.275" x2="-7.5" y2="-7.275" width="0.1" layer="51"/>
+<wire x1="-7.5" y1="-7.275" x2="-7.5" y2="7.275" width="0.1" layer="51"/>
+<wire x1="-3.5" y1="4.96" x2="-3.5" y2="5.96" width="0.1" layer="51"/>
+<wire x1="-3.5" y1="5.96" x2="7.5" y2="5.96" width="0.1" layer="51"/>
+<wire x1="7.5" y1="5.96" x2="7.5" y2="-6.04" width="0.1" layer="51"/>
+<wire x1="7.5" y1="-6.04" x2="-3.5" y2="-6.04" width="0.1" layer="51"/>
+<wire x1="-3.5" y1="-6.04" x2="-3.5" y2="-5.08" width="0.1" layer="51"/>
+<wire x1="-3.5" y1="-5.08" x2="-4.5" y2="-5.08" width="0.1" layer="51"/>
+<wire x1="-4.5" y1="-5.08" x2="-4.5" y2="-1.84" width="0.1" layer="51"/>
+<wire x1="-4.5" y1="-1.84" x2="-3.5" y2="-1.84" width="0.1" layer="51"/>
+<wire x1="-3.5" y1="-1.84" x2="-3.5" y2="1.76" width="0.1" layer="51"/>
+<wire x1="-3.5" y1="1.76" x2="-4.5" y2="1.76" width="0.1" layer="51"/>
+<wire x1="-4.5" y1="1.76" x2="-4.5" y2="4.96" width="0.1" layer="51"/>
+<wire x1="-4.5" y1="4.96" x2="-3.5" y2="4.96" width="0.1" layer="51"/>
+<wire x1="-4.5" y1="2.96" x2="-6.5" y2="2.96" width="0.1" layer="51"/>
+<wire x1="-6.5" y1="2.96" x2="-6.5" y2="-3.04" width="0.1" layer="51"/>
+<wire x1="-6.5" y1="-3.04" x2="-4.5" y2="-3.04" width="0.1" layer="51"/>
+<wire x1="-6.3" y1="2.96" x2="-6.3" y2="-3.04" width="0.1" layer="51"/>
+<wire x1="6.5" y1="5.96" x2="7.5" y2="5.96" width="0.2" layer="21"/>
+<wire x1="7.5" y1="5.96" x2="7.5" y2="-6.04" width="0.2" layer="21"/>
+<wire x1="7.5" y1="-6.04" x2="6.5" y2="-6.04" width="0.2" layer="21"/>
+<wire x1="3.5" y1="5.96" x2="-3.5" y2="5.96" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="5.96" x2="-3.5" y2="5" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="5" x2="-4.5" y2="4.96" width="0.2" layer="21"/>
+<wire x1="-4.5" y1="4.96" x2="-4.5" y2="1.76" width="0.2" layer="21"/>
+<wire x1="-4.5" y1="1.76" x2="-3.5" y2="1.76" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="1.76" x2="-3.5" y2="-1.84" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="-1.84" x2="-4.5" y2="-1.84" width="0.2" layer="21"/>
+<wire x1="-4.5" y1="-1.84" x2="-4.5" y2="-5.08" width="0.2" layer="21"/>
+<wire x1="-4.5" y1="-5.08" x2="-3.5" y2="-5.08" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="-5.08" x2="-3.5" y2="-6.04" width="0.2" layer="21"/>
+<wire x1="-3.5" y1="-6.04" x2="3.5" y2="-6.04" width="0.2" layer="21"/>
+<wire x1="-7" y1="0" x2="-7" y2="0" width="0.1" layer="21"/>
+<wire x1="-7" y1="0" x2="-7.1" y2="0" width="0.1" layer="21" curve="180"/>
+<wire x1="-7.1" y1="0" x2="-7.1" y2="0" width="0.1" layer="21"/>
+<wire x1="-7.1" y1="0" x2="-7" y2="0" width="0.1" layer="21" curve="180"/>
+</package>
+<package name="TPA2016">
+<description>&lt;b&gt;TPA2016&lt;/b&gt;&lt;br&gt;</description>
+<pad name="1" x="0" y="1.27" drill="1.11" diameter="1.665"/>
+<pad name="2" x="0" y="-1.27" drill="1.11" diameter="1.665"/>
+<pad name="3" x="0" y="-3.81" drill="1.11" diameter="1.665"/>
+<pad name="4" x="0" y="-6.35" drill="1.11" diameter="1.665"/>
+<pad name="5" x="0" y="-8.89" drill="1.11" diameter="1.665"/>
+<pad name="6" x="0" y="-11.43" drill="1.11" diameter="1.665"/>
+<pad name="7" x="0" y="-13.97" drill="1.11" diameter="1.665"/>
+<pad name="8" x="0" y="-16.51" drill="1.11" diameter="1.665"/>
+<pad name="9" x="0" y="-19.05" drill="1.11" diameter="1.665"/>
+<pad name="MH1" x="17.78" y="1.397" drill="2.54" diameter="3.81"/>
+<pad name="MH2" x="17.78" y="-21.717" drill="2.54" diameter="3.81"/>
+<text x="9.525" y="-10.16" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="9.525" y="-12.7" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-2.54" y1="3.81" x2="20.32" y2="3.81" width="0.2" layer="51"/>
+<wire x1="20.32" y1="3.81" x2="20.32" y2="-24.13" width="0.2" layer="51"/>
+<wire x1="20.32" y1="-24.13" x2="-2.54" y2="-24.13" width="0.2" layer="51"/>
+<wire x1="-2.54" y1="-24.13" x2="-2.54" y2="3.81" width="0.2" layer="51"/>
+<wire x1="-2.54" y1="3.81" x2="20.32" y2="3.81" width="0.1" layer="21"/>
+<wire x1="20.32" y1="3.81" x2="20.32" y2="-24.13" width="0.1" layer="21"/>
+<wire x1="20.32" y1="-24.13" x2="-2.54" y2="-24.13" width="0.1" layer="21"/>
+<wire x1="-2.54" y1="-24.13" x2="-2.54" y2="3.81" width="0.1" layer="21"/>
+<wire x1="-3.54" y1="4.81" x2="21.32" y2="4.81" width="0.1" layer="51"/>
+<wire x1="21.32" y1="4.81" x2="21.32" y2="-25.13" width="0.1" layer="51"/>
+<wire x1="21.32" y1="-25.13" x2="-3.54" y2="-25.13" width="0.1" layer="51"/>
+<wire x1="-3.54" y1="-25.13" x2="-3.54" y2="4.81" width="0.1" layer="51"/>
+<pad name="10" x="0" y="-21.59" drill="1.11" diameter="1.665"/>
+<text x="2.54" y="1.27" size="1.27" layer="21">VDD</text>
+<text x="2.54" y="-1.27" size="1.27" layer="21">GND</text>
+<text x="2.54" y="-3.81" size="1.27" layer="21">SHDN</text>
+<text x="2.54" y="-6.35" size="1.27" layer="21">R-</text>
+<text x="2.54" y="-8.89" size="1.27" layer="21">R+</text>
+<text x="2.54" y="-11.43" size="1.27" layer="21">L+</text>
+<text x="2.54" y="-13.97" size="1.27" layer="21">L-</text>
+<text x="2.54" y="-16.51" size="1.27" layer="21">SCL</text>
+<text x="2.54" y="-19.05" size="1.27" layer="21">SDA</text>
+<text x="2.54" y="-22.86" size="1.27" layer="21">I2C
+VCC</text>
+</package>
+</packages>
+</library>
+<library name="teensy">
+<packages>
+<package name="TEENSY40">
+<pad name="GND1" x="-16.51" y="-7.62" drill="1" shape="square"/>
+<pad name="GND2" x="16.51" y="0" drill="1" shape="square"/>
+<pad name="GND3" x="-13.97" y="7.62" drill="1" shape="square"/>
+<pad name="VIN" x="-16.51" y="7.62" drill="1" diameter="1.778" rot="R180"/>
+<pad name="3V3-1" x="-11.43" y="7.62" drill="1" shape="octagon" rot="R90"/>
+<pad name="3V3-2" x="16.51" y="-2.54" drill="1" rot="R90"/>
+<pad name="VBAT" x="16.51" y="-5.08" drill="1" rot="R90"/>
+<pad name="PROGRAM" x="16.51" y="2.54" drill="1" rot="R90"/>
+<pad name="ON/OFF" x="16.51" y="5.08" drill="1" rot="R90"/>
+<pad name="13-SCK/CRX1/LED" x="16.51" y="7.62" drill="1" rot="R90"/>
+<pad name="12-MIO/MQSL" x="16.51" y="-7.62" drill="1" rot="R90"/>
+<pad name="0-RX1" x="-13.97" y="-7.62" drill="1" rot="R90"/>
+<pad name="1-TX1" x="-11.43" y="-7.62" drill="1" rot="R90"/>
+<pad name="2-OUT2" x="-8.89" y="-7.62" drill="1" rot="R90"/>
+<pad name="3-LRCLK2" x="-6.35" y="-7.62" drill="1" rot="R90"/>
+<pad name="4-BCLK2" x="-3.81" y="-7.62" drill="1" rot="R90"/>
+<pad name="5-IN2" x="-1.27" y="-7.62" drill="1" rot="R90"/>
+<pad name="6-OUT1D" x="1.27" y="-7.62" drill="1" rot="R90"/>
+<pad name="7-RX2/OUT1A" x="3.81" y="-7.62" drill="1" rot="R90"/>
+<pad name="8-TX2/IN1" x="6.35" y="-7.62" drill="1" rot="R90"/>
+<pad name="9-OUT1C" x="8.89" y="-7.62" drill="1" rot="R90"/>
+<pad name="10-CS/MQSR" x="11.43" y="-7.62" drill="1" rot="R90"/>
+<pad name="11-MOSI/CTX1" x="13.97" y="-7.62" drill="1" rot="R90"/>
+<pad name="VUSB" x="-13.97" y="5.08" drill="1" rot="R90"/>
+<pad name="14-A0/TX3/S-PFI_OUT" x="13.97" y="7.62" drill="1" rot="R90"/>
+<pad name="15-A1/RX3/S-PDIF_IN" x="11.43" y="7.62" drill="1" rot="R90"/>
+<pad name="16-A2/RX4/SCL1" x="8.89" y="7.62" drill="1" rot="R90"/>
+<pad name="17-A3/TX4/SDA1" x="6.35" y="7.62" drill="1" rot="R90"/>
+<pad name="18-A4/SDA0" x="3.81" y="7.62" drill="1" rot="R90"/>
+<pad name="19-A5/SCL0" x="1.27" y="7.62" drill="1" rot="R90"/>
+<pad name="20-A6/TX5/LRCLK1" x="-1.27" y="7.62" drill="1" rot="R90"/>
+<pad name="21-A7/RX5/BCLK1" x="-3.81" y="7.62" drill="1" rot="R90"/>
+<pad name="22-A8/CTX1" x="-6.35" y="7.62" drill="1" rot="R90"/>
+<pad name="23-A9/CRX1/CCLK1" x="-8.89" y="7.62" drill="1" rot="R90"/>
+<wire x1="-17.78" y1="8.89" x2="-17.78" y2="-8.89" width="0.127" layer="21"/>
+<wire x1="-17.78" y1="-8.89" x2="17.78" y2="-8.89" width="0.127" layer="21"/>
+<wire x1="17.78" y1="-8.89" x2="17.78" y2="8.89" width="0.127" layer="21"/>
+<wire x1="17.78" y1="8.89" x2="-17.78" y2="8.89" width="0.127" layer="21"/>
+<wire x1="-19.05" y1="3.81" x2="-19.05" y2="-3.81" width="0.127" layer="21"/>
+<wire x1="-19.05" y1="-3.81" x2="-13.335" y2="-3.81" width="0.127" layer="21"/>
+<wire x1="-13.335" y1="-3.81" x2="-13.335" y2="3.81" width="0.127" layer="21"/>
+<wire x1="-13.335" y1="3.81" x2="-19.05" y2="3.81" width="0.127" layer="21"/>
+<text x="-6.35" y="0" size="1.27" layer="21">TEENSY 4.0</text>
+<text x="-15.24" y="-1.27" size="1.27" layer="21" rot="R90">USB</text>
+<text x="12.446" y="-5.08" size="0.6096" layer="21">3 VOLT</text>
+<text x="11.938" y="-5.7658" size="0.6096" layer="21">COIN CEL</text>
+<pad name="24-A10/TX6/SCL2" x="12.7" y="5.207" drill="1"/>
+<pad name="26-A12/MOSI1" x="12.7" y="2.6035" drill="1"/>
+<pad name="28-RX7" x="12.7" y="0" drill="1"/>
+<pad name="30-CRX3" x="12.7" y="-2.6035" drill="1"/>
+<pad name="32-OUTB1" x="12.7" y="-5.207" drill="1"/>
+<pad name="25-A11/SDA2" x="8.255" y="5.207" drill="1"/>
+<pad name="27-A13/SCK1" x="8.255" y="2.6035" drill="1"/>
+<pad name="29-TX7" x="8.255" y="0" drill="1"/>
+<pad name="31-CTX3" x="8.255" y="-2.6035" drill="1"/>
+<pad name="33-MCLK2" x="8.255" y="-5.207" drill="1"/>
+<pad name="D-" x="-16.51" y="0.9" drill="1"/>
+<pad name="D+" x="-15.75" y="-0.9" drill="1"/>
 </package>
 </packages>
 </library>
@@ -437,21 +633,81 @@ design rules under a new name.</description>
 <param name="cfChangeDir" value="25"/>
 </pass>
 </autorouter>
+<groups>
+<board_group name="VS1053"/>
+</groups>
 <elements>
-<element name="IC1" library="SamacSys_Parts" package="1381" value="1381" x="93.98" y="69.85" smashed="yes">
-<attribute name="ARROW_PART_NUMBER" value="1381" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/1381/adafruit-industries?region=nac" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="DESCRIPTION" value="Audio IC Development Tools VS1053 Codec + MicroSD Breakout - MP3/WAV/MIDI/OGG Play + Record - v4" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="HEIGHT" value="5mm" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_NAME" value="Adafruit" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="MANUFACTURER_PART_NUMBER" value="1381" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PART_NUMBER" value="485-1381" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Adafruit/1381?qs=GURawfaeGuC8%2Fdp%252B1TGxFQ%3D%3D" x="93.98" y="69.85" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="82.55" y="49.149" size="1.27" layer="25" align="center"/>
-<attribute name="VALUE" x="82.55" y="46.609" size="1.27" layer="27" align="center"/>
+<element name="IC1" library="SamacSys_Parts" package="1381" value="1381" x="36.83" y="62.23" smashed="yes" grouprefs="VS1053">
+<attribute name="ARROW_PART_NUMBER" value="1381" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/1381/adafruit-industries?region=nac" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="DESCRIPTION" value="Audio IC Development Tools VS1053 Codec + MicroSD Breakout - MP3/WAV/MIDI/OGG Play + Record - v4" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="HEIGHT" value="5mm" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="Adafruit" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="1381" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="485-1381" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Adafruit/1381?qs=GURawfaeGuC8%2Fdp%252B1TGxFQ%3D%3D" x="36.83" y="62.23" size="1.778" layer="27" display="off"/>
+<attribute name="NAME" x="25.4" y="41.529" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="25.4" y="38.989" size="1.27" layer="27" align="center"/>
+</element>
+<element name="U$1" library="teensy" package="TEENSY40" value="TEENSY40" x="71.12" y="62.23" smashed="yes" rot="R180"/>
+<element name="J1" library="SamacSys_Parts" package="SJ13525NGGR" value="SJ1-3525NG-GR" x="64.77" y="7.62" smashed="yes" rot="R90">
+<attribute name="ARROW_PART_NUMBER" value="SJ1-3525NG-GR" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="ARROW_PRICE-STOCK" value="https://www.arrow.com/en/products/sj1-3525ng-gr/cui-devices?region=nac" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="DESCRIPTION" value="Phone Connectors 3.5 mm, Stereo, Right Angle, Through Hole, Isolated Ground, 3 Conductors, 0 2 Internal Switches, Audio Jack Connector" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="HEIGHT" value="6.1mm" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_NAME" value="CUI Devices" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="SJ1-3525NG-GR" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PART_NUMBER" value="490-SJ1-3525NG-GR" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/CUI-Devices/SJ1-3525NG-GR?qs=WyjlAZoYn51BeLQaUbXH3w%3D%3D" x="64.77" y="7.62" size="1.778" layer="27" rot="R90" display="off"/>
+<attribute name="NAME" x="67.31" y="8.12" size="1.27" layer="25" rot="R90" align="center"/>
+<attribute name="VALUE" x="65.54" y="16.51" size="1.27" layer="27" rot="R180" align="center"/>
+</element>
+<element name="IC3" library="SamacSys_Parts" package="TPA2016" value="TPA2016" x="62.23" y="45.72" smashed="yes">
+<attribute name="NAME" x="76.835" y="39.37" size="1.27" layer="25" align="center"/>
+<attribute name="VALUE" x="76.835" y="36.83" size="1.27" layer="27" align="center"/>
 </element>
 </elements>
 <signals>
+<signal name="N$1">
+<contactref element="U$1" pad="13-SCK/CRX1/LED"/>
+<contactref element="IC1" pad="12"/>
+<wire x1="36.83" y1="34.29" x2="54.61" y2="54.61" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$2">
+<contactref element="IC1" pad="10"/>
+<contactref element="U$1" pad="12-MIO/MQSL"/>
+<wire x1="36.83" y1="39.37" x2="54.61" y2="69.85" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$3">
+<contactref element="U$1" pad="11-MOSI/CTX1"/>
+<contactref element="IC1" pad="11"/>
+<wire x1="36.83" y1="36.83" x2="57.15" y2="69.85" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$4">
+<contactref element="IC1" pad="14"/>
+<contactref element="U$1" pad="10-CS/MQSR"/>
+<wire x1="36.83" y1="29.21" x2="59.69" y2="69.85" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="GND">
+<contactref element="IC1" pad="5"/>
+<contactref element="IC1" pad="9"/>
+<wire x1="36.83" y1="41.91" x2="36.83" y2="52.07" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$5">
+<contactref element="IC1" pad="16"/>
+<contactref element="U$1" pad="6-OUT1D"/>
+<wire x1="36.83" y1="24.13" x2="69.85" y2="69.85" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$6">
+<contactref element="IC1" pad="15"/>
+<contactref element="U$1" pad="4-BCLK2"/>
+<wire x1="36.83" y1="26.67" x2="74.93" y2="69.85" width="0" layer="19" extent="1-1"/>
+</signal>
+<signal name="N$7">
+<contactref element="IC1" pad="13"/>
+<contactref element="U$1" pad="9-OUT1C"/>
+<wire x1="36.83" y1="31.75" x2="62.23" y2="69.85" width="0" layer="19" extent="1-1"/>
+</signal>
 </signals>
 <mfgpreviewcolors>
 <mfgpreviewcolor name="soldermaskcolor" color="0xC8008000"/>
@@ -462,4 +718,15 @@ design rules under a new name.</description>
 </mfgpreviewcolors>
 </board>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+<note version="9.5" severity="warning">
+Since Version 9.5, EAGLE supports persistent groups with
+schematics, and board files. Those persistent groups
+will not be understood (or retained) with this version.
+</note>
+</compatibility>
 </eagle>

@@ -235,6 +235,35 @@
 <text x="-21.663" y="-0.667996875" size="1.016" layer="21" ratio="15">LINE2</text>
 <text x="-18.161" y="4.445" size="1.016" layer="21" ratio="10">v2</text>
 </package>
+<package name="987">
+<description>&lt;b&gt;987-5&lt;/b&gt;&lt;br&gt;
+</description>
+<pad name="1" x="0" y="0" drill="1.11" diameter="1.665"/>
+<pad name="2" x="0" y="-2.54" drill="1.11" diameter="1.665"/>
+<pad name="3" x="0" y="-5.08" drill="1.11" diameter="1.665"/>
+<pad name="4" x="0" y="-7.62" drill="1.11" diameter="1.665"/>
+<pad name="5" x="0" y="-10.16" drill="1.11" diameter="1.665"/>
+<pad name="6" x="0" y="-12.7" drill="1.11" diameter="1.665"/>
+<pad name="7" x="0" y="-15.24" drill="1.11" diameter="1.665"/>
+<pad name="8" x="0" y="-17.78" drill="1.11" diameter="1.665"/>
+<pad name="9" x="0" y="-20.32" drill="1.11" diameter="1.665"/>
+<pad name="MH1" x="19.05" y="1.397" drill="2.54" diameter="3.81"/>
+<pad name="MH2" x="19.05" y="-21.717" drill="2.54" diameter="3.81"/>
+<text x="9.525" y="-10.16" size="1.27" layer="25" align="center">&gt;NAME</text>
+<text x="9.525" y="-10.16" size="1.27" layer="27" align="center">&gt;VALUE</text>
+<wire x1="-2.54" y1="3.81" x2="21.59" y2="3.81" width="0.2" layer="51"/>
+<wire x1="21.59" y1="3.81" x2="21.59" y2="-24.13" width="0.2" layer="51"/>
+<wire x1="21.59" y1="-24.13" x2="-2.54" y2="-24.13" width="0.2" layer="51"/>
+<wire x1="-2.54" y1="-24.13" x2="-2.54" y2="3.81" width="0.2" layer="51"/>
+<wire x1="-2.54" y1="3.81" x2="21.59" y2="3.81" width="0.1" layer="21"/>
+<wire x1="21.59" y1="3.81" x2="21.59" y2="-24.13" width="0.1" layer="21"/>
+<wire x1="21.59" y1="-24.13" x2="-2.54" y2="-24.13" width="0.1" layer="21"/>
+<wire x1="-2.54" y1="-24.13" x2="-2.54" y2="3.81" width="0.1" layer="21"/>
+<wire x1="-3.54" y1="4.81" x2="22.59" y2="4.81" width="0.1" layer="51"/>
+<wire x1="22.59" y1="4.81" x2="22.59" y2="-25.13" width="0.1" layer="51"/>
+<wire x1="22.59" y1="-25.13" x2="-3.54" y2="-25.13" width="0.1" layer="51"/>
+<wire x1="-3.54" y1="-25.13" x2="-3.54" y2="4.81" width="0.1" layer="51"/>
+</package>
 <package name="SJ13525NGGR">
 <description>&lt;b&gt;SJ1-3525NG-GR-1&lt;/b&gt;&lt;br&gt;
 </description>
@@ -289,46 +318,6 @@
 <wire x1="-7.1" y1="0" x2="-7.1" y2="0" width="0.1" layer="21"/>
 <wire x1="-7.1" y1="0" x2="-7" y2="0" width="0.1" layer="21" curve="180"/>
 </package>
-<package name="TPA2016">
-<description>&lt;b&gt;TPA2016&lt;/b&gt;&lt;br&gt;</description>
-<pad name="1" x="0" y="1.27" drill="1.11" diameter="1.665"/>
-<pad name="2" x="0" y="-1.27" drill="1.11" diameter="1.665"/>
-<pad name="3" x="0" y="-3.81" drill="1.11" diameter="1.665"/>
-<pad name="4" x="0" y="-6.35" drill="1.11" diameter="1.665"/>
-<pad name="5" x="0" y="-8.89" drill="1.11" diameter="1.665"/>
-<pad name="6" x="0" y="-11.43" drill="1.11" diameter="1.665"/>
-<pad name="7" x="0" y="-13.97" drill="1.11" diameter="1.665"/>
-<pad name="8" x="0" y="-16.51" drill="1.11" diameter="1.665"/>
-<pad name="9" x="0" y="-19.05" drill="1.11" diameter="1.665"/>
-<pad name="MH1" x="17.78" y="1.397" drill="2.54" diameter="3.81"/>
-<pad name="MH2" x="17.78" y="-21.717" drill="2.54" diameter="3.81"/>
-<text x="9.525" y="-10.16" size="1.27" layer="25" align="center">&gt;NAME</text>
-<text x="9.525" y="-12.7" size="1.27" layer="27" align="center">&gt;VALUE</text>
-<wire x1="-2.54" y1="3.81" x2="20.32" y2="3.81" width="0.2" layer="51"/>
-<wire x1="20.32" y1="3.81" x2="20.32" y2="-24.13" width="0.2" layer="51"/>
-<wire x1="20.32" y1="-24.13" x2="-2.54" y2="-24.13" width="0.2" layer="51"/>
-<wire x1="-2.54" y1="-24.13" x2="-2.54" y2="3.81" width="0.2" layer="51"/>
-<wire x1="-2.54" y1="3.81" x2="20.32" y2="3.81" width="0.1" layer="21"/>
-<wire x1="20.32" y1="3.81" x2="20.32" y2="-24.13" width="0.1" layer="21"/>
-<wire x1="20.32" y1="-24.13" x2="-2.54" y2="-24.13" width="0.1" layer="21"/>
-<wire x1="-2.54" y1="-24.13" x2="-2.54" y2="3.81" width="0.1" layer="21"/>
-<wire x1="-3.54" y1="4.81" x2="21.32" y2="4.81" width="0.1" layer="51"/>
-<wire x1="21.32" y1="4.81" x2="21.32" y2="-25.13" width="0.1" layer="51"/>
-<wire x1="21.32" y1="-25.13" x2="-3.54" y2="-25.13" width="0.1" layer="51"/>
-<wire x1="-3.54" y1="-25.13" x2="-3.54" y2="4.81" width="0.1" layer="51"/>
-<pad name="10" x="0" y="-21.59" drill="1.11" diameter="1.665"/>
-<text x="2.54" y="1.27" size="1.27" layer="21">VDD</text>
-<text x="2.54" y="-1.27" size="1.27" layer="21">GND</text>
-<text x="2.54" y="-3.81" size="1.27" layer="21">SHDN</text>
-<text x="2.54" y="-6.35" size="1.27" layer="21">R-</text>
-<text x="2.54" y="-8.89" size="1.27" layer="21">R+</text>
-<text x="2.54" y="-11.43" size="1.27" layer="21">L+</text>
-<text x="2.54" y="-13.97" size="1.27" layer="21">L-</text>
-<text x="2.54" y="-16.51" size="1.27" layer="21">SCL</text>
-<text x="2.54" y="-19.05" size="1.27" layer="21">SDA</text>
-<text x="2.54" y="-22.86" size="1.27" layer="21">I2C
-VCC</text>
-</package>
 </packages>
 <symbols>
 <symbol name="1381">
@@ -375,6 +364,25 @@ VCC</text>
 <pin name="MH3" x="17.78" y="15.24" length="middle" rot="R270"/>
 <pin name="MH4" x="17.78" y="-53.34" length="middle" rot="R90"/>
 </symbol>
+<symbol name="987">
+<wire x1="5.08" y1="2.54" x2="22.86" y2="2.54" width="0.254" layer="94"/>
+<wire x1="22.86" y1="-22.86" x2="22.86" y2="2.54" width="0.254" layer="94"/>
+<wire x1="22.86" y1="-22.86" x2="5.08" y2="-22.86" width="0.254" layer="94"/>
+<wire x1="5.08" y1="2.54" x2="5.08" y2="-22.86" width="0.254" layer="94"/>
+<text x="24.13" y="7.62" size="1.778" layer="95" align="center-left">&gt;NAME</text>
+<text x="24.13" y="5.08" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
+<pin name="VDD" x="0" y="0" length="middle"/>
+<pin name="GND" x="0" y="-2.54" length="middle"/>
+<pin name="SDWN" x="0" y="-5.08" length="middle"/>
+<pin name="L+" x="0" y="-7.62" length="middle"/>
+<pin name="L-" x="0" y="-10.16" length="middle"/>
+<pin name="R-" x="0" y="-12.7" length="middle"/>
+<pin name="R+" x="0" y="-15.24" length="middle"/>
+<pin name="G'" x="0" y="-17.78" length="middle"/>
+<pin name="G" x="0" y="-20.32" length="middle"/>
+<pin name="MH1" x="27.94" y="0" length="middle" rot="R180"/>
+<pin name="MH2" x="27.94" y="-2.54" length="middle" rot="R180"/>
+</symbol>
 <symbol name="SJ1-3525NG-GR">
 <wire x1="5.08" y1="2.54" x2="35.56" y2="2.54" width="0.254" layer="94"/>
 <wire x1="35.56" y1="-10.16" x2="35.56" y2="2.54" width="0.254" layer="94"/>
@@ -387,24 +395,6 @@ VCC</text>
 <pin name="RING" x="40.64" y="0" length="middle" rot="R180"/>
 <pin name="TIP_SWITCH" x="40.64" y="-5.08" length="middle" rot="R180"/>
 <pin name="RING_SWITCH" x="40.64" y="-2.54" length="middle" rot="R180"/>
-</symbol>
-<symbol name="TPA2016">
-<wire x1="5.08" y1="2.54" x2="22.86" y2="2.54" width="0.254" layer="94"/>
-<wire x1="22.86" y1="-25.4" x2="22.86" y2="2.54" width="0.254" layer="94"/>
-<wire x1="22.86" y1="-25.4" x2="5.08" y2="-25.4" width="0.254" layer="94"/>
-<wire x1="5.08" y1="2.54" x2="5.08" y2="-25.4" width="0.254" layer="94"/>
-<text x="24.13" y="7.62" size="1.778" layer="95" align="center-left">&gt;NAME</text>
-<text x="24.13" y="5.08" size="1.778" layer="96" align="center-left">&gt;VALUE</text>
-<pin name="VDD" x="0" y="0" length="middle"/>
-<pin name="GND" x="0" y="-2.54" length="middle"/>
-<pin name="SHDN" x="0" y="-5.08" length="middle"/>
-<pin name="R-" x="0" y="-7.62" length="middle"/>
-<pin name="R+" x="0" y="-10.16" length="middle"/>
-<pin name="L+" x="0" y="-12.7" length="middle"/>
-<pin name="L-" x="0" y="-15.24" length="middle"/>
-<pin name="SCL" x="0" y="-17.78" length="middle"/>
-<pin name="SDA" x="0" y="-20.32" length="middle"/>
-<pin name="I2C" x="0" y="-22.86" length="middle"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -469,6 +459,42 @@ Source: &lt;a href="https://cdn-shop.adafruit.com/datasheets/vs1053.pdf"&gt; Dat
 </device>
 </devices>
 </deviceset>
+<deviceset name="987" prefix="IC">
+<description>&lt;b&gt;Audio IC Development Tools Stereo 3.7W Class D Audio Amplifier&lt;/b&gt;&lt;p&gt;
+Source: &lt;a href="https://learn.adafruit.com/stereo-3-7w-class-d-audio-amplifier/downloads"&gt; Datasheet &lt;/a&gt;</description>
+<gates>
+<gate name="G$1" symbol="987" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="987">
+<connects>
+<connect gate="G$1" pin="G" pad="9"/>
+<connect gate="G$1" pin="G'" pad="8"/>
+<connect gate="G$1" pin="GND" pad="2"/>
+<connect gate="G$1" pin="L+" pad="4"/>
+<connect gate="G$1" pin="L-" pad="5"/>
+<connect gate="G$1" pin="MH1" pad="MH1"/>
+<connect gate="G$1" pin="MH2" pad="MH2"/>
+<connect gate="G$1" pin="R+" pad="7"/>
+<connect gate="G$1" pin="R-" pad="6"/>
+<connect gate="G$1" pin="SDWN" pad="3"/>
+<connect gate="G$1" pin="VDD" pad="1"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="ARROW_PART_NUMBER" value="" constant="no"/>
+<attribute name="ARROW_PRICE-STOCK" value="" constant="no"/>
+<attribute name="DESCRIPTION" value="Audio IC Development Tools Stereo 3.7W Class D Audio Amplifier" constant="no"/>
+<attribute name="HEIGHT" value="3.03mm" constant="no"/>
+<attribute name="MANUFACTURER_NAME" value="Adafruit" constant="no"/>
+<attribute name="MANUFACTURER_PART_NUMBER" value="987" constant="no"/>
+<attribute name="MOUSER_PART_NUMBER" value="485-987" constant="no"/>
+<attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/Adafruit/987?qs=GURawfaeGuAQGYb9Jkgqpg%3D%3D" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
 <deviceset name="SJ1-3525NG-GR" prefix="J">
 <description>&lt;b&gt;Phone Connectors 3.5 mm, Stereo, Right Angle, Through Hole, Isolated Ground, 3 Conductors, 0 2 Internal Switches, Audio Jack Connector&lt;/b&gt;&lt;p&gt;
 Source: &lt;a href="https://www.cuidevices.com/product/resource/digikeypdf/sj1-352xng.pdf"&gt; Datasheet &lt;/a&gt;</description>
@@ -495,32 +521,6 @@ Source: &lt;a href="https://www.cuidevices.com/product/resource/digikeypdf/sj1-3
 <attribute name="MOUSER_PART_NUMBER" value="490-SJ1-3525NG-GR" constant="no"/>
 <attribute name="MOUSER_PRICE-STOCK" value="https://www.mouser.co.uk/ProductDetail/CUI-Devices/SJ1-3525NG-GR?qs=WyjlAZoYn51BeLQaUbXH3w%3D%3D" constant="no"/>
 </technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-<deviceset name="TPA2016" prefix="IC">
-<description>&lt;b&gt;Audio IC Development Tools Stereo 3.7W Class D Audio Amplifier&lt;/b&gt;&lt;p&gt;
-Source: &lt;a href="https://learn.adafruit.com/stereo-3-7w-class-d-audio-amplifier/downloads"&gt; Datasheet &lt;/a&gt;</description>
-<gates>
-<gate name="G$1" symbol="TPA2016" x="2.54" y="7.62"/>
-</gates>
-<devices>
-<device name="" package="TPA2016">
-<connects>
-<connect gate="G$1" pin="GND" pad="2"/>
-<connect gate="G$1" pin="I2C" pad="10"/>
-<connect gate="G$1" pin="L+" pad="6"/>
-<connect gate="G$1" pin="L-" pad="7"/>
-<connect gate="G$1" pin="R+" pad="5"/>
-<connect gate="G$1" pin="R-" pad="4"/>
-<connect gate="G$1" pin="SCL" pad="8"/>
-<connect gate="G$1" pin="SDA" pad="9"/>
-<connect gate="G$1" pin="SHDN" pad="3"/>
-<connect gate="G$1" pin="VDD" pad="1"/>
-</connects>
-<technologies>
-<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -708,39 +708,6 @@ Source: &lt;a href="https://learn.adafruit.com/stereo-3-7w-class-d-audio-amplifi
 </deviceset>
 </devicesets>
 </library>
-<library name="supply1" urn="urn:adsk.eagle:library:371">
-<description>&lt;b&gt;Supply Symbols&lt;/b&gt;&lt;p&gt;
- GND, VCC, 0V, +5V, -5V, etc.&lt;p&gt;
- Please keep in mind, that these devices are necessary for the
- automatic wiring of the supply signals.&lt;p&gt;
- The pin name defined in the symbol is identical to the net which is to be wired automatically.&lt;p&gt;
- In this library the device names are the same as the pin names of the symbols, therefore the correct signal names appear next to the supply symbols in the schematic.&lt;p&gt;
- &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-</packages>
-<symbols>
-<symbol name="GND" urn="urn:adsk.eagle:symbol:26925/1" library_version="1">
-<wire x1="-1.905" y1="0" x2="1.905" y2="0" width="0.254" layer="94"/>
-<text x="-2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="GND" urn="urn:adsk.eagle:component:26954/1" prefix="GND" library_version="1">
-<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;</description>
-<gates>
-<gate name="1" symbol="GND" x="0" y="0"/>
-</gates>
-<devices>
-<device name="">
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 </libraries>
 <attributes>
 </attributes>
@@ -753,17 +720,15 @@ Source: &lt;a href="https://learn.adafruit.com/stereo-3-7w-class-d-audio-amplifi
 <parts>
 <part name="IC1" library="SamacSys_Parts" deviceset="1381" device=""/>
 <part name="U$1" library="teensy" deviceset="TEENSY40" device=""/>
+<part name="IC2" library="SamacSys_Parts" deviceset="987" device=""/>
 <part name="J1" library="SamacSys_Parts" deviceset="SJ1-3525NG-GR" device=""/>
-<part name="IC3" library="SamacSys_Parts" deviceset="TPA2016" device=""/>
-<part name="GND1" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
-<part name="GND2" library="supply1" library_urn="urn:adsk.eagle:library:371" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="116.84" y="180.34" size="1.778" layer="97">MINI JACK (emplacement des pins à vérifier)</text>
 <text x="124.46" y="86.36" size="1.778" layer="97">AUDIO AMP</text>
-<text x="27.94" y="81.28" size="1.778" layer="97">VS1053 - MP3 DECODER</text>
+<text x="27.94" y="86.36" size="1.778" layer="97">VS1053 - MP3 DECODER</text>
 <text x="25.4" y="180.34" size="1.778" layer="97">TEENSY</text>
 </plain>
 <instances>
@@ -772,123 +737,21 @@ Source: &lt;a href="https://learn.adafruit.com/stereo-3-7w-class-d-audio-amplifi
 <attribute name="VALUE" x="62.23" y="73.66" size="1.778" layer="96" align="center-left"/>
 </instance>
 <instance part="U$1" gate="G$1" x="48.26" y="142.24" smashed="yes"/>
+<instance part="IC2" gate="G$1" x="121.92" y="66.04" smashed="yes">
+<attribute name="NAME" x="146.05" y="73.66" size="1.778" layer="95" align="center-left"/>
+<attribute name="VALUE" x="146.05" y="71.12" size="1.778" layer="96" align="center-left"/>
+</instance>
 <instance part="J1" gate="G$1" x="111.76" y="165.1" smashed="yes">
 <attribute name="NAME" x="148.59" y="172.72" size="1.778" layer="95" align="center-left"/>
 <attribute name="VALUE" x="148.59" y="170.18" size="1.778" layer="96" align="center-left"/>
-</instance>
-<instance part="IC3" gate="G$1" x="121.92" y="73.66" smashed="yes">
-<attribute name="NAME" x="146.05" y="81.28" size="1.778" layer="95" align="center-left"/>
-<attribute name="VALUE" x="146.05" y="78.74" size="1.778" layer="96" align="center-left"/>
-</instance>
-<instance part="GND1" gate="1" x="76.2" y="7.62" smashed="yes">
-<attribute name="VALUE" x="73.66" y="5.08" size="1.778" layer="96"/>
-</instance>
-<instance part="GND2" gate="1" x="99.06" y="40.64" smashed="yes" rot="R90">
-<attribute name="VALUE" x="101.6" y="38.1" size="1.778" layer="96" rot="R90"/>
 </instance>
 </instances>
 <busses>
 </busses>
 <nets>
-<net name="N$1" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="13-SCK/CRX1/LED"/>
-<wire x1="76.2" y1="114.3" x2="86.36" y2="114.3" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="SCLK"/>
-<wire x1="86.36" y1="114.3" x2="86.36" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="86.36" y1="33.02" x2="66.04" y2="33.02" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$2" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="MISO"/>
-<wire x1="66.04" y1="38.1" x2="88.9" y2="38.1" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="12-MISO/MQSL"/>
-<wire x1="88.9" y1="38.1" x2="88.9" y2="137.16" width="0.1524" layer="91"/>
-<wire x1="88.9" y1="137.16" x2="76.2" y2="137.16" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$3" class="0">
-<segment>
-<pinref part="U$1" gate="G$1" pin="11-MOSI/CTX1"/>
-<wire x1="76.2" y1="139.7" x2="91.44" y2="139.7" width="0.1524" layer="91"/>
-<wire x1="91.44" y1="139.7" x2="91.44" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="IC1" gate="G$1" pin="MOSI"/>
-<wire x1="91.44" y1="35.56" x2="66.04" y2="35.56" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$4" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="CS"/>
-<wire x1="66.04" y1="27.94" x2="83.82" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="83.82" y1="27.94" x2="83.82" y2="142.24" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="10-CS"/>
-<wire x1="83.82" y1="142.24" x2="76.2" y2="142.24" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="GND" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="GND_1"/>
-<wire x1="66.04" y1="50.8" x2="76.2" y2="50.8" width="0.1524" layer="91"/>
-<pinref part="GND1" gate="1" pin="GND"/>
-<wire x1="76.2" y1="50.8" x2="76.2" y2="10.16" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="IC1" gate="G$1" pin="GND_2"/>
-<wire x1="66.04" y1="40.64" x2="96.52" y2="40.64" width="0.1524" layer="91"/>
-<pinref part="GND2" gate="1" pin="GND"/>
-</segment>
-</net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="XDCS"/>
-<wire x1="66.04" y1="22.86" x2="81.28" y2="22.86" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="6-OUT1D"/>
-<wire x1="81.28" y1="22.86" x2="81.28" y2="121.92" width="0.1524" layer="91"/>
-<wire x1="81.28" y1="121.92" x2="76.2" y2="121.92" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$6" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="SDCS"/>
-<wire x1="66.04" y1="25.4" x2="78.74" y2="25.4" width="0.1524" layer="91"/>
-<wire x1="78.74" y1="25.4" x2="78.74" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="78.74" y1="99.06" x2="15.24" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="15.24" y1="99.06" x2="15.24" y2="114.3" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="4-BCLK1"/>
-<wire x1="15.24" y1="114.3" x2="20.32" y2="114.3" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$7" class="0">
-<segment>
-<pinref part="IC1" gate="G$1" pin="RST"/>
-<wire x1="66.04" y1="30.48" x2="73.66" y2="30.48" width="0.1524" layer="91"/>
-<wire x1="73.66" y1="30.48" x2="73.66" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="73.66" y1="101.6" x2="78.74" y2="101.6" width="0.1524" layer="91"/>
-<wire x1="78.74" y1="101.6" x2="78.74" y2="124.46" width="0.1524" layer="91"/>
-<pinref part="U$1" gate="G$1" pin="9-OUT1C"/>
-<wire x1="78.74" y1="124.46" x2="76.2" y2="124.46" width="0.1524" layer="91"/>
-</segment>
-</net>
 </nets>
 </sheet>
 </sheets>
 </schematic>
 </drawing>
-<compatibility>
-<note version="6.3" minversion="6.2.2" severity="warning">
-Since Version 6.2.2 text objects can contain more than one line,
-which will not be processed correctly with this version.
-</note>
-<note version="8.2" severity="warning">
-Since Version 8.2, EAGLE supports online libraries. The ids
-of those online libraries will not be understood (or retained)
-with this version.
-</note>
-<note version="8.3" severity="warning">
-Since Version 8.3, EAGLE supports URNs for individual library
-assets (packages, symbols, and devices). The URNs of those assets
-will not be understood (or retained) with this version.
-</note>
-</compatibility>
 </eagle>
