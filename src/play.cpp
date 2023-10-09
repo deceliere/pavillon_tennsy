@@ -28,7 +28,7 @@
 
 // These are the pins used for the Adafruit vs1053B breakout module
 #define XRST 9	// vs1053 reset (output)
-#define XCS 10	// vs1053 chip select (output)
+#define XCS 10	// vs1053 chip select (output) // aka CS on vs1053
 #define XDCS 8	// vs1053 Data select (output)
 #define XDREQ 3 // vs1053 Data Ready an Interrupt pin (input)
 // #define SDCS  BUILTIN_SDCARD   // Use Teensy built-in card
@@ -83,18 +83,25 @@
 
 #define vs1053_DATABUFFERLEN 32
 
+#define SCI_AICTRL3 0x0F	// address du Vu metre
+#define SS_VU_ENABLE 0x0200 // address pour activer le Vu metre
+#define SCI_STATUS 0x01		// address du status du Vu metre
+
+#define INIT_AMP_GAIN 20
+
 File currentTrack;
 boolean playingMusic;
 uint8_t SoundBuffer[vs1053_DATABUFFERLEN];
 s_id3 id3;
-int trackNumber = 1;
+int trackNumber = 0;
 
 uint8_t volume = 0;
-int amp_gain = 20;
+int amp_gain = INIT_AMP_GAIN;
 uint16_t volume_pot;
 uint8_t fileCount = 0;
 Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
 char *soundfile;
+String	soundfile_str; // wip TBC
 
 /* TBC pour le Vu metre*/
 union twobyte
@@ -102,10 +109,6 @@ union twobyte
 	uint16_t word;
 	uint8_t byte[2];
 };
-
-#define SCI_AICTRL3 0x0F	// address du Vu metre
-#define SS_VU_ENABLE 0x0200 // address pour activer le Vu metre
-#define SCI_STATUS 0x01		// adress du status du Vu metre
 
 ////////////////////////////////////////////////////////////////////////////////
 // vs1053B.cpp
@@ -210,8 +213,8 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	playingMusic = true;
 	while (!vs1053ReadyForData())
 	{ // wait for ready for data
-	  message_oled("waiting for data...");
-	  // delay(1000);
+		message_oled("waiting for data...");
+		// delay(1000);
 	}
 	// message_oled("data ready");
 	DPRINTLN("data ready");
@@ -220,8 +223,8 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	{
 		// DPRINTLN("feeding buffer");
 		vs1053FeedBuffer(); // then send data
-	  	message_oled("feeding buffer");
-							// message_oled("feeding buffer");
+		message_oled("feeding buffer");
+		// message_oled("feeding buffer");
 	}
 	return true;
 }
@@ -689,6 +692,7 @@ void printDirectory(File dir, int numTabs)
 	}
 }
 
+#ifdef DEBUG
 /// waiting for serial messages
 int check_serial()
 {
@@ -796,6 +800,7 @@ int check_serial()
 	}
 	return 0;
 }
+#endif
 
 void parse_id3()
 {
@@ -803,11 +808,11 @@ void parse_id3()
 
 	// display = new char[12];
 	vs1053getTrackInfo(TRACK_TITLE, id3.title);
-	// DPRINTLN(id3.title);
+	DPRINTLN(id3.title);
 	vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
-	// DPRINTLN(id3.artist);
+	DPRINTLN(id3.artist);
 	vs1053getTrackInfo(TRACK_ALBUM, id3.album);
-	// DPRINTLN(id3.album);
+	DPRINTLN(id3.album);
 
 	itoa(trackNumber + 1, id3.fileCurrent, 10); // + 1 pour que la piste 0 s affiche comme etant la piste 1
 	strcpy(id3.trackDisplay, id3.fileCurrent);
@@ -928,13 +933,24 @@ void buttonCheck()
 	lastNextButtonState = readingNext;
 }
 
+void getScaledVolume(void)
+{
+	pot_debounce(50);
+	if (volume_pot >= 0 && volume_pot <= 400)
+		volume = (unsigned int)map(volume_pot, 0, 400, 200, 30);
+	if (volume_pot > 400)
+		volume = (unsigned int)map(volume_pot, 400, 1023, 29, 1);
+	while (audioamp.getGain() != amp_gain)
+		;
+}
+
 void setup()
 {
-	#ifdef DEBUG
+#ifdef DEBUG
 	Serial.begin(9600);
 	while (!Serial)
 		; // wait for Arduino Serial Monitor
-	#endif
+#endif
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP);
@@ -954,18 +970,19 @@ void setup()
 		message_oled("audio amp ok");
 		delay(500);
 	}
-	// DPRINTLN(F("Amp found"));
+	DPRINTLN(F("Amp found"));
 	audioamp.setAGCCompression(TPA2016_AGC_OFF);
 	audioamp.setReleaseControl(0);
 	audioamp.setAttackControl(0);
 	audioamp.setHoldControl(0);
 	audioamp.setLimitLevelOff();
 	audioamp.setGain(amp_gain);
-	while(audioamp.getGain() != amp_gain)
-	;
+	while (audioamp.getGain() != amp_gain)
+	{
+		audioamp.setGain(amp_gain);
+	}
 	message_oled("amp gain ok");
 	delay(500);
-	
 
 	// if (vs1053vs_init()) { // initialise the music player
 	if (!vs1053Begin())
@@ -1007,9 +1024,6 @@ void setup()
 	// DPRINTLN(fileNames[0]);
 
 	// Set volume for left, right channels. lower numbers is higher volume
-	vs1053SetVolume(volume, volume);
-	message_oled("set volume ok");
-	delay(500);
 	// delay(500);
 
 	// If XDREQ is on an interrupt pin (any Teensy pin) can do background audio playing
@@ -1046,6 +1060,10 @@ void setup()
 	// message_oled("start playingfile OK");
 	pinMode(22, INPUT);
 	volume_pot = analogRead(22);
+	getScaledVolume();
+	vs1053SetVolume(volume, volume);
+	message_oled("set volume ok");
+	delay(500);
 	// DPRINTLN(volume_pot);
 	// DPRINTLN(volume);
 	soundfile = fileNames[trackNumber];
@@ -1074,6 +1092,9 @@ int previousMilliPrec = currentMilliPrev;
 void loop()
 {
 
+#ifdef DEBUG
+	check_serial();
+#endif
 	currentMilliVU = millis();
 	if (currentMilliVU - previousMilliVU >= 50)
 	{
@@ -1112,8 +1133,7 @@ void loop()
 	if (vs1053Stopped())
 	{
 		playNext();
-		
-		
+
 		// vs1053resetPosition();
 		// analogWrite(FET, 0);
 		// DPRINT("SCI mode at stop 0x");
@@ -1121,9 +1141,9 @@ void loop()
 		// DPRINT("SCI Clock");
 		// DPRINTLN(vs1053SciRead(SCI_CLOCKF));
 		// if (trackNumber < fileCount - 1)
-			// trackNumber++;
+		// trackNumber++;
 		// else if (trackNumber == fileCount - 1)
-			// trackNumber = 0;
+		// trackNumber = 0;
 		// DPRINT("trackNumber= ");
 		// DPRINTLN(trackNumber);
 		// soundfile = fileNames[trackNumber];
@@ -1145,22 +1165,18 @@ void loop()
 	// 	vs1053StartPlayingFile(soundfile);
 	// }
 
-	check_serial();
+	// check_serial();
 
 	// DPRINTLN("Loop running");
 	// DPRINT("pot= ");
 	// DPRINTLN(analogRead(22));;
 
-	pot_debounce(50);
 	// logVol = pow(10, volume_pot / 1023.0) - 1;
 	// logVol = (int) map(logVol, 0, 9, 100, 0);
 	// read = (int) logVol;
 	// DPRINT("logVol mapped=");
 	// DPRINTLN(logVol);
-	if (volume_pot >= 0 && volume_pot <= 400)
-		volume = (unsigned int)map(volume_pot, 0, 400, 200, 30);
-	if (volume_pot > 400)
-		volume = (unsigned int)map(volume_pot, 400, 1023, 29, 1);
+	getScaledVolume();
 	vs1053SetVolume(volume, volume);
 	// delay(10);
 	/*
@@ -1172,11 +1188,10 @@ void loop()
 	// loop_oled_scroll(soundfile); // not working
 
 	// DPRINTLN(vu_level);
-	
+
 	// DPRINTLN(vu_level);
 	// DPRINTLN(vs1053getVUmeter());
 	loop_oled(id3, soundfile);
-
 
 	// delay(1000);
 	// analogWrite(FET, 10);

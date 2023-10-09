@@ -406,8 +406,8 @@ u_int32_t count = 0;
 char str[33];
 int currentMillli_oled;
 int previousMilli_oled;
-char minStr[3];
-char secStr[3];
+char minStr[3]; // minutes
+char secStr[3]; // secondes
 static char minSecStr[6];
 
 /* pour le scrolling - WIP */
@@ -508,10 +508,12 @@ void loop_oled(s_id3 id3, const char *soundfile)
     if (!isAlphaNumeric(id3.title[0]))
       u8g2.drawStr(0, 8, soundfile);
     else
+      // u8g2.drawUTF8(0, 8, id3.title);
       u8g2.drawStr(0, 8, id3.title);
     if (!isAlphaNumeric(id3.artist[0]))
       u8g2.drawStr(0, 20, "n/a");
     else
+      // u8g2.drawUTF8(0, 8, id3.title);
       u8g2.drawStr(0, 20, id3.artist);
     if (!isAlphaNumeric(id3.album[0]))
       u8g2.drawStr(0, 33, "n/a");

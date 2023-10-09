@@ -6,7 +6,7 @@
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
 #define DPRINTLN(...) Serial.println(__VA_ARGS__)
-#else 
+#else
 #define DPRINT(...)
 #define DPRINTLN(...)
 #endif
@@ -62,7 +62,7 @@
 #define para_positionMsec_1 0x1E28
 #define para_resync 0x1E29
 
-/* ID3 */ // WIP
+/* ID3v1 */ // WIP
 #define TRACK_TITLE 3
 #define TRACK_ARTIST 33
 #define TRACK_ALBUM 63
@@ -85,6 +85,9 @@
 #include <cmath>
 #include <limits.h>
 #include <strings.h>
+#include <taglib.h>
+#include <fileref.h>
+
 
 struct s_id3
 {
@@ -132,9 +135,8 @@ void dcs_low();
 void dcs_high();
 uint16_t vs1053Mp3ReadWRAM(uint16_t addressbyte);
 void vs1053flush_cancel(flush_m mode);
-void vs1053resetPosition();
-
-
+void vs1053resetPosition(void);
+void getScaledVolume(void);
 
 /* libft */
 void ft_bzero(void *s, size_t n);
@@ -145,10 +147,8 @@ void loop_oled(s_id3 id3, const char *soundfile);
 void message_oled(const char *soundfile);
 void loop_oled_scroll(s_id3 id3);
 
- 
 static uint16_t spi_Read_Rate;
 static uint16_t spi_Write_Rate;
- 
 
 #define CODE_SIZE 4676
 const unsigned char atab[4676] = {/* Register addresses */
