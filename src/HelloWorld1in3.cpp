@@ -51,8 +51,8 @@
 
 */
 
-// #include <Arduino.h>
-#include <U8g2lib.h>
+#include <Arduino.h>
+// #include <U8g2lib.h>
 #include "pavillon.h"
 
 #ifdef U8X8_HAVE_HW_SPI
@@ -455,12 +455,12 @@ bool setup_oled(void)
   // DPRINTLN("oled not found");
   else
   {
-    u8g2.setFontMode(0);		// enable transparent mode, which is faster
+    u8g2.setFontMode(0); // enable transparent mode, which is faster
     message_oled("oled setup ok");
     delay(100);
-    // scroll_setup();
-    // while(1)
-      // scroll_loop();
+    scroll_setup();
+    while (1)
+      scroll_loop();
     return (true);
   }
   // DPRINTLN("oled init ok  ");
@@ -473,8 +473,8 @@ void message_oled(const char *message)
   do
   {
     u8g2.setFont(FONT_NORMAL);
-    u8g2.drawStr(0, 8, message);
-    u8g2.drawStr(0, 64, "bisou");
+    u8g2.drawUTF8(0, 10, message);
+    u8g2.drawUTF8(0, 64, "bisouéèêėàç");
   } while (u8g2.nextPage());
 }
 
@@ -531,7 +531,7 @@ void loop_oled(s_id3 id3, const char *soundfile)
 
     u8g2.drawStr(98, 53, id3.trackDisplay);
   } while (u8g2.nextPage());
-    // DPRINTLN(id3.time);
+  // DPRINTLN(id3.time);
 
   // delay(10);
   // DPRINTLN(str);
@@ -573,45 +573,76 @@ void loop_oled_scroll(const char *soundfile) {
 
 /* test basic pour scroll */
 
-u8g2_uint_t offset;			// current offset for the scrolling text
-u8g2_uint_t width;			// pixel width of the scrolling text (must be lesser than 128 unless U8G2_16BIT is defined
-const char *text = "oui oui c'est ça ";	// scroll this text from right to left
+scroll_msg msg[2];
 
+// const char *text1 = "oui oui c'est ça à asd é è ç ";	// scroll this text from right to left
+// const char *text2 = "OUIIIIII ";	// scroll this text from right to left
 
-void scroll_setup(void) {
+void scroll_setup(void)
+{
 
-  // u8g2.begin();  
-  
-  u8g2.setFont(FONT_NORMAL);	// set the target font to calculate the pixel width
-  width = u8g2.getUTF8Width(text);		// calculate the pixel width of the text
-  
-  u8g2.setFontMode(0);		// enable transparent mode, which is faster
+  // u8g2.begin();
+
+  u8g2.setFont(FONT_NORMAL); // set the target font to calculate the pixel width
+  msg[0].str = "est-ce que c'est plus joli d'avoir une ligne qui termine, ou bien plutôt qu'elle se repète en boucle ? ";
+  msg[0].y = 10;
+  msg[1].str = "ET COMMENT ÇA SE PASSE DU CÔTÉ DE L'ABUM HEIN";
+  msg[1].y = 30;
+
+  for (int i = 0; i < 2; i++)
+  {
+    msg[i].width = u8g2.getUTF8Width(msg[i].str); // calculate the pixel width of the text
+    msg[i].timer = 0;
+  }
+  u8g2.setFontMode(0); // enable transparent mode, which is faster
 }
 
+void scroll_loop(void)
+{
+  // u8g2_uint_t x;
 
-void scroll_loop(void) {
-  u8g2_uint_t x;
-  
+  // for (int i = 0; i < 2; i++)
+  // {
   u8g2.firstPage();
-  do {
-  
-    // draw the scrolling text at current offset
-    x = offset;
-    u8g2.setFont(FONT_NORMAL);		// set the target font
-    do {								// repeated drawing of the scrolling text...
-      u8g2.drawUTF8(x, 12, text);			// draw the scolling text
-      x += width;						// add the pixel width of the scrolling text
-    } while( x < u8g2.getDisplayWidth() );		// draw again until the complete display is filled
-    
-    u8g2.setFont(FONT_NORMAL);		// draw the current pixel width
-    u8g2.setCursor(0, 30);
-    u8g2.print(width);					// this value must be lesser than 128 unless U8G2_16BIT is set
-    
-  } while ( u8g2.nextPage() );
-  
-  offset-=1;							// scroll by one pixel
-  if ( (u8g2_uint_t)offset < (u8g2_uint_t)-width )	
-    offset = 0;							// start over again
-    
-  delay(10);							// do some small delay
+  do
+  {
+
+    u8g2.setFont(FONT_NORMAL); // set the target font
+                               // draw the scrolling text at current offset
+    for (int i = 0; i < 2; i++)
+    {
+
+      msg[i].x = msg[i].offset;
+      // if (msg[i].offset > u8g2.getDisplayWidth())
+      // {
+      // do
+      // {                                         // repeated drawing of the scrolling text...
+      u8g2.drawUTF8(msg[i].x, msg[i].y, msg[i].str); // draw the scolling text
+                                                     // x += msg[i].width;                      // add the pixel width of the scrolling text
+      // } while (x < u8g2.getDisplayWidth());     // draw again until the complete display is filled
+      // }
+      // else
+      // u8g2.drawUTF8(0, msg[i].y, msg[i].str);
+
+      u8g2.setFont(FONT_NORMAL); // draw the current pixel width
+      u8g2.setCursor(0, msg[i].y + 10);
+      u8g2.print(msg[i].width); // this value must be lesser than 128 unless U8G2_16BIT is set
+    }
+
+  } while (u8g2.nextPage());
+
+  for (int i = 0; i < 2; i++)
+  {
+    if (msg[i].width > 128 && msg[i].timer > 1000)
+    {
+      msg[i].offset -= 1; // scroll by one pixel
+      if ((u8g2_uint_t)msg[i].offset < (u8g2_uint_t)-msg[i].width)
+      {
+        msg[i].offset = 0; // start over again
+        msg[i].timer = 0;
+      }
+    }
+  }
+  delay(20); // do some small delay
+  // }
 }

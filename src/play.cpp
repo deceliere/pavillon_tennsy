@@ -998,7 +998,10 @@ void setup()
 			;
 	}
 	else
+	{
 		message_oled("vs1053 found");
+		// DPRINTLN(F("vs1053 found"));
+	}
 	delay(500);
 */	
 	while (!SD.begin(SDCS))
@@ -1027,7 +1030,6 @@ void setup()
 	delay(500);
 	DPRINT(F("fileCount:"));
 	DPRINTLN(fileCount);
-	DPRINTLN(F("vs1053 found"));
 	// DPRINT("sounfile is ");
 	// DPRINTLN(fileNames[0]);
 
@@ -1272,7 +1274,7 @@ int listFiles()
 			{
 				if (count < MAX_FILES)
 				{
-					fileNames[count] = new char[strlen(entry.name()) + 1];
+					fileNames[count] = new char[strlen(entry.name())];
 					strcpy(fileNames[count], entry.name());
 					count++;
 				}
@@ -1292,6 +1294,8 @@ int listFiles()
 		for (int i = 0; i < count; i++)
 		{
 			DPRINTLN(fileNames[i]);
+			message_oled(fileNames[i]);
+			delay(2000);
 		}
 	}
 	else

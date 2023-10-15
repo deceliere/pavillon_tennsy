@@ -89,6 +89,8 @@
 #include <taglib.h>
 #include <fileref.h>
 #include "vs1053_patch.h"
+#include <U8g2lib.h>
+
 
 
 struct s_id3
@@ -100,6 +102,16 @@ struct s_id3
 	char fileCurrent[4];
 	char trackDisplay[12];
 	char time[12];
+};
+
+struct scroll_msg 
+{
+  u8g2_uint_t offset;
+  u8g2_uint_t width;
+  const char *str;
+  u8g2_uint_t x;
+  int y; // y pixel to display text
+  elapsedMillis timer;
 };
 
 enum flush_m
