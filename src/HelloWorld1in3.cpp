@@ -413,10 +413,12 @@ static char minSecStr[6];
 /* pour le scrolling - WIP */
 // u8g2_uint_t offset;			// current offset for the scrolling text
 // u8g2_uint_t width;			// pixel width of the scrolling text (must be lesser than 128 unless U8G2_16BIT is defined
+void scroll_setup(void);
+void scroll_loop(void);
 
 bool setup_oled(void)
 {
-  Serial.begin(115200);
+  // Serial.begin(115200);
   // while(!Serial) ;
 
   // u8g2.setBusClock(400000);
@@ -453,7 +455,12 @@ bool setup_oled(void)
   // DPRINTLN("oled not found");
   else
   {
+    u8g2.setFontMode(0);		// enable transparent mode, which is faster
     message_oled("oled setup ok");
+    delay(100);
+    // scroll_setup();
+    // while(1)
+      // scroll_loop();
     return (true);
   }
   // DPRINTLN("oled init ok  ");
@@ -563,3 +570,48 @@ void loop_oled_scroll(const char *soundfile) {
   delay(10);							// do some small delay
 }
 */
+
+/* test basic pour scroll */
+
+u8g2_uint_t offset;			// current offset for the scrolling text
+u8g2_uint_t width;			// pixel width of the scrolling text (must be lesser than 128 unless U8G2_16BIT is defined
+const char *text = "oui oui c'est ça ";	// scroll this text from right to left
+
+
+void scroll_setup(void) {
+
+  // u8g2.begin();  
+  
+  u8g2.setFont(FONT_NORMAL);	// set the target font to calculate the pixel width
+  width = u8g2.getUTF8Width(text);		// calculate the pixel width of the text
+  
+  u8g2.setFontMode(0);		// enable transparent mode, which is faster
+}
+
+
+void scroll_loop(void) {
+  u8g2_uint_t x;
+  
+  u8g2.firstPage();
+  do {
+  
+    // draw the scrolling text at current offset
+    x = offset;
+    u8g2.setFont(FONT_NORMAL);		// set the target font
+    do {								// repeated drawing of the scrolling text...
+      u8g2.drawUTF8(x, 12, text);			// draw the scolling text
+      x += width;						// add the pixel width of the scrolling text
+    } while( x < u8g2.getDisplayWidth() );		// draw again until the complete display is filled
+    
+    u8g2.setFont(FONT_NORMAL);		// draw the current pixel width
+    u8g2.setCursor(0, 30);
+    u8g2.print(width);					// this value must be lesser than 128 unless U8G2_16BIT is set
+    
+  } while ( u8g2.nextPage() );
+  
+  offset-=1;							// scroll by one pixel
+  if ( (u8g2_uint_t)offset < (u8g2_uint_t)-width )	
+    offset = 0;							// start over again
+    
+  delay(10);							// do some small delay
+}

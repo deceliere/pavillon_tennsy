@@ -31,9 +31,9 @@
 #define XCS 10	// vs1053 chip select (output) // aka CS on vs1053
 #define XDCS 8	// vs1053 Data select (output)
 #define XDREQ 3 // vs1053 Data Ready an Interrupt pin (input)
-// #define SDCS  BUILTIN_SDCARD   // Use Teensy built-in card
+#define SDCS  BUILTIN_SDCARD   // Use Teensy built-in card
 //  For Teensy 3.5, 3.6, 4.0, 4.1 better to use its built-in SDCard
-#define SDCS 4 // Use vs1053 SDCard Card chip select pin
+// #define SDCS 4 // Use vs1053 SDCard Card chip select pin
 
 /////////////////////////////////////////////////////////////////////////////////
 // vs1053B.h
@@ -951,14 +951,18 @@ void setup()
 	Serial.begin(9600);
 	while (!Serial)
 		; // wait for Arduino Serial Monitor
+	DPRINTLN(F("Serial OK"));
 #endif
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP); // tbc
 	pinMode(BUTTON_NEXT, INPUT_PULLUP);
-	while (!setup_oled())
-		;
+	if (!setup_oled())
+		DPRINTLN(F("Oled not found"));
+	else
+		DPRINTLN(F("Oled found"));
 	delay(500);
+/* // desactivé pour travail sur t41 sans vs1053
 	audioamp.begin();
 	if (!audioamp.begin())
 	{ // initialise the music player
@@ -996,12 +1000,14 @@ void setup()
 	else
 		message_oled("vs1053 found");
 	delay(500);
+*/	
 	while (!SD.begin(SDCS))
 	{
 		message_oled("SD card not found");
 	} // initialise the SD card
 	message_oled("SD card found");
 	delay(500);
+	/*
 	LoadUserCode();		 // patch pour avoir le Vu metre
 	vs1053setVUmeter(1); // allumer les infos du Vu metre
 	if (vs1053getVUmeter())
@@ -1011,9 +1017,10 @@ void setup()
 	}
 	else
 	{
-		message_oled("Vu meter OK");
+		message_oled("Vu meter not OK");
 		delay(500);
 	}
+	*/
 	fileCount = listFiles();
 	itoa(fileCount, id3.fileTotal, 10);
 	message_oled(strcat("filecount= ", id3.fileTotal));
@@ -1232,6 +1239,16 @@ int compareNames(const void *a, const void *b)
 	return strcmp(*(const char **)a, *(const char **)b);
 }
 
+// Fonction de comparaison personnalisée (met dans l'ordre selon les numeros avant le nom de fichier)
+int compareListNbr(const void *a, const void *b) {
+    // Extrait les numéros à partir des chaînes de caractères
+    int num1, num2;
+    sscanf(*(const char**)a, "%d-", &num1);
+    sscanf(*(const char**)b, "%d-", &num2);
+    
+    return num1 - num2;
+}
+
 int listFiles()
 {
 	File root = SD.open(folderPath);
@@ -1259,12 +1276,17 @@ int listFiles()
 					strcpy(fileNames[count], entry.name());
 					count++;
 				}
+				else
+				{
+					message_oled("too many files");
+					return(0);
+				}
 			}
 			entry.close();
 		}
 		root.close();
 
-		qsort(fileNames, count, sizeof(char *), compareNames);
+		qsort(fileNames, count, sizeof(char *), compareListNbr);
 
 		// Affichage des noms des fichiers
 		for (int i = 0; i < count; i++)
