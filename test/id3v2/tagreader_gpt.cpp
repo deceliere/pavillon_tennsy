@@ -3,7 +3,7 @@
 // #include <stdio.h>
 
 
-#include <iostream>
+// #include <iostream>
 #include <taglib/taglib.h>
 #include <taglib/mpegfile.h>
 #include <taglib/id3v2tag.h>
@@ -13,7 +13,6 @@
 
 
 using namespace std;
-
 
 int main() {
     // Chemin vers le fichier MP3
@@ -31,10 +30,10 @@ int main() {
         }
 
         // Obtenir les tags ID3v2
-        TagLib::ID3v2::Tag *tag = file.ID3v2Tag();
+        TagLib::Tag *tag = f.tag();
 
         // Vérifier si les tags existent
-        if (tag) {
+        if (!f.isNull() && f.tag()) {
             // Lire et afficher les informations des tags
             std::cout << "Titre : " << tag->title().toCString(true) << std::endl;
             std::cout << "Artiste : " << tag->artist().toCString(true) << std::endl;

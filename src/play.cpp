@@ -88,6 +88,7 @@
 #define SCI_STATUS 0x01		// address du status du Vu metre
 
 #define INIT_AMP_GAIN 20
+#define VOLUME_ROTARY_POT 22
 
 File currentTrack;
 boolean playingMusic;
@@ -953,7 +954,7 @@ void setup()
 #endif
 	pinMode(FET, OUTPUT);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
-	pinMode(BUTTON_PLAY, INPUT_PULLUP);
+	pinMode(BUTTON_PLAY, INPUT_PULLUP); // tbc
 	pinMode(BUTTON_NEXT, INPUT_PULLUP);
 	while (!setup_oled())
 		;
@@ -1058,8 +1059,8 @@ void setup()
 	// DPRINTLN(vs1053SciRead(0x00), HEX);
 
 	// message_oled("start playingfile OK");
-	pinMode(22, INPUT);
-	volume_pot = analogRead(22);
+	pinMode(VOLUME_ROTARY_POT, INPUT);
+	volume_pot = analogRead(VOLUME_ROTARY_POT);
 	getScaledVolume();
 	vs1053SetVolume(volume, volume);
 	message_oled("set volume ok");
@@ -1203,7 +1204,7 @@ int pot_debounce(int threshold)
 {
 	int read;
 
-	read = analogRead(22);
+	read = analogRead(VOLUME_ROTARY_POT);
 	if (read > volume_pot + threshold || read < volume_pot - threshold)
 	{
 		DPRINT("volum_pot= ");
