@@ -170,6 +170,10 @@ void vs1053flush_cancel(flush_m mode);
 void vs1053resetPosition(void);
 void getScaledVolume(void);
 
+/* custom vs1053 */
+void playNext();
+void playPrevious();
+
 /* libft */
 void ft_bzero(void *s, size_t n);
 
@@ -180,8 +184,13 @@ void message_oled(const char *soundfile);
 void loop_oled_scroll(s_id3 id3);
 
 /* id3v2 */
-void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
-               char fname[30], bool showpic);
+void frameInfo(File track);
+
+
+/* utils */
+bool copyFileToSD(const char* sourceFileName, const char* targetFileName);
+
+
 
 
 static uint16_t spi_Read_Rate; 

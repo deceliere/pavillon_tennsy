@@ -515,23 +515,23 @@ void loop_oled(s_id3 id3, const char *soundfile)
   {
     u8g2.setFont(FONT_NORMAL);
     if (!isAlphaNumeric(id3.title[0]))
-      u8g2.drawStr(0, 8, soundfile);
+      u8g2.drawUTF8(0, 10, soundfile);
     else
       // u8g2.drawUTF8(0, 8, id3.title);
-      u8g2.drawStr(0, 8, id3.title);
+      u8g2.drawUTF8(0, 10, id3.title);
     if (!isAlphaNumeric(id3.artist[0]))
-      u8g2.drawStr(0, 20, "n/a");
+      u8g2.drawUTF8(0, 22, "n/a");
     else
       // u8g2.drawUTF8(0, 8, id3.title);
-      u8g2.drawStr(0, 20, id3.artist);
+      u8g2.drawUTF8(0, 22, id3.artist);
     if (!isAlphaNumeric(id3.album[0]))
-      u8g2.drawStr(0, 33, "n/a");
+      u8g2.drawUTF8(0, 35, "n/a");
     else
-      u8g2.drawStr(0, 33, id3.album);
+      u8g2.drawUTF8(0, 35, id3.album);
     // u8g2.drawStr(0, 53, itoa(count, str, 10));
-    u8g2.drawStr(0, 53, id3.time);
+    u8g2.drawUTF8(0, 53, id3.time);
 
-    u8g2.drawStr(98, 53, id3.trackDisplay);
+    u8g2.drawUTF8(98, 53, id3.trackDisplay);
   } while (u8g2.nextPage());
   // DPRINTLN(id3.time);
 

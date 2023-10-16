@@ -3,25 +3,38 @@
 
 // int max_chars = 30;
 
-void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
-               char fname[30], bool showpic)
+void frameInfo(File track)
 {
+    char tvalue[64];
+    char albval[64];
+    char artval[64];
+    char fname[30];
+    bool showpic;
+
     uint32_t start = 10;
     uint32_t lastfrm = 10;
     bool done = false;
 
-    fname = (char*) track.name();
+    strcpy(fname, track.name());
+    // fname = new (char*) track.name();
     // strlcpy(fname, track.name(), max_chars);
+    DPRINTLN("in frameInfo\n\n");
+    DPRINT("filename= ");
+    DPRINTLN(fname);
 
     while (!done)
     {
+        DPRINTLN("\tin frameInfo loop");
         uint8_t buff[4];
         uint32_t ltwo[4];
         char tag[5];
         uint32_t fsize;
+        // track.seek(0);
         track.seek(start);
         track.read((uint8_t *)tag, 4);
-        tag[5] = 0;
+        tag[4] = 0;
+        DPRINT("\ttag= ");
+        DPRINTLN(tag);
 
         track.seek(start + 4);
         track.read((uint8_t *)buff, 4);
@@ -35,6 +48,8 @@ void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
 
         if (tag[0] == 'T' && tag[1] == 'I' && tag[2] == 'T' && tag[3] == '2')
         {
+            DPRINT("IN TIT");
+
             uint32_t i;
             int vlen = 0;
             char val[fsize];
@@ -55,6 +70,8 @@ void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
                 }
             }
             tvalue[vlen] = '\0';
+            DPRINT("tvalue: ");
+            DPRINTLN(tvalue);
         }
         else if (tag[0] == 'T' && tag[1] == 'A' && tag[2] == 'L' && tag[3] == 'B')
         {
@@ -78,6 +95,8 @@ void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
                 }
             }
             albval[vlen] = '\0';
+            DPRINT("albval: ");
+            DPRINTLN(albval);
         }
         else if (tag[0] == 'T' && tag[1] == 'P' && tag[2] == 'E' && tag[3] == '1')
         {
@@ -101,44 +120,47 @@ void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
                 }
             }
             artval[vlen] = '\0';
+            DPRINT("artval: ");
+            DPRINTLN(artval);
         }
 
-        else if (tag[0] == 'A' && tag[1] == 'P' && tag[2] == 'I' && tag[3] == 'C')
-        {
-            uint32_t i;
-            int vlen = 0;
-            char val[30];
-            char test[30];
-            uint8_t raw[fsize - 11];
+        // else if (tag[0] == 'A' && tag[1] == 'P' && tag[2] == 'I' && tag[3] == 'C')
+        // {
+        //     uint32_t i;
+        //     int vlen = 0;
+        //     char val[30];
+        //     char test[30];
+        //     uint8_t raw[fsize - 11];
 
-            track.seek(start);
-            track.read((uint8_t *)val, 11);
-            for (i = 0; i < 11; i++)
-            {
-                if (isAlphaNumeric(val[i]))
-                {
-                    test[vlen] = val[i];
-                    vlen++;
-                }
-                else if (val[i] == '(' || val[i] == ')' || val[i] == ' ')
-                {
-                    test[vlen] = val[i];
-                    vlen++;
-                }
-            }
-            test[vlen] = '\0';
+        //     track.seek(start);
+        //     track.read((uint8_t *)val, 11);
+        //     for (i = 0; i < 11; i++)
+        //     {
+        //         if (isAlphaNumeric(val[i]))
+        //         {
+        //             test[vlen] = val[i];
+        //             vlen++;
+        //         }
+        //         else if (val[i] == '(' || val[i] == ')' || val[i] == ' ')
+        //         {
+        //             test[vlen] = val[i];
+        //             vlen++;
+        //         }
+        //     }
+        //     test[vlen] = '\0';
 
-            if (fsize < 200000)
-            {
-                track.seek(start + 11);
-                Serial.println(fsize + 11);
-                // track.read((uint8_t *)pic, fsize-11);
-            }
-        }
+        //     if (fsize < 200000)
+        //     {
+        //         track.seek(start + 11);
+        //         Serial.println(fsize + 11);
+        //         // track.read((uint8_t *)pic, fsize-11);
+        //     }
+        // }
         else
         {
         }
 
+        done = true;
         // start = start + fsize;
         // if ((start == lastfrm + 10) || start > musicPlayer.mp3_ID3Jumper(track))
         // {

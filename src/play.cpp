@@ -709,6 +709,8 @@ int check_serial()
 		{
 			vs1053StartPlayingFile(soundfile);
 		}
+		if (c == 'n')
+			playNext();
 
 		// if we get an 'p' on the serial console, pause/unpause!
 		if (c == 'p')
@@ -1288,6 +1290,7 @@ int listFiles()
 				{
 					fileNames[count] = new char[strlen(entry.name())];
 					strcpy(fileNames[count], entry.name());
+					frameInfo(entry); /// WIP
 					count++;
 				}
 				else
@@ -1307,7 +1310,7 @@ int listFiles()
 		{
 			DPRINTLN(fileNames[i]);
 			message_oled(fileNames[i]);
-			delay(200);
+			delay(20);
 		}
 	}
 	else
