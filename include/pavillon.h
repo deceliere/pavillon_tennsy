@@ -1,8 +1,13 @@
 /* from vs1053_SdFat.h */
 /* Arduino Library for VS10xx shield*/
 
-// #define DEBUG
+#ifndef PAVILLON_H
+#define PAVILLON_H
+
+#define DEBUG
 // #define WAIT_DEVICES
+#define NO_VOL_POT /* working without volume pot connected */
+// #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
@@ -90,8 +95,21 @@
 #include <fileref.h>
 #include "vs1053_patch.h"
 #include <U8g2lib.h>
+// #include <filesystem> 
+#include <iostream>
 
+/* test TAGLIB pour id3v2*/
+// #include <fileref.h>
+// #include <tag.h>
+// #include <tpropertymap.h>
+// #include <taglib.h>
+// #include <mpegfile.h>
+// #include <id3v2tag.h>
+// #include <tpropertymap.h>
+// #include <iostreams.h>
+// #include <iostream.h>
 
+#endif
 
 struct s_id3
 {
@@ -160,6 +178,11 @@ bool setup_oled(void);
 void loop_oled(s_id3 id3, const char *soundfile);
 void message_oled(const char *soundfile);
 void loop_oled_scroll(s_id3 id3);
+
+/* id3v2 */
+void frameInfo(File track, char tvalue[64], char albval[64], char artval[64],
+               char fname[30], bool showpic);
+
 
 static uint16_t spi_Read_Rate; 
 static uint16_t spi_Write_Rate;

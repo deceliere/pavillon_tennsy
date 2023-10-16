@@ -31,9 +31,9 @@
 #define XCS 10	// vs1053 chip select (output) // aka CS on vs1053
 #define XDCS 8	// vs1053 Data select (output)
 #define XDREQ 3 // vs1053 Data Ready an Interrupt pin (input)
-#define SDCS  BUILTIN_SDCARD   // Use Teensy built-in card
+// #define SDCS  BUILTIN_SDCARD   // Use Teensy built-in card
 //  For Teensy 3.5, 3.6, 4.0, 4.1 better to use its built-in SDCard
-// #define SDCS 4 // Use vs1053 SDCard Card chip select pin
+#define SDCS 4 // Use vs1053 SDCard Card chip select pin
 
 /////////////////////////////////////////////////////////////////////////////////
 // vs1053B.h
@@ -962,7 +962,7 @@ void setup()
 	else
 		DPRINTLN(F("Oled found"));
 	delay(500);
-/* // desactivé pour travail sur t41 sans vs1053
+
 	audioamp.begin();
 	if (!audioamp.begin())
 	{ // initialise the music player
@@ -1003,7 +1003,7 @@ void setup()
 		// DPRINTLN(F("vs1053 found"));
 	}
 	delay(500);
-*/	
+
 	while (!SD.begin(SDCS))
 	{
 		message_oled("SD card not found");
@@ -1070,7 +1070,12 @@ void setup()
 	// message_oled("start playingfile OK");
 	pinMode(VOLUME_ROTARY_POT, INPUT);
 	volume_pot = analogRead(VOLUME_ROTARY_POT);
+	#ifndef NO_VOL_POT
 	getScaledVolume();
+	#endif
+	#ifdef NO_VOL_POT
+	volume = 29;
+	#endif
 	vs1053SetVolume(volume, volume);
 	message_oled("set volume ok");
 	delay(500);
@@ -1186,8 +1191,15 @@ void loop()
 	// read = (int) logVol;
 	// DPRINT("logVol mapped=");
 	// DPRINTLN(logVol);
+	
+	
+	#ifndef NO_VOL_POT
 	getScaledVolume();
 	vs1053SetVolume(volume, volume);
+	#endif
+	
+
+
 	// delay(10);
 	/*
 	if (vs1053Stopped()) {
@@ -1295,7 +1307,7 @@ int listFiles()
 		{
 			DPRINTLN(fileNames[i]);
 			message_oled(fileNames[i]);
-			delay(2000);
+			delay(200);
 		}
 	}
 	else
@@ -1364,3 +1376,8 @@ bool hasExtension(const char *filename, const char *extension)
 
 	return false;
 }
+
+// int	id3v2_read() {
+// 	return(0);
+// }
+

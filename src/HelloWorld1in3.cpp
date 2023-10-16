@@ -458,9 +458,11 @@ bool setup_oled(void)
     u8g2.setFontMode(0); // enable transparent mode, which is faster
     message_oled("oled setup ok");
     delay(100);
+    #ifdef SCROLLING_TEST
     scroll_setup();
     while (1)
       scroll_loop();
+    #endif
     return (true);
   }
   // DPRINTLN("oled init ok  ");
@@ -584,9 +586,9 @@ void scroll_setup(void)
   // u8g2.begin();
 
   u8g2.setFont(FONT_NORMAL); // set the target font to calculate the pixel width
-  msg[0].str = "est-ce que c'est plus joli d'avoir une ligne qui termine, ou bien plutôt qu'elle se repète en boucle ? ";
+  msg[0].str = "courage chérie pour la journée, moi je vais me coucher maintenant, il est 3h31 ";
   msg[0].y = 10;
-  msg[1].str = "ET COMMENT ÇA SE PASSE DU CÔTÉ DE L'ABUM HEIN";
+  msg[1].str = "BISOUS BISOUS baisers 1000x";
   msg[1].y = 30;
 
   for (int i = 0; i < 2; i++)

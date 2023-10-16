@@ -1,8 +1,6 @@
 /* 
-
 2023.10.15
 fichier patch pour avoir le vu meter sur vs1053
-
 */
 
 #define CODE_SIZE 4676
