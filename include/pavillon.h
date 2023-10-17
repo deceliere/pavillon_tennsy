@@ -184,11 +184,14 @@ void message_oled(const char *soundfile);
 void loop_oled_scroll(s_id3 id3);
 
 /* id3v2 */
-void frameInfo(File track);
+s_id3 frameInfo(File track, s_id3 id3);
+void parse_id3v2();
+
 
 
 /* utils */
 bool copyFileToSD(const char* sourceFileName, const char* targetFileName);
+char *strToUpper(char *str);
 
 
 

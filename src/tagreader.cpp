@@ -1,9 +1,13 @@
 
 #include <pavillon.h>
 
-// int max_chars = 30;
+// // int max_chars = 30;
+// int checkTag(char *tag) {
 
-void frameInfo(File track)
+// }
+
+
+s_id3 frameInfo(File track, s_id3 id3)
 {
     char tvalue[64];
     char albval[64];
@@ -33,8 +37,8 @@ void frameInfo(File track)
         track.seek(start);
         track.read((uint8_t *)tag, 4);
         tag[4] = 0;
-        DPRINT("\ttag= ");
-        DPRINTLN(tag);
+        // DPRINT("\ttag= ");
+        // DPRINTLN(tag);
 
         track.seek(start + 4);
         track.read((uint8_t *)buff, 4);
@@ -48,7 +52,6 @@ void frameInfo(File track)
 
         if (tag[0] == 'T' && tag[1] == 'I' && tag[2] == 'T' && tag[3] == '2')
         {
-            DPRINT("IN TIT");
 
             uint32_t i;
             int vlen = 0;
@@ -70,8 +73,11 @@ void frameInfo(File track)
                 }
             }
             tvalue[vlen] = '\0';
+            strcpy(id3.title, strToUpper(tvalue));
             DPRINT("tvalue: ");
             DPRINTLN(tvalue);
+            DPRINT("id3.titel: ");
+            DPRINTLN(id3.title);
         }
         else if (tag[0] == 'T' && tag[1] == 'A' && tag[2] == 'L' && tag[3] == 'B')
         {
@@ -95,6 +101,7 @@ void frameInfo(File track)
                 }
             }
             albval[vlen] = '\0';
+            strcpy(id3.album, albval);
             DPRINT("albval: ");
             DPRINTLN(albval);
         }
@@ -120,6 +127,7 @@ void frameInfo(File track)
                 }
             }
             artval[vlen] = '\0';
+            strcpy(id3.artist, artval);
             DPRINT("artval: ");
             DPRINTLN(artval);
         }
@@ -158,18 +166,35 @@ void frameInfo(File track)
         // }
         else
         {
+            done = true;
         }
 
-        done = true;
-        // start = start + fsize;
-        // if ((start == lastfrm + 10) || start > musicPlayer.mp3_ID3Jumper(track))
-        // {
-        //     done = true;
-        // }
-        // else
-        // {
-        //     lastfrm = start;
-        // }
+        // done = true;
+        start = start + fsize;
+        if ((start == lastfrm + 10) || !isAlphaNumeric(tag[0]))
+        {
+            done = true;
+        }
+        else
+        {
+            lastfrm = start;
+        }
     }
+    return (id3);
     // track.rewind();
+}
+
+
+char *strToUpper(char *str) {
+
+    char *tmp = str;
+
+    while(*str)
+    {
+        *str = toUpperCase(*str);
+        str++;
+        // i++;
+    }
+    *str = 0;
+    return(tmp);
 }

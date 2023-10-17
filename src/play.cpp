@@ -208,8 +208,9 @@ boolean vs1053StartPlayingFile(const char *trackname)
 		DPRINT("Opened from SD: ");
 		DPRINTLN(trackname);
 	}
-	parse_id3();
-	DPRINTLN("parse id3");
+	// parse_id3();
+	parse_id3v2();
+	DPRINTLN("parse id3v2");
 	DPRINTLN(trackNumber);
 	playingMusic = true;
 	while (!vs1053ReadyForData())
@@ -829,6 +830,32 @@ void parse_id3()
 	// delete[] display;
 }
 
+void parse_id3v2()
+{
+	// char *display;
+
+	id3 = frameInfo(currentTrack, id3);
+	// display = new char[12];
+	// vs1053getTrackInfo(TRACK_TITLE, id3.title);
+	// DPRINTLN(id3.title);
+	// vs1053getTrackInfo(TRACK_ARTIST, id3.artist);
+	// DPRINTLN(id3.artist);
+	// vs1053getTrackInfo(TRACK_ALBUM, id3.album);
+	// DPRINTLN(id3.album);
+
+	itoa(trackNumber + 1, id3.fileCurrent, 10); // + 1 pour que la piste 0 s affiche comme etant la piste 1
+	strcpy(id3.trackDisplay, id3.fileCurrent);
+	strcat(id3.trackDisplay, " / ");
+	strcat(id3.trackDisplay, id3.fileTotal);
+
+	DPRINT("trackDisplay=");
+	DPRINTLN(id3.trackDisplay);
+
+	// strcpy(id3.trackDisplay, display);
+	// delete[] display;
+
+}
+
 // trackNumber--;
 // if (trackNumber < 0)
 // 	trackNumber = fileCount - 1;
@@ -1290,7 +1317,7 @@ int listFiles()
 				{
 					fileNames[count] = new char[strlen(entry.name())];
 					strcpy(fileNames[count], entry.name());
-					frameInfo(entry); /// WIP
+					// frameInfo(entry); /// WIP
 					count++;
 				}
 				else
