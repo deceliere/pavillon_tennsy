@@ -404,8 +404,8 @@ U8G2_SH1107_64X128_1_4W_SW_SPI u8g2(U8G2_R1, /* clock=*/27, /* data=*/26, /* cs=
 
 u_int32_t count = 0;
 char str[33];
-int currentMillli_oled;
-int previousMilli_oled;
+elapsedMillis currentMillli_oled;
+// int previousMilli_oled;
 char minStr[3]; // minutes
 char secStr[3]; // secondes
 static char minSecStr[6];
@@ -447,8 +447,8 @@ bool setup_oled(void)
   // SPI1.setMOSI(26);
   // SPI1.setSCK(27);
 
-  currentMillli_oled = millis();
-  previousMilli_oled = currentMillli_oled;
+  currentMillli_oled = 0;
+  // previousMilli_oled = currentMillli_oled;
 
   if (!u8g2.begin())
     return (false);
@@ -476,14 +476,14 @@ void message_oled(const char *message)
   {
     u8g2.setFont(FONT_NORMAL);
     u8g2.drawUTF8(0, 10, message);
-    u8g2.drawUTF8(0, 64, "bisouéèêėàç");
+    // u8g2.drawUTF8(0, 64, "bisouéèêėàç");
   } while (u8g2.nextPage());
 }
 
 void loop_oled(s_id3 id3, const char *soundfile)
 {
-  currentMillli_oled = millis();
-  if (currentMillli_oled - previousMilli_oled > 100)
+  // currentMillli_oled = 0;
+  if (currentMillli_oled > 100)
   {
     uint8_t min;
     uint8_t sec;
@@ -507,7 +507,7 @@ void loop_oled(s_id3 id3, const char *soundfile)
 
     // DPRINT("id3.time=");
     // DPRINTLN(id3.time);
-    previousMilli_oled = currentMillli_oled;
+    currentMillli_oled = 0;
   }
   strcpy(id3.time, minSecStr);
   u8g2.firstPage();
@@ -531,7 +531,7 @@ void loop_oled(s_id3 id3, const char *soundfile)
     // u8g2.drawStr(0, 53, itoa(count, str, 10));
     u8g2.drawUTF8(0, 53, id3.time);
 
-    u8g2.drawUTF8(98, 53, id3.trackDisplay);
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width(id3.trackDisplay), 53, id3.trackDisplay);
   } while (u8g2.nextPage());
   // DPRINTLN(id3.time);
 
@@ -575,26 +575,26 @@ void loop_oled_scroll(const char *soundfile) {
 
 /* test basic pour scroll */
 
-scroll_msg msg[2];
+scroll_msg scroll[3];
 
 // const char *text1 = "oui oui c'est ça à asd é è ç ";	// scroll this text from right to left
 // const char *text2 = "OUIIIIII ";	// scroll this text from right to left
 
-void scroll_setup(void)
+void scroll_setup(s_id3 id3)
 {
 
   // u8g2.begin();
 
   u8g2.setFont(FONT_NORMAL); // set the target font to calculate the pixel width
-  msg[0].str = "courage chérie pour la journée, moi je vais me coucher maintenant, il est 3h31 ";
-  msg[0].y = 10;
-  msg[1].str = "BISOUS BISOUS baisers 1000x";
-  msg[1].y = 30;
+  // scroll[0].str = id3.ti;
+  scroll[0].y = 10;
+  scroll[1].str = "BISOUS BISOUS baisers 1000x";
+  scroll[1].y = 30;
 
   for (int i = 0; i < 2; i++)
   {
-    msg[i].width = u8g2.getUTF8Width(msg[i].str); // calculate the pixel width of the text
-    msg[i].timer = 0;
+    scroll[i].width = u8g2.getUTF8Width(scroll[i].str); // calculate the pixel width of the text
+    scroll[i].timer = 0;
   }
   u8g2.setFontMode(0); // enable transparent mode, which is faster
 }
@@ -614,12 +614,12 @@ void scroll_loop(void)
     for (int i = 0; i < 2; i++)
     {
 
-      msg[i].x = msg[i].offset;
+      scroll[i].x = scroll[i].offset;
       // if (msg[i].offset > u8g2.getDisplayWidth())
       // {
       // do
       // {                                         // repeated drawing of the scrolling text...
-      u8g2.drawUTF8(msg[i].x, msg[i].y, msg[i].str); // draw the scolling text
+      u8g2.drawUTF8(scroll[i].x, scroll[i].y, scroll[i].str); // draw the scolling text
                                                      // x += msg[i].width;                      // add the pixel width of the scrolling text
       // } while (x < u8g2.getDisplayWidth());     // draw again until the complete display is filled
       // }
@@ -627,21 +627,21 @@ void scroll_loop(void)
       // u8g2.drawUTF8(0, msg[i].y, msg[i].str);
 
       u8g2.setFont(FONT_NORMAL); // draw the current pixel width
-      u8g2.setCursor(0, msg[i].y + 10);
-      u8g2.print(msg[i].width); // this value must be lesser than 128 unless U8G2_16BIT is set
+      u8g2.setCursor(0, scroll[i].y + 10);
+      u8g2.print(scroll[i].width); // this value must be lesser than 128 unless U8G2_16BIT is set
     }
 
   } while (u8g2.nextPage());
 
   for (int i = 0; i < 2; i++)
   {
-    if (msg[i].width > 128 && msg[i].timer > 1000)
+    if (scroll[i].width > 128 && scroll[i].timer > 1000)
     {
-      msg[i].offset -= 1; // scroll by one pixel
-      if ((u8g2_uint_t)msg[i].offset < (u8g2_uint_t)-msg[i].width)
+      scroll[i].offset -= 1; // scroll by one pixel
+      if ((u8g2_uint_t)scroll[i].offset < (u8g2_uint_t) - scroll[i].width)
       {
-        msg[i].offset = 0; // start over again
-        msg[i].timer = 0;
+        scroll[i].offset = 0; // start over again
+        scroll[i].timer = 0;
       }
     }
   }

@@ -85,11 +85,15 @@ s_id3 frameInfo(File track, s_id3 id3)
                 }
             }
             tvalue[vlen] = '\0';
+            #ifdef UPPER_TITLE
             strcpy(id3.title, strToUpper(tvalue));
-            DPRINT("tvalue: ");
-            DPRINTLN(tvalue);
-            DPRINT("id3.titel: ");
-            DPRINTLN(id3.title);
+            #else
+            strcpy(id3.title, tvalue);
+            #endif
+            // DPRINT("tvalue: ");
+            // DPRINTLN(tvalue);
+            // DPRINT("id3.title: ");
+            // DPRINTLN(id3.title);
         }
         else if (tag[0] == 'T' && tag[1] == 'A' && tag[2] == 'L' && tag[3] == 'B')
         {

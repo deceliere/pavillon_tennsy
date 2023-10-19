@@ -82,6 +82,9 @@
 
 /* OLED */
 #define FONT_NORMAL u8g2_font_helvR08_te
+#define	OLED_WIDTH 128
+#define UPPER_TITLE // capitilize id3 title
+#define WAIT_BEFORE_SCROLL 2000 // millis
 
 #include <Arduino.h>
 #include <SPI.h>
