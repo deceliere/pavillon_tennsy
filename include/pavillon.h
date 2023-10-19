@@ -83,8 +83,13 @@
 /* OLED */
 #define FONT_NORMAL u8g2_font_helvR08_te
 #define	OLED_WIDTH 128
+#define	OLED_HEIGHT 64
 #define UPPER_TITLE // capitilize id3 title
 #define WAIT_BEFORE_SCROLL 2000 // millis
+#define FIRST_LINE 10
+#define SECOND_LINE 12
+#define THIRD_LINE 13
+#define LINE_FROM_BOTTOM 11 // space from bottom screen
 
 #include <Arduino.h>
 #include <SPI.h>
@@ -122,14 +127,14 @@ struct s_id3
 	char fileTotal[4];
 	char fileCurrent[4];
 	char trackDisplay[12];
-	char time[12];
+	// char time[12]; // replaced by minSecStr
 };
 
 struct scroll_msg 
 {
   u8g2_uint_t offset;
   u8g2_uint_t width;
-  const char *str;
+  char str[64];
   u8g2_uint_t x;
   int y; // y pixel to display text
   elapsedMillis timer;
@@ -180,11 +185,13 @@ void playPrevious();
 /* libft */
 void ft_bzero(void *s, size_t n);
 
-/* OLD */
+/* OLED */
 bool setup_oled(void);
 void loop_oled(s_id3 id3, const char *soundfile);
 void message_oled(const char *soundfile);
 void loop_oled_scroll(s_id3 id3);
+void scroll_parseId3v2(s_id3 id3);
+void scroll_loop(s_id3 id3);
 
 /* id3v2 */
 s_id3 frameInfo(File track, s_id3 id3);

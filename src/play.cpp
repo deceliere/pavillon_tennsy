@@ -847,7 +847,7 @@ void parse_id3v2()
 	strcpy(id3.trackDisplay, id3.fileCurrent);
 	strcat(id3.trackDisplay, " / ");
 	strcat(id3.trackDisplay, id3.fileTotal);
-
+	scroll_parseId3v2(id3); /// temp - for testing purpose
 	DPRINT("trackDisplay=");
 	DPRINTLN(id3.trackDisplay);
 
@@ -1242,7 +1242,10 @@ void loop()
 
 	// DPRINTLN(vu_level);
 	// DPRINTLN(vs1053getVUmeter());
-	loop_oled(id3, soundfile);
+	
+	// loop_oled(id3, soundfile);
+	
+	scroll_loop(id3);
 
 	// delay(1000);
 	// analogWrite(FET, 10);

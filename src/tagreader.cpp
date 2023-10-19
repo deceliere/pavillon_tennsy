@@ -12,22 +12,22 @@ s_id3 frameInfo(File track, s_id3 id3)
     char tvalue[64];
     char albval[64];
     char artval[64];
-    char fname[30];
-    strcpy(id3.title, "");
-    strcpy(id3.artist, "");
-    strcpy(id3.album, "");
+    // char fname[30];
+    // strcpy(fname, track.name());
+    strcpy(id3.title, track.name());
+    strcpy(id3.artist, "n/a");
+    strcpy(id3.album, "n/a");
     // bool showpic;
 
     uint32_t start = 10;
     uint32_t lastfrm = 10;
     bool done = false;
 
-    strcpy(fname, track.name());
     // fname = new (char*) track.name();
     // strlcpy(fname, track.name(), max_chars);
-    DPRINTLN("in frameInfo\n\n");
-    DPRINT("filename= ");
-    DPRINTLN(fname);
+    // DPRINTLN("in frameInfo\n\n");
+    // DPRINT("filename= ");
+    // DPRINTLN(fname);
 
     while (!done)
     {
