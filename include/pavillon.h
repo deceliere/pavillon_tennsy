@@ -113,9 +113,9 @@
 
 struct s_id3
 {
-	char title[31];
-	char artist[31];
-	char album[31];
+	char title[64];
+	char artist[64];
+	char album[64];
 	char fileTotal[4];
 	char fileCurrent[4];
 	char trackDisplay[12];
@@ -192,7 +192,7 @@ void parse_id3v2();
 /* utils */
 bool copyFileToSD(const char* sourceFileName, const char* targetFileName);
 char *strToUpper(char *str);
-
+int strIsAlphaNumeric(char *str);
 
 
 

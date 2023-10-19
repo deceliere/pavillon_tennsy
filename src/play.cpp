@@ -1315,9 +1315,15 @@ int listFiles()
 			{
 				if (count < MAX_FILES)
 				{
-					fileNames[count] = new char[strlen(entry.name())];
+					int len = strlen(entry.name());
+					DPRINT("file len =");
+					DPRINTLN(len);
+					fileNames[count] = new char[len + 1];
+					fileNames[count][len] = 0;
 					strcpy(fileNames[count], entry.name());
 					// frameInfo(entry); /// WIP
+					DPRINTLN(fileNames[count]);
+					message_oled(fileNames[count]);
 					count++;
 				}
 				else
@@ -1332,13 +1338,7 @@ int listFiles()
 
 		qsort(fileNames, count, sizeof(char *), compareListNbr);
 
-		// Affichage des noms des fichiers
-		for (int i = 0; i < count; i++)
-		{
-			DPRINTLN(fileNames[i]);
-			message_oled(fileNames[i]);
-			delay(20);
-		}
+
 	}
 	else
 	{

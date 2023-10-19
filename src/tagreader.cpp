@@ -13,7 +13,10 @@ s_id3 frameInfo(File track, s_id3 id3)
     char albval[64];
     char artval[64];
     char fname[30];
-    bool showpic;
+    strcpy(id3.title, "");
+    strcpy(id3.artist, "");
+    strcpy(id3.album, "");
+    // bool showpic;
 
     uint32_t start = 10;
     uint32_t lastfrm = 10;
@@ -33,12 +36,21 @@ s_id3 frameInfo(File track, s_id3 id3)
         uint32_t ltwo[4];
         char tag[5];
         uint32_t fsize;
-        // track.seek(0);
+
+        noInterrupts();
+
         track.seek(start);
         track.read((uint8_t *)tag, 4);
         tag[4] = 0;
         // DPRINT("\ttag= ");
         // DPRINTLN(tag);
+        if (!strIsAlphaNumeric(tag))
+        {
+            DPRINTLN("non alpha numeric");
+            track.seek(0);
+            interrupts();
+            return (id3);
+        }
 
         track.seek(start + 4);
         track.read((uint8_t *)buff, 4);
@@ -180,6 +192,8 @@ s_id3 frameInfo(File track, s_id3 id3)
             lastfrm = start;
         }
     }
+    track.seek(0);
+    interrupts();
     return (id3);
     // track.rewind();
 }
@@ -197,4 +211,14 @@ char *strToUpper(char *str) {
     }
     *str = 0;
     return(tmp);
+}
+
+int strIsAlphaNumeric(char *str) {
+    
+    while(*str) {
+        if (!isAlphaNumeric(*str))
+            return(0);
+        str++;
+    }
+    return (1);
 }
