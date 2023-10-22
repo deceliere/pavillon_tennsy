@@ -10,6 +10,8 @@
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
+#define RANDOM_INIT
+#define RANDOM_FIRST_TRACK
 
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
@@ -114,6 +116,7 @@
 /* local includes */
 #include "Adafruit_TPA2016.h"
 #include "vs1053_patch.h"
+#include "Entropy.h"
 // #include "oled_logo.h"
 
 /* test TAGLIB pour id3v2*/

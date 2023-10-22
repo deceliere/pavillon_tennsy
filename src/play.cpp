@@ -102,7 +102,7 @@ uint16_t volume_pot;
 uint8_t fileCount = 0;
 Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
 char *soundfile;
-String	soundfile_str; // wip TBC
+String soundfile_str; // wip TBC
 
 /* TBC pour le Vu metre*/
 union twobyte
@@ -853,7 +853,6 @@ void parse_id3v2()
 
 	// strcpy(id3.trackDisplay, display);
 	// delete[] display;
-
 }
 
 // trackNumber--;
@@ -1015,10 +1014,15 @@ void setup()
 	{
 		audioamp.setGain(amp_gain);
 	}
+
+	char str3[10];															// tmp wip
+	message_oled(strcat("amp gain =", itoa(audioamp.getGain(), str3, 10))); // tmp wip
+	delay(500); //tmp wip
+	#ifdef RANDOM_INIT
+	Entropy.Initialize();
+	#endif
+
 	
-	char str3[10]; // tmp wip
-	message_oled(strcat("amp gain =",itoa (audioamp.getGain(), str3, 10))); // tmp wip
-	delay(500);
 
 	// if (vs1053vs_init()) { // initialise the music player
 	if (!vs1053Begin())
@@ -1101,17 +1105,20 @@ void setup()
 	// message_oled("start playingfile OK");
 	pinMode(VOLUME_ROTARY_POT, INPUT);
 	volume_pot = analogRead(VOLUME_ROTARY_POT);
-	#ifndef NO_VOL_POT
+#ifndef NO_VOL_POT
 	getScaledVolume();
-	#endif
-	#ifdef NO_VOL_POT
+#endif
+#ifdef NO_VOL_POT
 	volume = 29;
-	#endif
+#endif
 	vs1053SetVolume(volume, volume);
 	message_oled("set volume ok");
 	delay(500);
 	// DPRINTLN(volume_pot);
 	// DPRINTLN(volume);
+	#ifdef RANDOM_FIRST_TRACK
+	trackNumber = Entropy.random(fileCount);
+	#endif
 	soundfile = fileNames[trackNumber];
 	// DPRINT("soundfile:");
 	// DPRINTLN(soundfile);
@@ -1222,14 +1229,11 @@ void loop()
 	// read = (int) logVol;
 	// DPRINT("logVol mapped=");
 	// DPRINTLN(logVol);
-	
-	
-	#ifndef NO_VOL_POT
+
+#ifndef NO_VOL_POT
 	getScaledVolume();
 	vs1053SetVolume(volume, volume);
-	#endif
-	
-
+#endif
 
 	// delay(10);
 	/*
@@ -1244,9 +1248,9 @@ void loop()
 
 	// DPRINTLN(vu_level);
 	// DPRINTLN(vs1053getVUmeter());
-	
+
 	// loop_oled(id3, soundfile);
-	
+
 	scroll_loop(id3);
 
 	// delay(1000);
@@ -1288,13 +1292,14 @@ int compareNames(const void *a, const void *b)
 }
 
 // Fonction de comparaison personnalisée (met dans l'ordre selon les numeros avant le nom de fichier)
-int compareListNbr(const void *a, const void *b) {
-    // Extrait les numéros à partir des chaînes de caractères
-    int num1, num2;
-    sscanf(*(const char**)a, "%d-", &num1);
-    sscanf(*(const char**)b, "%d-", &num2);
-    
-    return num1 - num2;
+int compareListNbr(const void *a, const void *b)
+{
+	// Extrait les numéros à partir des chaînes de caractères
+	int num1, num2;
+	sscanf(*(const char **)a, "%d-", &num1);
+	sscanf(*(const char **)b, "%d-", &num2);
+
+	return num1 - num2;
 }
 
 int listFiles()
@@ -1334,7 +1339,7 @@ int listFiles()
 				else
 				{
 					message_oled("too many files");
-					return(0);
+					return (0);
 				}
 			}
 			entry.close();
@@ -1342,8 +1347,6 @@ int listFiles()
 		root.close();
 
 		qsort(fileNames, count, sizeof(char *), compareListNbr);
-
-
 	}
 	else
 	{
@@ -1415,4 +1418,3 @@ bool hasExtension(const char *filename, const char *extension)
 // int	id3v2_read() {
 // 	return(0);
 // }
-
