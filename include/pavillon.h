@@ -105,8 +105,8 @@
 #include <cmath>
 #include <limits.h>
 #include <strings.h>
-#include <taglib.h>
-#include <fileref.h>
+// #include <taglib.h>
+// #include <fileref.h>
 #include <U8g2lib.h>
 // #include <filesystem> 
 #include <iostream>
