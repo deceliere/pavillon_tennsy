@@ -8,6 +8,8 @@
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
+#define OLED_XBM_TEST
+#define LOGO_STARTUP
 
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
@@ -95,20 +97,24 @@
 /* DIVERS */
 #define POT_DEBOUNCE_DELAY 30
 
+/* external includes */
 #include <Arduino.h>
 #include <SPI.h>
 #include <SD.h>
 #include <cctype>
-#include "Adafruit_TPA2016.h"
 #include <cmath>
 #include <limits.h>
 #include <strings.h>
 #include <taglib.h>
 #include <fileref.h>
-#include "vs1053_patch.h"
 #include <U8g2lib.h>
 // #include <filesystem> 
 #include <iostream>
+
+/* local includes */
+#include "Adafruit_TPA2016.h"
+#include "vs1053_patch.h"
+// #include "oled_logo.h"
 
 /* test TAGLIB pour id3v2*/
 // #include <fileref.h>
@@ -196,6 +202,7 @@ void message_oled(const char *soundfile);
 void loop_oled_scroll(s_id3 id3);
 void scroll_parseId3v2(s_id3 id3);
 void scroll_loop(s_id3 id3);
+void oled_logo_xbm(void);
 
 /* id3v2 */
 s_id3 frameInfo(File track, s_id3 id3);

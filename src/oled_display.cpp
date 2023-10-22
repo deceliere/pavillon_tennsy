@@ -52,8 +52,9 @@
 */
 
 #include <Arduino.h>
-// #include <U8g2lib.h>
+// #include <U8g2lib.h> // not needed
 #include "pavillon.h"
+#include "oled_logo.h"
 
 #ifdef U8X8_HAVE_HW_SPI
 #include <SPI.h>
@@ -456,6 +457,11 @@ bool setup_oled(void)
   else
   {
     u8g2.setFontMode(0); // enable transparent mode, which is faster
+#ifdef LOGO_STARTUP
+    oled_logo_xbm();
+    delay(1000);
+#endif
+    delay(500);
     message_oled("oled setup ok");
     delay(100);
 #ifdef SCROLLING_TEST
@@ -587,7 +593,6 @@ scroll_msg scroll[3];
 // const char *text1 = "oui oui c'est ça à asd é è ç ";	// scroll this text from right to left
 // const char *text2 = "OUIIIIII ";	// scroll this text from right to left
 
-
 void scroll_parseId3v2(s_id3 id3)
 {
 
@@ -703,4 +708,20 @@ void scroll_loop(s_id3 id3)
   }
   // delay(20); // do some small delay
   // }
+}
+
+void oled_logo_xbm(void)
+{
+  u8g2.firstPage();
+  do
+  {
+    u8g2.setFont(FONT_NORMAL);
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("Pavillon"), 12, "Pavillon");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("d'écoute"), 25, "d'écoute");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("HEROS"), 45, "HEROS");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("LIMITE"), 55, "LIMITE");
+    u8g2.setDrawColor(1);
+    u8g2.setBitmapMode(1);
+    u8g2.drawXBM(0, 0, LOGO_WIDTH, LOGO_HEIGHT, logo_bits);
+  } while (u8g2.nextPage());
 }
