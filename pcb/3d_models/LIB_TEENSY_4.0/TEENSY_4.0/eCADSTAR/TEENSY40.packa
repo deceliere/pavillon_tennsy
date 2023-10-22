@@ -1,0 +1,13 @@
+(unit MM)
+
+(package "TEENSY_4_0"
+    (type UNDEF)
+    (uver 2)
+    (cuser "SamacSys")
+    (uuser "SamacSys")
+    (utime 2020-12-10-10:06:45)
+    (mountForm default
+        (footprintRef "TEENSY40")
+        (spec "System")
+    )
+)

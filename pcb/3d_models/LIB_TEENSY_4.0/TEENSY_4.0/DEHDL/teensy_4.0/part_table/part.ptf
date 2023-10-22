@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART 'TEENSY_4.0'
+CLASS = IC
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "ARROW_PART_NUMBER", "ARROW_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Teensy", "TEENSY 4.0" (!) = "", "TEENSY40", "Other", "", "", "", "", "Teensy USB Board, Version 4.0", "https://www.pjrc.com/store/teensy40.html", "4.64 mm"
+END_PART
+
+END.
