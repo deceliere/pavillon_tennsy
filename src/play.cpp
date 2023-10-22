@@ -965,7 +965,7 @@ void buttonCheck()
 
 void getScaledVolume(void)
 {
-	pot_debounce(50);
+	pot_debounce(POT_DEBOUNCE_DELAY);
 	if (volume_pot >= 0 && volume_pot <= 400)
 		volume = (unsigned int)map(volume_pot, 0, 400, 200, 30);
 	if (volume_pot > 400)
@@ -1015,7 +1015,9 @@ void setup()
 	{
 		audioamp.setGain(amp_gain);
 	}
-	message_oled("amp gain ok");
+	
+	char str3[10]; // tmp wip
+	message_oled(strcat("amp gain =",itoa (audioamp.getGain(), str3, 10))); // tmp wip
 	delay(500);
 
 	// if (vs1053vs_init()) { // initialise the music player
@@ -1257,7 +1259,7 @@ int pot_debounce(int threshold)
 {
 	int read;
 
-	read = analogRead(VOLUME_ROTARY_POT);
+	read = abs(analogRead(VOLUME_ROTARY_POT) - 1023);
 	if (read > volume_pot + threshold || read < volume_pot - threshold)
 	{
 		DPRINT("volum_pot= ");

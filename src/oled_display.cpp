@@ -587,11 +587,11 @@ scroll_msg scroll[3];
 // const char *text1 = "oui oui c'est ça à asd é è ç ";	// scroll this text from right to left
 // const char *text2 = "OUIIIIII ";	// scroll this text from right to left
 
+
 void scroll_parseId3v2(s_id3 id3)
 {
 
   // u8g2.begin();
-
   u8g2.setFont(FONT_NORMAL); // set the target font to calculate the pixel width
   // scroll[0].str = id3.title;
   strcpy(scroll[0].str, id3.title);
@@ -640,63 +640,67 @@ void scroll_parseId3v2(s_id3 id3)
   }
 }
 
+elapsedMillis scrollMillis = 0;
+
 void scroll_loop(s_id3 id3)
 {
-  // u8g2_uint_t x;
-
-  // for (int i = 0; i < 2; i++)
-  // {
-  if (currentMillli_oled > 100)
+  if (scrollMillis > SCROLL_SPEED)
   {
+    // u8g2_uint_t x;
 
-    strcpy(minSecStr, GetMinSec());
-    // DPRINT("id3.time=");
-    // DPRINTLN(id3.time);
-    currentMillli_oled = 0;
-  }
-  u8g2.firstPage();
-  do
-  {
+    // for (int i = 0; i < 2; i++)
+    // {
+    if (currentMillli_oled > 100)
+    {
 
-    u8g2.setFont(FONT_NORMAL); // set the target font
-                               // draw the scrolling text at current offset
+      strcpy(minSecStr, GetMinSec());
+      // DPRINT("id3.time=");
+      // DPRINTLN(id3.time);
+      currentMillli_oled = 0;
+    }
+    u8g2.firstPage();
+    do
+    {
+
+      u8g2.setFont(FONT_NORMAL); // set the target font
+                                 // draw the scrolling text at current offset
+      for (int i = 0; i < 3; i++)
+      {
+        scroll[i].x = scroll[i].offset;
+        // if (msg[i].offset > u8g2.getDisplayWidth())
+        // {
+        // do
+        // {                                         // repeated drawing of the scrolling text...
+        u8g2.drawUTF8(scroll[i].x, scroll[i].y, scroll[i].str); // draw the scolling text
+                                                                // x += msg[i].width;                      // add the pixel width of the scrolling text
+        // } while (x < u8g2.getDisplayWidth());     // draw again until the complete display is filled
+        // }
+        // else
+        // u8g2.drawUTF8(0, msg[i].y, msg[i].str);
+
+        u8g2.setFont(FONT_NORMAL); // draw the current pixel width
+        // u8g2.setCursor(0, scroll[i].y + 10);
+        // u8g2.print(scroll[i].width); // this value must be lesser than 128 unless U8G2_16BIT is set
+      }
+      u8g2.drawUTF8(0, OLED_HEIGHT - LINE_FROM_BOTTOM, minSecStr);
+      u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width(id3.trackDisplay), OLED_HEIGHT - LINE_FROM_BOTTOM, id3.trackDisplay);
+
+    } while (u8g2.nextPage());
+
     for (int i = 0; i < 3; i++)
     {
-      scroll[i].x = scroll[i].offset;
-      // if (msg[i].offset > u8g2.getDisplayWidth())
-      // {
-      // do
-      // {                                         // repeated drawing of the scrolling text...
-      u8g2.drawUTF8(scroll[i].x, scroll[i].y, scroll[i].str); // draw the scolling text
-                                                              // x += msg[i].width;                      // add the pixel width of the scrolling text
-      // } while (x < u8g2.getDisplayWidth());     // draw again until the complete display is filled
-      // }
-      // else
-      // u8g2.drawUTF8(0, msg[i].y, msg[i].str);
-
-      u8g2.setFont(FONT_NORMAL); // draw the current pixel width
-      // u8g2.setCursor(0, scroll[i].y + 10);
-      // u8g2.print(scroll[i].width); // this value must be lesser than 128 unless U8G2_16BIT is set
-    }
-    u8g2.drawUTF8(0, OLED_HEIGHT - LINE_FROM_BOTTOM, minSecStr);
-    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width(id3.trackDisplay), OLED_HEIGHT - LINE_FROM_BOTTOM, id3.trackDisplay);
-
-
-
-  } while (u8g2.nextPage());
-
-  for (int i = 0; i < 3; i++)
-  {
-    if (scroll[i].width > OLED_WIDTH && scroll[i].timer > WAIT_BEFORE_SCROLL)
-    {
-      scroll[i].offset -= 1; // scroll by one pixel
-      if ((u8g2_uint_t)scroll[i].offset < (u8g2_uint_t)-scroll[i].width)
+      if (scroll[i].width > OLED_WIDTH && scroll[i].timer > WAIT_BEFORE_SCROLL)
       {
-        scroll[i].offset = 0; // start over again
-        scroll[i].timer = 0;
+        scroll[i].offset -= 1; // scroll by one pixel
+        if ((u8g2_uint_t)scroll[i].offset < (u8g2_uint_t)-scroll[i].width)
+        {
+          scroll[i].offset = 0; // start over again
+          scroll[i].timer = 0;
+        }
       }
     }
+    scrollMillis = 0;
   }
-  delay(20); // do some small delay
+  // delay(20); // do some small delay
   // }
 }

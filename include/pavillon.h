@@ -6,7 +6,7 @@
 
 #define DEBUG
 // #define WAIT_DEVICES
-#define NO_VOL_POT /* working without volume pot connected */
+// #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 
 #ifdef DEBUG
@@ -86,10 +86,14 @@
 #define	OLED_HEIGHT 64
 #define UPPER_TITLE // capitilize id3 title
 #define WAIT_BEFORE_SCROLL 2000 // millis
-#define FIRST_LINE 10
+#define FIRST_LINE 12
 #define SECOND_LINE 12
 #define THIRD_LINE 13
-#define LINE_FROM_BOTTOM 11 // space from bottom screen
+#define LINE_FROM_BOTTOM 5 // space from bottom screen
+#define SCROLL_SPEED 20 // delay between scrolling steps (the highest = the slowest scrolling)
+
+/* DIVERS */
+#define POT_DEBOUNCE_DELAY 30
 
 #include <Arduino.h>
 #include <SPI.h>
