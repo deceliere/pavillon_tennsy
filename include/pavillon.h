@@ -4,12 +4,13 @@
 #ifndef PAVILLON_H
 #define PAVILLON_H
 
-#define DEBUG
+// #define DEBUG  
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
+// #define LOGO_STUCK
 #define RANDOM_INIT
 #define RANDOM_FIRST_TRACK
 

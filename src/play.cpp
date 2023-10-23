@@ -1045,7 +1045,6 @@ void setup()
 	} // initialise the SD card
 	message_oled("SD card found");
 	delay(500);
-	/*
 	LoadUserCode();		 // patch pour avoir le Vu metre
 	vs1053setVUmeter(1); // allumer les infos du Vu metre
 	if (vs1053getVUmeter())
@@ -1058,7 +1057,6 @@ void setup()
 		message_oled("Vu meter not OK");
 		delay(500);
 	}
-	*/
 	fileCount = listFiles();
 	itoa(fileCount, id3.fileTotal, 10);
 	message_oled(strcat("filecount= ", id3.fileTotal));

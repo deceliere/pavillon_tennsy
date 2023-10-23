@@ -459,7 +459,12 @@ bool setup_oled(void)
     u8g2.setFontMode(0); // enable transparent mode, which is faster
 #ifdef LOGO_STARTUP
     oled_logo_xbm();
+#ifdef LOGO_STUCK
+    while (1)
+      ;
+#else
     delay(1000);
+#endif
 #endif
     delay(500);
     message_oled("oled setup ok");
