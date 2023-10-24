@@ -972,16 +972,15 @@ void getScaledVolume(void)
 		;
 }
 
-
 /* pour la conversion exponentielle */
 ///
-const byte pwm_max_value = 255;
+const int pwm_max_value = 1023;
 
 // Since we won't provide the number of steps, this variable
 // will be defined after the object calculates them.
-byte steps_count;
+int steps_count;
 
-ExponentMap<byte> e(254, 255);
+ExponentMap<int> e(1022, 1023);
 
 ///
 
@@ -994,6 +993,8 @@ void setup()
 	DPRINTLN(F("Serial OK"));
 #endif
 	pinMode(FET, OUTPUT);
+	analogWriteFrequency(FET, 128000);
+	analogWriteResolution(10);
 	pinMode(BUTTON_PREV, INPUT_PULLUP);
 	pinMode(BUTTON_PLAY, INPUT_PULLUP); // tbc
 	pinMode(BUTTON_NEXT, INPUT_PULLUP);
@@ -1151,24 +1152,64 @@ int vu_level = 0;
 int currentMilliPrev = millis();
 int previousMilliPrec = currentMilliPrev;
 
-void check_fet_lamp()
+void ramp_check()
 {
-	int vol_pot;
+	ramp rampCheck;
+	elapsedMillis delay1;
+	elapsedMillis delay2;
+	bool passed1 = false;
+	bool passed2 = false;
 
 	while (1)
 	{
-		char nbr[8];
-		vol_pot = analogRead(VOLUME_ROTARY_POT);
-		vol_pot = map(vol_pot, 0, 1023, 0, 255);
-		DPRINTLN(vol_pot);
-		vol_pot = e(vol_pot - 1);
-		DPRINTLN(e(vol_pot));
-		analogWrite(FET, vol_pot);
-		// message_oled((const char*) itoa(map(vol_pot, 0, 1023, 0, 255), nbr, 10));
-		message_oled((const char *)itoa(vol_pot, nbr, 10));
-		// DPRINT("led level=")
-		// DPRINT(map(vol_pot, 0, 1023, 0, 255));
-		delay(50);
+		if (delay1 >= 200 && !passed1)
+		{
+			rampCheck.go(255, 200);
+			// delay1 = 0;
+			passed1 = true;
+		}
+		if (delay1 >= 2000 && !passed2)
+		{
+			rampCheck.go(10, 200);
+			DPRINTLN("coucou");
+			passed2 = true;
+			// delay1 = 0;
+		}
+		if (delay2 >= 10)
+		{
+			DPRINTLN(rampCheck.update());
+			delay2 = 0;
+		}
+	}
+}
+
+void check_fet_lamp()
+{
+	rampInt rampLamp;
+	elapsedMillis lampPotDelay;
+	elapsedMillis debugDelay;
+	int volPot = 0;
+
+	while (1)
+	{
+		if (lampPotDelay >= 30)
+		{
+			char nbr[8];
+			volPot = analogRead(VOLUME_ROTARY_POT);
+			// volPot = map(volPot, 0, 1023, 0, 255);
+			DPRINTLN(volPot);
+			volPot = e(volPot - 1);
+			volPot = map(volPot, 0, 1023, LAMP_OFFSET, 1023);
+			DPRINTLN(volPot);
+			// message_oled((const char*) itoa(map(volPot, 0, 1023, 0, 255), nbr, 10));
+			message_oled((const char *)itoa(volPot, nbr, 10));
+			rampLamp.go(volPot, LAMP_RAMP_TIME);
+			// DPRINT("led level=")
+			// DPRINT(map(volPot, 0, 1023, 0, 255));
+
+			lampPotDelay = 0;
+		}
+		analogWrite(FET, rampLamp.update());
 	}
 }
 

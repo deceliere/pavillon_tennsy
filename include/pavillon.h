@@ -13,7 +13,7 @@
 // #define LOGO_STUCK
 #define RANDOM_INIT
 #define RANDOM_FIRST_TRACK
-#define CHECK_FET_LAMP // intensite de la lampe par vol pot
+#define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
 
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
@@ -98,6 +98,11 @@
 #define LINE_FROM_BOTTOM 5 // space from bottom screen
 #define SCROLL_SPEED 20 // delay between scrolling steps (the highest = the slowest scrolling)
 
+/* LAMP VARS */
+#define LAMP_RAMP_TIME 50 // ms
+#define LAMP_OFFSET 40 // minimum PWM value
+
+
 /* DIVERS */
 #define POT_DEBOUNCE_DELAY 30
 
@@ -120,6 +125,7 @@
 #include "vs1053_patch.h"
 #include "Entropy.h"
 #include "ExponentMap.h"
+#include "Ramp.h" 
 // #include "oled_logo.h"
 
 /* test TAGLIB pour id3v2*/
