@@ -104,7 +104,6 @@ Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
 char *soundfile;
 String soundfile_str; // wip TBC
 
-/* TBC pour le Vu metre*/
 union twobyte
 {
 	uint16_t word;
@@ -973,6 +972,19 @@ void getScaledVolume(void)
 		;
 }
 
+
+/* pour la conversion exponentielle */
+///
+const byte pwm_max_value = 255;
+
+// Since we won't provide the number of steps, this variable
+// will be defined after the object calculates them.
+byte steps_count;
+
+ExponentMap<byte> e(254, 255);
+
+///
+
 void setup()
 {
 #ifdef DEBUG
@@ -1017,12 +1029,10 @@ void setup()
 
 	char str3[10];															// tmp wip
 	message_oled(strcat("amp gain =", itoa(audioamp.getGain(), str3, 10))); // tmp wip
-	delay(500); //tmp wip
-	#ifdef RANDOM_INIT
+	delay(500);																// tmp wip
+#ifdef RANDOM_INIT
 	Entropy.Initialize();
-	#endif
-
-	
+#endif
 
 	// if (vs1053vs_init()) { // initialise the music player
 	if (!vs1053Begin())
@@ -1112,11 +1122,11 @@ void setup()
 	vs1053SetVolume(volume, volume);
 	message_oled("set volume ok");
 	delay(500);
-	// DPRINTLN(volume_pot);
-	// DPRINTLN(volume);
-	#ifdef RANDOM_FIRST_TRACK
+// DPRINTLN(volume_pot);
+// DPRINTLN(volume);
+#ifdef RANDOM_FIRST_TRACK
 	trackNumber = Entropy.random(fileCount);
-	#endif
+#endif
 	soundfile = fileNames[trackNumber];
 	// DPRINT("soundfile:");
 	// DPRINTLN(soundfile);
@@ -1132,6 +1142,7 @@ void setup()
 		DPRINTLN("Playback started");
 	else
 		DPRINTLN("Playback failed");
+	steps_count = e.stepsCount();
 }
 
 int currentMilliVU = millis();
@@ -1140,9 +1151,32 @@ int vu_level = 0;
 int currentMilliPrev = millis();
 int previousMilliPrec = currentMilliPrev;
 
+void check_fet_lamp()
+{
+	int vol_pot;
+
+	while (1)
+	{
+		char nbr[8];
+		vol_pot = analogRead(VOLUME_ROTARY_POT);
+		vol_pot = map(vol_pot, 0, 1023, 0, 255);
+		DPRINTLN(vol_pot);
+		vol_pot = e(vol_pot - 1);
+		DPRINTLN(e(vol_pot));
+		analogWrite(FET, vol_pot);
+		// message_oled((const char*) itoa(map(vol_pot, 0, 1023, 0, 255), nbr, 10));
+		message_oled((const char *)itoa(vol_pot, nbr, 10));
+		// DPRINT("led level=")
+		// DPRINT(map(vol_pot, 0, 1023, 0, 255));
+		delay(50);
+	}
+}
+
 void loop()
 {
-
+#ifdef CHECK_FET_LAMP
+	check_fet_lamp();
+#endif
 #ifdef DEBUG
 	check_serial();
 #endif
@@ -1163,6 +1197,7 @@ void loop()
 		if (vu_level <= 0)
 			vu_level = 0;
 		// DPRINTLN(vu_level);
+		// Serial.println(vu_level);
 		analogWrite(FET, vu_level);
 	}
 	// for (int i = 0; i < 20; i++)

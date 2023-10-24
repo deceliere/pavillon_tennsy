@@ -13,6 +13,7 @@
 // #define LOGO_STUCK
 #define RANDOM_INIT
 #define RANDOM_FIRST_TRACK
+#define CHECK_FET_LAMP // intensite de la lampe par vol pot
 
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
@@ -118,6 +119,7 @@
 #include "Adafruit_TPA2016.h"
 #include "vs1053_patch.h"
 #include "Entropy.h"
+#include "ExponentMap.h"
 // #include "oled_logo.h"
 
 /* test TAGLIB pour id3v2*/
