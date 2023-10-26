@@ -4,7 +4,8 @@
 #ifndef PAVILLON_H
 #define PAVILLON_H
 
-// #define DEBUG  
+// #define DEBUG
+// #define DEVEL
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
@@ -13,7 +14,8 @@
 // #define LOGO_STUCK
 #define RANDOM_INIT
 #define RANDOM_FIRST_TRACK
-#define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
+// #define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
+#define DELAY_STARTUP_SCREENS 100
 
 #ifdef DEBUG
 #define DPRINT(...) Serial.print(__VA_ARGS__)
@@ -99,12 +101,12 @@
 #define SCROLL_SPEED 20 // delay between scrolling steps (the highest = the slowest scrolling)
 
 /* LAMP VARS */
-#define LAMP_RAMP_TIME 50 // ms
+#define LAMP_RAMP_TIME 20 // ms
 #define LAMP_OFFSET 40 // minimum PWM value
 
 
 /* DIVERS */
-#define POT_DEBOUNCE_DELAY 30
+#define POT_DEBOUNCE_THRESHOLD 10
 
 /* external includes */
 #include <Arduino.h>
@@ -185,7 +187,7 @@ uint8_t vs1053SpiRead();
 void vs1053SciWrite(uint8_t addr, uint16_t data);
 uint16_t vs1053SciRead(uint8_t addr);
 void vs1053Interrupt();
-int pot_debounce(int threshold);
+void pot_debounce(int threshold);
 uint32_t vs1053getPosition();
 void LoadUserCode(void);
 void vs1053getTrackInfo(uint8_t offset, char *info);

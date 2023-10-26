@@ -961,9 +961,74 @@ void buttonCheck()
 	lastNextButtonState = readingNext;
 }
 
+#ifdef DEVEL
+void testExp(void)
+{
+	float testExp;
+	float testSqrt;
+	for (int i = 0; i < 255; i++)
+	{
+
+		// testExp = map((float) i, 0, 255, 0, 1);
+		// DPRINT("exp(");
+		// DPRINT(testExp);
+		// DPRINT(")= ");
+		// DPRINTLN(testExp = map(exp(testExp), 0, 2.71, 0, 1));
+		// DPRINT("exp* ");
+		// DPRINT(i);
+		// DPRINT("=");
+		// DPRINTLN((int) (testExp*i));
+		testSqrt = map((float)i, 0, 255, 0, 1);
+		DPRINT("sqrt(");
+		DPRINT(testSqrt);
+		DPRINT(")= ");
+		// DPRINTLN(sqrt(testSqrt));
+		DPRINTLN(testSqrt = sqrt(testSqrt));
+		DPRINT("sqrt* ");
+		DPRINT(i);
+		DPRINT("=");
+		DPRINTLN((int)(testSqrt * 255));
+	}
+	while (1)
+		;
+}
+#endif
+
+ExponentMap<int> expoVolume(1022, 1023);
+int volumEx;
+elapsedMillis display;
+
+void getScaledVolumeEx(void)
+{
+	float volumeSqrt;
+	pot_debounce(POT_DEBOUNCE_THRESHOLD);
+
+// #ifdef DEBUG
+// 	if (display >= 20)
+// 	{
+// 		DPRINT("volume POT=");
+// 		DPRINTLN(volume_pot);
+// 	}
+// #endif
+	volumeSqrt = map((float)volume_pot, 0, 1023, 0, 1);
+	volume = map(sqrt(sqrt(volumeSqrt)), 0, 1, 200, 1); // racine carre de racine carree pour un rendu plus naturel (sorte d'exponentiel à l'envers)
+// #ifdef DEBUG
+// 	if (display >= 20)
+// 	{
+// 		DPRINT("volume SQRT MAPPED=");
+// 		DPRINTLN(volume);
+// 		display = 0;
+// 	}
+// #endif
+	while (audioamp.getGain() != amp_gain) // a confirmer - je ne vois pas a quoi ca sert pour l'instant
+		;
+}
+
+int tr = exp(20);
+
 void getScaledVolume(void)
 {
-	pot_debounce(POT_DEBOUNCE_DELAY);
+	pot_debounce(POT_DEBOUNCE_THRESHOLD);
 	if (volume_pot >= 0 && volume_pot <= 400)
 		volume = (unsigned int)map(volume_pot, 0, 400, 200, 30);
 	if (volume_pot > 400)
@@ -981,6 +1046,7 @@ const int pwm_max_value = 1023;
 int steps_count;
 
 ExponentMap<int> e(1022, 1023);
+ExponentMap<int> expoLampVu(1022, 1023);
 
 ///
 
@@ -992,6 +1058,7 @@ void setup()
 		; // wait for Arduino Serial Monitor
 	DPRINTLN(F("Serial OK"));
 #endif
+	// testExp(); /// WIP
 	pinMode(FET, OUTPUT);
 	analogWriteFrequency(FET, 128000);
 	analogWriteResolution(10);
@@ -1001,8 +1068,8 @@ void setup()
 	if (!setup_oled())
 		DPRINTLN(F("Oled not found"));
 	else
-		DPRINTLN(F("Oled found"));
-	delay(500);
+		DPRINTLN(F("Oled init"));
+	delay(DELAY_STARTUP_SCREENS);
 
 	audioamp.begin();
 	if (!audioamp.begin())
@@ -1030,7 +1097,7 @@ void setup()
 
 	char str3[10];															// tmp wip
 	message_oled(strcat("amp gain =", itoa(audioamp.getGain(), str3, 10))); // tmp wip
-	delay(500);																// tmp wip
+	delay(DELAY_STARTUP_SCREENS);											// tmp wip
 #ifdef RANDOM_INIT
 	Entropy.Initialize();
 #endif
@@ -1066,12 +1133,12 @@ void setup()
 	else
 	{
 		message_oled("Vu meter not OK");
-		delay(500);
+		delay(DELAY_STARTUP_SCREENS);
 	}
 	fileCount = listFiles();
 	itoa(fileCount, id3.fileTotal, 10);
 	message_oled(strcat("filecount= ", id3.fileTotal));
-	delay(500);
+	delay(DELAY_STARTUP_SCREENS);
 	DPRINT(F("fileCount:"));
 	DPRINTLN(fileCount);
 	// DPRINT("sounfile is ");
@@ -1106,7 +1173,7 @@ void setup()
 	char str2[10];
 	itoa(vs1053SciRead(0x00), str2, 16);
 	message_oled(strcat("SCI mode 0x", str2));
-	delay(500);
+	delay(DELAY_STARTUP_SCREENS);
 
 	// DPRINT("SCI mode after change 0x");
 	// DPRINTLN(vs1053SciRead(0x00), HEX);
@@ -1115,14 +1182,15 @@ void setup()
 	pinMode(VOLUME_ROTARY_POT, INPUT);
 	volume_pot = analogRead(VOLUME_ROTARY_POT);
 #ifndef NO_VOL_POT
-	getScaledVolume();
+	// getScaledVolume();
+	getScaledVolumeEx(); // WIP
 #endif
 #ifdef NO_VOL_POT
 	volume = 29;
 #endif
 	vs1053SetVolume(volume, volume);
 	message_oled("set volume ok");
-	delay(500);
+	delay(DELAY_STARTUP_SCREENS);
 // DPRINTLN(volume_pot);
 // DPRINTLN(volume);
 #ifdef RANDOM_FIRST_TRACK
@@ -1137,7 +1205,7 @@ void setup()
 	// id3 = parse_id3(id3);
 	vs1053StartPlayingFile(soundfile);
 	message_oled("start playingfile OK");
-	delay(500);
+	delay(DELAY_STARTUP_SCREENS);
 	DPRINTLN(F("Playing - press p to pause, s to stop"));
 	if (playingMusic)
 		DPRINTLN("Playback started");
@@ -1146,12 +1214,12 @@ void setup()
 	steps_count = e.stepsCount();
 }
 
-int currentMilliVU = millis();
-int previousMilliVU = currentMilliVU;
+elapsedMillis currentMilliVU;
 int vu_level = 0;
 int currentMilliPrev = millis();
 int previousMilliPrec = currentMilliPrev;
 
+#ifdef DEVEL
 void ramp_check()
 {
 	ramp rampCheck;
@@ -1182,7 +1250,9 @@ void ramp_check()
 		}
 	}
 }
+#endif
 
+#ifdef DEVEL
 void check_fet_lamp()
 {
 	rampInt rampLamp;
@@ -1212,6 +1282,33 @@ void check_fet_lamp()
 		analogWrite(FET, rampLamp.update());
 	}
 }
+#endif
+
+rampInt rampVU;
+
+void lampVUmeter()
+{
+	if (currentMilliVU >= 50)
+	{
+		vu_level = vs1053VuLevel() >> 8;
+		// DPRINT("vu level brut=");
+		// DPRINTLN(vu_level);
+		// DPRINT("left=");
+		// DPRINTLN(vu_level >> 8);
+		// DPRINT("right=");
+		// DPRINTLN(vu_level & 0xFF);
+		vu_level = map(vu_level, 0, 99, LAMP_OFFSET, 1023);
+		// DPRINT("vu mapped=");
+		// DPRINTLN(vu_level);
+		vu_level = expoLampVu(vu_level - 1);
+		vu_level = map(vu_level, 0, 1023, LAMP_OFFSET, 1023);
+		// DPRINT("vu expo + offset=");
+		// DPRINTLN(vu_level);
+		rampVU.go(vu_level, LAMP_RAMP_TIME);
+		currentMilliVU = 0;
+	}
+	analogWrite(FET, rampVU.update());
+}
 
 void loop()
 {
@@ -1221,26 +1318,7 @@ void loop()
 #ifdef DEBUG
 	check_serial();
 #endif
-	currentMilliVU = millis();
-	if (currentMilliVU - previousMilliVU >= 50)
-	{
-		vu_level = vs1053VuLevel() >> 8;
-		// DPRINTLN(vu_level);
-		// DPRINT("left=");
-		// DPRINTLN(vu_level >> 8);
-		// DPRINT("right=");
-		// DPRINTLN(vu_level & 0xFF);
-		previousMilliVU = currentMilliVU;
-		if (vu_level >= 20 && vu_level <= 70)
-			vu_level = map(vu_level, 30, 70, 0, 80);
-		if (vu_level >= 70 && vu_level <= 90)
-			vu_level = map(vu_level, 70, 90, 81, 255);
-		if (vu_level <= 0)
-			vu_level = 0;
-		// DPRINTLN(vu_level);
-		// Serial.println(vu_level);
-		analogWrite(FET, vu_level);
-	}
+	lampVUmeter();
 	// for (int i = 0; i < 20; i++)
 	// {
 	//   vu_level += vs1053VuLevel();
@@ -1305,7 +1383,7 @@ void loop()
 	// DPRINTLN(logVol);
 
 #ifndef NO_VOL_POT
-	getScaledVolume();
+	getScaledVolumeEx();
 	vs1053SetVolume(volume, volume);
 #endif
 
@@ -1333,31 +1411,24 @@ void loop()
 	buttonCheck();
 }
 
-int pot_debounce(int threshold)
+elapsedMillis potDebounceDelay;
+
+void pot_debounce(int threshold)
 {
 	int read;
-
-	read = abs(analogRead(VOLUME_ROTARY_POT) - 1023);
-	if (read > volume_pot + threshold || read < volume_pot - threshold)
+	if (potDebounceDelay >= 10)
 	{
-		DPRINT("volum_pot= ");
-		DPRINTLN(volume_pot);
-		DPRINT("volume ");
-		DPRINTLN(volume);
-
-		// volFloat = (float) volume_pot;
-		// logVol = log(volFloat / 1023);
-
-		// DPRINT("volFloat=");
-		// DPRINTLN(volFloat);
-		// DPRINT("logVol=");
-		// DPRINTLN(logVol);
-		return (volume_pot = read);
+		read = abs(analogRead(VOLUME_ROTARY_POT) - 1023);
+		// DPRINT("read_pot= ");
+		// DPRINTLN(read);
+		if (read > volume_pot + threshold || read < volume_pot - threshold)
+			volume_pot = read;
+		// DPRINT("volum_pot= ");
+		// DPRINTLN(volume_pot);
+		// DPRINT("volume ");
+		// DPRINTLN(volume);
+		potDebounceDelay = 0;
 	}
-	else
-		return (volume_pot);
-
-	// delay(10);
 }
 
 int compareNames(const void *a, const void *b)
