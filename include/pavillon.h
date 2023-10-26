@@ -200,7 +200,8 @@ void dcs_high();
 uint16_t vs1053Mp3ReadWRAM(uint16_t addressbyte);
 void vs1053flush_cancel(flush_m mode);
 void vs1053resetPosition(void);
-void getScaledVolume(void);
+void getScaledVolume(void); // voir si garder
+void getScaledVolumeSq(void);
 
 /* custom vs1053 */
 void playNext();

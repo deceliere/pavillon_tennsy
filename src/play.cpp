@@ -998,7 +998,7 @@ ExponentMap<int> expoVolume(1022, 1023);
 int volumEx;
 elapsedMillis display;
 
-void getScaledVolumeEx(void)
+void getScaledVolumeSq(void)
 {
 	float volumeSqrt;
 	pot_debounce(POT_DEBOUNCE_THRESHOLD);
@@ -1024,8 +1024,9 @@ void getScaledVolumeEx(void)
 		;
 }
 
-int tr = exp(20);
+// int tr = exp(20); // ? herite de WIP ?
 
+#ifdef DEVEL
 void getScaledVolume(void)
 {
 	pot_debounce(POT_DEBOUNCE_THRESHOLD);
@@ -1036,6 +1037,7 @@ void getScaledVolume(void)
 	while (audioamp.getGain() != amp_gain)
 		;
 }
+#endif
 
 /* pour la conversion exponentielle */
 ///
@@ -1045,7 +1047,7 @@ const int pwm_max_value = 1023;
 // will be defined after the object calculates them.
 int steps_count;
 
-ExponentMap<int> e(1022, 1023);
+// ExponentMap<int> e(1022, 1023); // pour test, voir si a garder
 ExponentMap<int> expoLampVu(1022, 1023);
 
 ///
@@ -1183,7 +1185,7 @@ void setup()
 	volume_pot = analogRead(VOLUME_ROTARY_POT);
 #ifndef NO_VOL_POT
 	// getScaledVolume();
-	getScaledVolumeEx(); // WIP
+	getScaledVolumeSq();
 #endif
 #ifdef NO_VOL_POT
 	volume = 29;
@@ -1211,7 +1213,7 @@ void setup()
 		DPRINTLN("Playback started");
 	else
 		DPRINTLN("Playback failed");
-	steps_count = e.stepsCount();
+	steps_count = expoLampVu.stepsCount();
 }
 
 elapsedMillis currentMilliVU;
@@ -1383,7 +1385,7 @@ void loop()
 	// DPRINTLN(logVol);
 
 #ifndef NO_VOL_POT
-	getScaledVolumeEx();
+	getScaledVolumeSq();
 	vs1053SetVolume(volume, volume);
 #endif
 
