@@ -702,17 +702,13 @@ int check_serial()
 		char c = Serial.read();
 		// if we get an 's' on the serial console, stop!
 		if (c == 's')
-		{
 			vs1053StopPlaying();
-		}
 		if (c == 'r')
-		{
 			vs1053StartPlayingFile(soundfile);
-		}
 		if (c == 'n')
 			playNext();
-
-		// if we get an 'p' on the serial console, pause/unpause!
+		if (c == 'c')
+			playCurrent();
 		if (c == 'p')
 		{
 			if (vs1053Stopped())
@@ -861,6 +857,19 @@ void parse_id3v2()
 // soundfile = fileNames[trackNumber];
 // vs1053StartPlayingFile(soundfile);
 
+void playCurrent()
+{
+	vs1053StopPlaying();
+	// trackNumber--;
+	// if (trackNumber < 0)
+		// trackNumber = fileCount - 1;
+	// soundfile = fileNames[trackNumber];
+	// DPRINT("soundfile playPrevious= ");
+	// DPRINTLN(soundfile);
+	while (!vs1053StartPlayingFile(soundfile))
+		;
+}
+
 void playPrevious()
 {
 	// if (!vs1053Stopped)
@@ -893,17 +902,19 @@ void playNext()
 /* push buttons */
 
 // Délai de debounce en millisecondes
-const unsigned long debounceDelay = 50;
+// const unsigned long debounceDelay = 50;
 
 // Variables pour le debounce
-unsigned long previousMillis = 0;
+// unsigned long previousMillis = 0;
+elapsedMillis prevMillis;
 int previousButtonState = HIGH;
 int lastPreviousButtonState = HIGH;
-unsigned long nextMillis = 0;
+elapsedMillis nextMillis;
 int nextButtonState = HIGH;
 int lastNextButtonState = HIGH;
-int playButtonState = HIGH;
-int lastPlayButtonState = HIGH;
+elapsedMillis playingMillis;
+// int playButtonState = HIGH; // no play button implemented
+// int lastPlayButtonState = HIGH // no play button implemented;
 
 // int nextButtonState = HIGH;
 int releasedTime;
@@ -924,18 +935,20 @@ void buttonCheck()
 	int readingNext = digitalRead(BUTTON_NEXT);
 
 	if (readingPrevious != lastPreviousButtonState)
-	{
-		previousMillis = millis();
-	}
-	if ((millis() - previousMillis) >= debounceDelay)
+		prevMillis = 0;
+	if (prevMillis >= BUTTON_DEBOUNCE_DELAY)
 	{
 		if (readingPrevious != previousButtonState)
 		{
 			previousButtonState = readingPrevious;
 			if (previousButtonState == HIGH)
 			{
-				previousMillis = millis();
-				playPrevious();
+				if(playingMillis <= PREVIOUS_JUMP_MILLIS)
+					playPrevious();
+				else
+					playCurrent();
+				playingMillis = 0;
+				prevMillis = 0;
 				DPRINTLN("prevButton pushed");
 			}
 		}
@@ -945,14 +958,14 @@ void buttonCheck()
 	{
 		nextMillis = millis();
 	}
-	if ((millis() - nextMillis) >= debounceDelay)
+	if (nextMillis >= BUTTON_DEBOUNCE_DELAY)
 	{
 		if (readingNext != nextButtonState)
 		{
 			nextButtonState = readingNext;
 			if (nextButtonState == HIGH)
 			{
-				nextMillis = millis();
+				nextMillis = 0;
 				playNext();
 				DPRINTLN("nextButton pushed");
 			}

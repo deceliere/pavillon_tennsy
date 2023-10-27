@@ -4,7 +4,7 @@
 #ifndef PAVILLON_H
 #define PAVILLON_H
 
-// #define DEBUG
+#define DEBUG
 // #define DEVEL
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
@@ -107,6 +107,8 @@
 
 /* DIVERS */
 #define POT_DEBOUNCE_THRESHOLD 10
+#define BUTTON_DEBOUNCE_DELAY 50
+#define PREVIOUS_JUMP_MILLIS 1000
 
 /* external includes */
 #include <Arduino.h>
@@ -206,6 +208,8 @@ void getScaledVolumeSq(void);
 /* custom vs1053 */
 void playNext();
 void playPrevious();
+void playCurrent();
+
 
 /* libft */
 void ft_bzero(void *s, size_t n);
