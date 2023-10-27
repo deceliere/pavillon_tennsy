@@ -4,7 +4,7 @@
 #ifndef PAVILLON_H
 #define PAVILLON_H
 
-#define DEBUG
+// #define DEBUG
 // #define DEVEL
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
@@ -208,7 +208,7 @@ void getScaledVolumeSq(void);
 /* custom vs1053 */
 void playNext();
 void playPrevious();
-void playCurrent();
+void playFromBegining();
 
 
 /* libft */

@@ -224,8 +224,7 @@ boolean vs1053StartPlayingFile(const char *trackname)
 	{
 		// DPRINTLN("feeding buffer");
 		vs1053FeedBuffer(); // then send data
-		message_oled("feeding buffer");
-		// message_oled("feeding buffer");
+							// message_oled("feeding buffer");
 	}
 	return true;
 }
@@ -708,7 +707,7 @@ int check_serial()
 		if (c == 'n')
 			playNext();
 		if (c == 'c')
-			playCurrent();
+			playFromBegining();
 		if (c == 'p')
 		{
 			if (vs1053Stopped())
@@ -857,12 +856,12 @@ void parse_id3v2()
 // soundfile = fileNames[trackNumber];
 // vs1053StartPlayingFile(soundfile);
 
-void playCurrent()
+void playFromBegining()
 {
 	vs1053StopPlaying();
 	// trackNumber--;
 	// if (trackNumber < 0)
-		// trackNumber = fileCount - 1;
+	// trackNumber = fileCount - 1;
 	// soundfile = fileNames[trackNumber];
 	// DPRINT("soundfile playPrevious= ");
 	// DPRINTLN(soundfile);
@@ -904,7 +903,7 @@ void playNext()
 // Délai de debounce en millisecondes
 // const unsigned long debounceDelay = 50;
 
-// Variables pour le debounce
+/* Variables pour le debounce */
 // unsigned long previousMillis = 0;
 elapsedMillis prevMillis;
 int previousButtonState = HIGH;
@@ -943,10 +942,10 @@ void buttonCheck()
 			previousButtonState = readingPrevious;
 			if (previousButtonState == HIGH)
 			{
-				if(playingMillis <= PREVIOUS_JUMP_MILLIS)
+				if (playingMillis <= PREVIOUS_JUMP_MILLIS)
 					playPrevious();
 				else
-					playCurrent();
+					playFromBegining();
 				playingMillis = 0;
 				prevMillis = 0;
 				DPRINTLN("prevButton pushed");
@@ -1016,24 +1015,24 @@ void getScaledVolumeSq(void)
 	float volumeSqrt;
 	pot_debounce(POT_DEBOUNCE_THRESHOLD);
 
-// #ifdef DEBUG
-// 	if (display >= 20)
-// 	{
-// 		DPRINT("volume POT=");
-// 		DPRINTLN(volume_pot);
-// 	}
-// #endif
+	// #ifdef DEBUG
+	// 	if (display >= 20)
+	// 	{
+	// 		DPRINT("volume POT=");
+	// 		DPRINTLN(volume_pot);
+	// 	}
+	// #endif
 	volumeSqrt = map((float)volume_pot, 0, 1023, 0, 1);
 	volume = map(sqrt(sqrt(volumeSqrt)), 0, 1, 200, 1); // racine carre de racine carree pour un rendu plus naturel (sorte d'exponentiel à l'envers)
-// #ifdef DEBUG
-// 	if (display >= 20)
-// 	{
-// 		DPRINT("volume SQRT MAPPED=");
-// 		DPRINTLN(volume);
-// 		display = 0;
-// 	}
-// #endif
-	while (audioamp.getGain() != amp_gain) // a confirmer - je ne vois pas a quoi ca sert pour l'instant
+														// #ifdef DEBUG
+														// 	if (display >= 20)
+														// 	{
+														// 		DPRINT("volume SQRT MAPPED=");
+														// 		DPRINTLN(volume);
+														// 		display = 0;
+														// 	}
+														// #endif
+	while (audioamp.getGain() != amp_gain)				// a confirmer - je ne vois pas a quoi ca sert pour l'instant
 		;
 }
 
@@ -1352,6 +1351,10 @@ void loop()
 
 	if (vs1053Stopped())
 	{
+		elapsedMillis logoMillis;
+
+		while (logoMillis <= 3000) // pause 3 secs entre chaque piste - avec affichage logo
+			oled_logo_xbm();
 		playNext();
 
 		// vs1053resetPosition();
