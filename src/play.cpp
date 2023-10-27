@@ -692,7 +692,7 @@ void printDirectory(File dir, int numTabs)
 	}
 }
 
-#ifdef DEBUG
+#ifdef DEBUG_PAVILLON
 /// waiting for serial messages
 int check_serial()
 {
@@ -1015,7 +1015,7 @@ void getScaledVolumeSq(void)
 	float volumeSqrt;
 	pot_debounce(POT_DEBOUNCE_THRESHOLD);
 
-	// #ifdef DEBUG
+	// #ifdef DEBUG_PAVILLON
 	// 	if (display >= 20)
 	// 	{
 	// 		DPRINT("volume POT=");
@@ -1024,14 +1024,6 @@ void getScaledVolumeSq(void)
 	// #endif
 	volumeSqrt = map((float)volume_pot, 0, 1023, 0, 1);
 	volume = map(sqrt(sqrt(volumeSqrt)), 0, 1, 200, 1); // racine carre de racine carree pour un rendu plus naturel (sorte d'exponentiel à l'envers)
-														// #ifdef DEBUG
-														// 	if (display >= 20)
-														// 	{
-														// 		DPRINT("volume SQRT MAPPED=");
-														// 		DPRINTLN(volume);
-														// 		display = 0;
-														// 	}
-														// #endif
 	while (audioamp.getGain() != amp_gain)				// a confirmer - je ne vois pas a quoi ca sert pour l'instant
 		;
 }
@@ -1066,7 +1058,7 @@ ExponentMap<int> expoLampVu(1022, 1023);
 
 void setup()
 {
-#ifdef DEBUG
+#ifdef DEBUG_PAVILLON
 	Serial.begin(9600);
 	while (!Serial)
 		; // wait for Arduino Serial Monitor
@@ -1329,7 +1321,7 @@ void loop()
 #ifdef CHECK_FET_LAMP
 	check_fet_lamp();
 #endif
-#ifdef DEBUG
+#ifdef DEBUG_PAVILLON
 	check_serial();
 #endif
 	lampVUmeter();

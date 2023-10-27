@@ -4,7 +4,7 @@
 #ifndef PAVILLON_H
 #define PAVILLON_H
 
-// #define DEBUG
+// #define DEBUG_PAVILLON
 // #define DEVEL
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
