@@ -11,8 +11,8 @@
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
+// #define UPPER_TITLE // capitilize id3v2 title
 // #define LOGO_STUCK
-#define RANDOM_INIT
 #define RANDOM_FIRST_TRACK
 // #define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
 #define DELAY_STARTUP_SCREENS 100
@@ -82,7 +82,16 @@
 #define TRACK_ALBUM 63
 
 /* ID3v2 */ // WIP
-// #define ID3 "ID3"
+#define ID3_TITLE "TIT2" // Titre de la chanson
+#define ID3_ARTIST "TPE1" // Artiste principal
+#define ID3_ALBUM "TALB" // Album
+#define ID3_YEAR "TYER" // Année de sortie
+#define ID3_TDRC "TDRC" // Recording Time
+#define ID3_TRACK "TRCK" // Numéro de piste
+#define ID3_TCON "TCON" // Genre musical
+#define ID3_COMM "COMM" // Commentaires
+#define ID3_LENGTH "TLEN" // Durée de la piste
+#define ID3_PICT "APIC" // Image de la pochette (Cover Art)
 
 /* PINS */
 #define FET 23 // PWM pin > FET
@@ -95,7 +104,6 @@
 #define FONT_NORMAL u8g2_font_helvR08_te
 #define	OLED_WIDTH 128
 #define	OLED_HEIGHT 64
-#define UPPER_TITLE // capitilize id3 title
 #define WAIT_BEFORE_SCROLL 2000 // millis
 #define FIRST_LINE 12
 #define SECOND_LINE 12
@@ -231,10 +239,7 @@ s_id3 frameInfo(File track, s_id3 id3);
 void parse_id3v2();
 s_id3 id3v2r20(File track, s_id3 id3);
 s_id3 id3v2r30(File track, s_id3 id3);
-
-
-
-
+int skipTags(char *tag);
 
 /* utils */
 bool copyFileToSD(const char* sourceFileName, const char* targetFileName);

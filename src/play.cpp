@@ -1104,7 +1104,7 @@ void setup()
 	char str3[10];															// tmp wip
 	message_oled(strcat("amp gain =", itoa(audioamp.getGain(), str3, 10))); // tmp wip
 	delay(DELAY_STARTUP_SCREENS);											// tmp wip
-#ifdef RANDOM_INIT
+#ifdef RANDOM_FIRST_TRACK
 	Entropy.Initialize();
 #endif
 

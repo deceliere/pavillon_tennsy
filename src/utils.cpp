@@ -37,7 +37,7 @@ void printCharBit(char c, int i)
     DPRINT((char)c);
     DPRINT("\t int=");
     DPRINT((int)c);
-    DPRINT("\t");
+    DPRINT("\t\t");
     for (int x = 0; x < 8; x++)
     {
         if (c & 1)
