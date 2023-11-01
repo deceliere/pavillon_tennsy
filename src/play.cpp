@@ -1345,7 +1345,7 @@ void loop()
 	{
 		elapsedMillis logoMillis;
 
-		while (logoMillis <= 3000) // pause 3 secs entre chaque piste - avec affichage logo
+		while (logoMillis <= 5000) // pause 3 secs entre chaque piste - avec affichage logo
 			oled_logo_xbm();
 		playNext();
 

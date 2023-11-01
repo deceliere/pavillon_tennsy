@@ -4,7 +4,7 @@
 #ifndef PAVILLON_H
 #define PAVILLON_H
 
-// #define DEBUG_PAVILLON
+#define DEBUG_PAVILLON
 // #define DEVEL
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
@@ -17,7 +17,7 @@
 // #define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
 #define DELAY_STARTUP_SCREENS 100
 
-#ifdef DEBUG
+#ifdef DEBUG_PAVILLON
 #define DPRINT(...) Serial.print(__VA_ARGS__)
 #define DPRINTLN(...) Serial.println(__VA_ARGS__)
 #else
@@ -80,6 +80,9 @@
 #define TRACK_TITLE 3
 #define TRACK_ARTIST 33
 #define TRACK_ALBUM 63
+
+/* ID3v2 */ // WIP
+// #define ID3 "ID3"
 
 /* PINS */
 #define FET 23 // PWM pin > FET
@@ -226,6 +229,10 @@ void oled_logo_xbm(void);
 /* id3v2 */
 s_id3 frameInfo(File track, s_id3 id3);
 void parse_id3v2();
+s_id3 id3v2r20(File track, s_id3 id3);
+s_id3 id3v2r30(File track, s_id3 id3);
+
+
 
 
 
@@ -233,8 +240,11 @@ void parse_id3v2();
 bool copyFileToSD(const char* sourceFileName, const char* targetFileName);
 char *strToUpper(char *str);
 int strIsAlphaNumeric(char *str);
-
-
+int isAlnumUTF(char c);
+void checkUTF(s_id3 id3); // temp
+void printCharBit(char c, int i); // temp
+char* GetUnicodeChar(unsigned int code);
+char *decimalToUTF(File track, int start, u_int32_t fsize);
 
 static uint16_t spi_Read_Rate; 
 static uint16_t spi_Write_Rate;
