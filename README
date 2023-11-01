@@ -1,4 +1,5 @@
-a simple MP3 player
+a simple MP3 player - for a sound installation 
+
  + Teensy 4.0 
  + adafruit VS1053 
  + TPA2016 amp
