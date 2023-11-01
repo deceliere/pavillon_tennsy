@@ -1,0 +1,6 @@
+a simple MP3 player
+ + Teensy 4.0 
+ + adafruit VS1053 
+ + TPA2016 amp
+ + waveshare 1.3inch OLED Module 64 × 128 soft SPI
+ + mosfet driving lamp following Vu meter level
