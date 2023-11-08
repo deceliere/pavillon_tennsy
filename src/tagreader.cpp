@@ -223,9 +223,7 @@ void checkUTF(s_id3 id3) // TEMP - pour comprendre
 s_id3 frameInfo(File track, s_id3 id3)
 {
     char id3_check[4]; // pour voir si ID3 est bien present au debut du fichier
-#ifdef DEBUG_PAVILLON
     char version[2]; //
-#endif
 
     strcpy(id3.title, track.name());
     strcpy(id3.artist, "n/a");

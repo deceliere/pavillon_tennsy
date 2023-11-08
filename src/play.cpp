@@ -87,8 +87,6 @@
 #define SS_VU_ENABLE 0x0200 // address pour activer le Vu metre
 #define SCI_STATUS 0x01		// address du status du Vu metre
 
-#define INIT_AMP_GAIN 20
-#define VOLUME_ROTARY_POT 22
 
 File currentTrack;
 boolean playingMusic;
