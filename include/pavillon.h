@@ -97,8 +97,8 @@
 #define FET 23 // PWM pin > FET
 #define VOLUME_ROTARY_POT 22
 #define BUTTON_PREV 0
-#define BUTTON_PLAY 1 // a effacer sur pcb 2.1
-#define BUTTON_NEXT 2 // a changer pour 1 sur pcb 2.1
+#define BUTTON_NEXT 1
+#define BUTTON_PLAY 2 // a effacer sur pcb 2.1
 #define DEBOUNCE 20
 
 /* AMP */
