@@ -282,9 +282,9 @@ s_id3 frameInfo(File track, s_id3 id3)
 
 s_id3 id3v2r20(File track, s_id3 id3)
 {
-    char tvalue[64];
-    char albval[64];
-    char artval[64];
+    char tvalue[256];
+    char albval[256];
+    char artval[256];
 
     uint32_t start = 10;
     uint32_t lastfrm = 10;
@@ -440,7 +440,7 @@ s_id3 id3v2r30(File track, s_id3 id3)
     {
         DPRINTLN("\tin frameInfo loop v30");
         uint8_t buff[4];
-        uint32_t ltwo[4];
+        // uint32_t ltwo[4];
         char tag[5];
         uint32_t fsize;
         noInterrupts();
@@ -456,11 +456,16 @@ s_id3 id3v2r30(File track, s_id3 id3)
         }
         track.seek(start + 4);
         track.read((uint8_t *)buff, 4);
-        ltwo[0] = buff[0];
-        ltwo[1] = buff[1];
-        ltwo[2] = buff[2];
-        ltwo[3] = buff[3];
-        fsize = (ltwo[0] << 24) | (ltwo[1] << 16) | (ltwo[2] << 8) | ltwo[3];
+        // ltwo[0] = buff[0];
+        // ltwo[1] = buff[1];
+        // ltwo[2] = buff[2];
+        // ltwo[3] = buff[3];
+        // fsize = (ltwo[0] << 24) | (ltwo[1] << 16) | (ltwo[2] << 8) | ltwo[3];
+        fsize = decodeSyncSafeSize(buff);
+#ifdef DEBUG_PAVILLON
+        DPRINT("syncsafe size=");
+        DPRINTLN(decodeSyncSafeSize(buff));
+#endif
         start += 10;
         if (skipTags(tag))
             ;
@@ -496,6 +501,17 @@ s_id3 id3v2r30(File track, s_id3 id3)
             lastfrm = start;
     }
     return (id3);
+}
+
+// Fonction pour décoder la taille syncsafe
+unsigned int decodeSyncSafeSize(const unsigned char syncsafeBytes[4]) {
+    unsigned int size = 0;
+
+    for (int i = 0; i < 4; ++i) {
+        size = (size << 7) | (syncsafeBytes[i] & 0x7F);
+    }
+
+    return size;
 }
 
 char *strToUpper(char *str)

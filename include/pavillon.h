@@ -11,7 +11,7 @@
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
-// #define UPPER_TITLE // capitilize id3v2 title
+#define UPPER_TITLE // capitilize id3v2 title
 // #define LOGO_STUCK
 #define RANDOM_FIRST_TRACK
 // #define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
@@ -138,6 +138,7 @@
 #include <U8g2lib.h>
 // #include <filesystem> 
 #include <iostream>
+// #include <vector> // pour le sychsafe bits des id3v2
 
 /* local includes */
 #include "Adafruit_TPA2016.h"
@@ -162,9 +163,9 @@
 
 struct s_id3
 {
-	char title[64];
-	char artist[64];
-	char album[64];
+	char title[1024];
+	char artist[1024];
+	char album[1024];
 	char fileTotal[4];
 	char fileCurrent[4];
 	char trackDisplay[12];
@@ -175,7 +176,7 @@ struct scroll_msg
 {
   u8g2_uint_t offset;
   u8g2_uint_t width;
-  char str[64];
+  char str[1024];
   u8g2_uint_t x;
   int y; // y pixel to display text
   elapsedMillis timer;
@@ -244,6 +245,7 @@ void parse_id3v2();
 s_id3 id3v2r20(File track, s_id3 id3);
 s_id3 id3v2r30(File track, s_id3 id3);
 int skipTags(char *tag);
+unsigned int decodeSyncSafeSize(const unsigned char syncsafeBytes[4]); // TBC
 
 /* utils */
 bool copyFileToSD(const char* sourceFileName, const char* targetFileName);

@@ -55,7 +55,7 @@ char *decimalToUTF(File track, int start, u_int32_t fsize)
     int vlen = 0;
     uint8_t val[fsize];
     uint8_t strStart = 0;
-    char *frame = new char[64];
+    char *frame = new char[1024];
     DPRINT("fsize=");
     DPRINTLN(fsize);
 
@@ -88,6 +88,6 @@ char *decimalToUTF(File track, int start, u_int32_t fsize)
             }
         }
     }
-    frame[vlen] = '\0';
+    frame[vlen] = 0;
     return(frame);
 }
