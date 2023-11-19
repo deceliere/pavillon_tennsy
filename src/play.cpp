@@ -1181,8 +1181,25 @@ void setup()
 
 	// DPRINT("SCI mode after change 0x");
 	// DPRINTLN(vs1053SciRead(0x00), HEX);
+/*
+ * tentative de test pour gerer le passage des UTF-8 en majuscule avec accent
+ *
+ * probleme lors de la compilation probablement due a une macro de rename selon la version.
+ * fonctionne tres bien sur macos.
 
-	// message_oled("start playingfile OK");
+	UChar input[] = u"é";
+	UChar output[2];
+	UErrorCode status = U_ZERO_ERROR;
+
+	u_strToUpper(output, 2, input, 1, "fr", &status);
+	// u_strToUpper(output, 2, input, -1, "fr", NULL);
+	// message_oled((const char*) output);
+*/
+
+	// message_oled("HÉLLO ’’'");
+	// while(1)
+		// ;
+	
 	pinMode(VOLUME_ROTARY_POT, INPUT);
 	volume_pot = analogRead(VOLUME_ROTARY_POT);
 #ifndef NO_VOL_POT

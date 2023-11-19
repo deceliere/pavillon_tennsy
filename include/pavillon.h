@@ -105,7 +105,7 @@
 #define INIT_AMP_GAIN 20
 
 /* OLED */
-#define FONT_NORMAL u8g2_font_helvR08_te
+#define FONT_NORMAL u8g2_font_helvR08_tf
 #define	OLED_WIDTH 128
 #define	OLED_HEIGHT 64
 #define WAIT_BEFORE_SCROLL 2000 // millis
@@ -114,6 +114,8 @@
 #define THIRD_LINE 13
 #define LINE_FROM_BOTTOM 5 // space from bottom screen
 #define SCROLL_SPEED 20 // delay between scrolling steps (the highest = the slowest scrolling)
+#define DEFAULT_ARTIST "*" //previously "n/a"
+#define DEFAULT_ALBUM "*" //previously "n/a"
 
 /* LAMP VARS */
 #define LAMP_RAMP_TIME 20 // ms
@@ -139,6 +141,8 @@
 // #include <filesystem> 
 #include <iostream>
 // #include <vector> // pour le sychsafe bits des id3v2
+// #include <unicode/ucase.h>
+// #include <unicode/ustring.h>
 
 /* local includes */
 #include "Adafruit_TPA2016.h"

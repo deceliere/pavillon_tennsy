@@ -148,12 +148,12 @@ void loop_oled(s_id3 id3, const char *soundfile)
       // u8g2.drawUTF8(0, 8, id3.title);
       u8g2.drawUTF8(0, 10, id3.title);
     if (!isAlphaNumeric(id3.artist[0]))
-      u8g2.drawUTF8(0, 22, "n/a");
+      u8g2.drawUTF8(0, 22, DEFAULT_ARTIST);
     else
       // u8g2.drawUTF8(0, 8, id3.title);
       u8g2.drawUTF8(0, 22, id3.artist);
     if (!isAlphaNumeric(id3.album[0]))
-      u8g2.drawUTF8(0, 35, "n/a");
+      u8g2.drawUTF8(0, 35, DEFAULT_ALBUM);
     else
       u8g2.drawUTF8(0, 35, id3.album);
     // u8g2.drawStr(0, 53, itoa(count, str, 10));

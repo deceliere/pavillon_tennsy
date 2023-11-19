@@ -51,11 +51,12 @@ char *GetUnicodeChar(unsigned int code)
 
 char *decimalToUTF(File track, int start, u_int32_t fsize)
 {
-    uint32_t i;
+    // uint32_t i;
     int vlen = 0;
     uint8_t val[fsize];
     uint8_t strStart = 0;
     char *frame = new char[1024];
+    bool utf_mode = false;
     DPRINT("fsize=");
     DPRINTLN(fsize);
 
@@ -63,8 +64,9 @@ char *decimalToUTF(File track, int start, u_int32_t fsize)
     track.read((uint8_t *)val, fsize);
     if (val[0] && val[1] == 255 && val[2] == 254)
     {
-        DPRINTLN("hello val++");
+        DPRINTLN("UTF mode= true");
         strStart = 3;
+        utf_mode = true;
     }
 
     for (u_int32_t i = strStart; i < fsize; i++)
@@ -74,6 +76,16 @@ char *decimalToUTF(File track, int start, u_int32_t fsize)
 #endif
         if (val[i])
         {
+            if (utf_mode)
+            {
+                u_int16_t coucou;
+                coucou = val[i] | (val[i + 1] << 8);
+                DPRINT("val[i] + val[i + 1] as int=");
+                DPRINTLN(coucou);
+                val[i] |= val[i + 1] << 8;
+                if (coucou == 8217) // pour remplacer l'apostrophe u{2019} qui ne s'affiche pas 
+                    val[i] = 39;
+            }
             char *tmp;
 
             tmp = GetUnicodeChar((int)val[i]);
@@ -86,6 +98,8 @@ char *decimalToUTF(File track, int start, u_int32_t fsize)
                 vlen++;
                 tmp++;
             }
+            if(utf_mode)
+                i++;
         }
     }
     frame[vlen] = 0;

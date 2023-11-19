@@ -226,8 +226,8 @@ s_id3 frameInfo(File track, s_id3 id3)
     char version[2]; //
 
     strcpy(id3.title, track.name());
-    strcpy(id3.artist, "n/a");
-    strcpy(id3.album, "n/a");
+    strcpy(id3.artist, DEFAULT_ARTIST);
+    strcpy(id3.album, DEFAULT_ALBUM);
     // checkUTF(id3);
     noInterrupts();
     track.seek(0); // peut etre pas necessaire, a voir.
@@ -456,11 +456,6 @@ s_id3 id3v2r30(File track, s_id3 id3)
         }
         track.seek(start + 4);
         track.read((uint8_t *)buff, 4);
-        // ltwo[0] = buff[0];
-        // ltwo[1] = buff[1];
-        // ltwo[2] = buff[2];
-        // ltwo[3] = buff[3];
-        // fsize = (ltwo[0] << 24) | (ltwo[1] << 16) | (ltwo[2] << 8) | ltwo[3];
         fsize = decodeSyncSafeSize(buff);
 #ifdef DEBUG_PAVILLON
         DPRINT("syncsafe size=");
