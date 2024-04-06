@@ -73,12 +73,12 @@ bool setup_oled(void)
     while (1)
       ;
 #else
-    delay(1000);
+    delay(DELAY_LOGO_STARTUP);
 #endif
 #endif
-    delay(500);
+    // delay(500);
     message_oled("oled setup ok");
-    delay(100);
+    delay(DELAY_STARTUP_SCREENS);
 #ifdef SCROLLING_TEST
     scroll_setup();
     while (1)

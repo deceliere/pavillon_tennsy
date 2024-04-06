@@ -9,13 +9,15 @@
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
+#define VERSION_PAVILLON "2.0 - 2024.04.06"
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
 #define UPPER_TITLE // capitilize id3v2 title
 // #define LOGO_STUCK
 #define RANDOM_FIRST_TRACK
 // #define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel
-#define DELAY_STARTUP_SCREENS 100
+#define DELAY_LOGO_STARTUP 2000
+#define DELAY_STARTUP_SCREENS 1000
 
 #ifdef DEBUG_PAVILLON
 #define DPRINT(...) Serial.print(__VA_ARGS__)

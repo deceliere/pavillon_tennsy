@@ -1073,8 +1073,8 @@ void setup()
 		DPRINTLN(F("Oled not found"));
 	else
 		DPRINTLN(F("Oled init"));
-	delay(DELAY_STARTUP_SCREENS);
-
+	message_oled(strcat("version ", VERSION_PAVILLON)); // tmp wip
+	delay(2 * DELAY_STARTUP_SCREENS);
 	audioamp.begin();
 	if (!audioamp.begin())
 	{ // initialise the music player
@@ -1083,10 +1083,8 @@ void setup()
 			;
 	}
 	else
-	{
 		message_oled("audio amp ok");
-		delay(500);
-	}
+	delay(DELAY_STARTUP_SCREENS);
 	DPRINTLN(F("Amp found"));
 	audioamp.setAGCCompression(TPA2016_AGC_OFF);
 	audioamp.setReleaseControl(0);
@@ -1100,7 +1098,7 @@ void setup()
 	}
 
 	char str3[10];															// tmp wip
-	message_oled(strcat("amp gain =", itoa(audioamp.getGain(), str3, 10))); // tmp wip
+	message_oled(strcat("amp gain= ", itoa(audioamp.getGain(), str3, 10))); // tmp wip
 	delay(DELAY_STARTUP_SCREENS);											// tmp wip
 #ifdef RANDOM_FIRST_TRACK
 	Entropy.Initialize();
@@ -1119,7 +1117,7 @@ void setup()
 		message_oled("vs1053 found");
 		// DPRINTLN(F("vs1053 found"));
 	}
-	delay(500);
+	delay(DELAY_STARTUP_SCREENS);
 
 	while (!SD.begin(SDCS))
 	{

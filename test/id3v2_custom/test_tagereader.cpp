@@ -36,7 +36,7 @@ s_id3 id3;
 void frameInfo()
 {
     FILE *track;
-    File track_bis;
+    // File track_bis;
     track = fopen("test.mp3", "r");
     // track->read("test.mp3", 0);
     
