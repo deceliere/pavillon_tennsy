@@ -9,7 +9,7 @@
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
-#define VERSION_PAVILLON "2.0 - 2024.04.06"
+#define VERSION_PAVILLON "2.2 - 2024.06.11"
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
 #define UPPER_TITLE // capitilize id3v2 title
@@ -101,7 +101,6 @@
 #define BUTTON_PREV 0
 #define BUTTON_NEXT 1
 #define BUTTON_PLAY 2 // a effacer sur pcb 2.1
-#define DEBOUNCE 20
 
 /* AMP */
 #define INIT_AMP_GAIN 20
@@ -115,6 +114,7 @@
 #define SECOND_LINE 12
 #define THIRD_LINE 13
 #define LINE_FROM_BOTTOM 5 // space from bottom screen
+#define OFFSET_RIGHT 5 // space from right corner
 #define SCROLL_SPEED 20 // delay between scrolling steps (the highest = the slowest scrolling)
 #define DEFAULT_ARTIST "*" //previously "n/a"
 #define DEFAULT_ALBUM "*" //previously "n/a"
@@ -122,6 +122,7 @@
 /* LAMP VARS */
 #define LAMP_RAMP_TIME 20 // ms
 #define LAMP_OFFSET 40 // minimum PWM value
+#define DEBOUNCE 20
 
 
 /* DIVERS */

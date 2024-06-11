@@ -303,7 +303,7 @@ void scroll_loop(s_id3 id3)
         // u8g2.print(scroll[i].width); // this value must be lesser than 128 unless U8G2_16BIT is set
       }
       u8g2.drawUTF8(0, OLED_HEIGHT - LINE_FROM_BOTTOM, minSecStr);
-      u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width(id3.trackDisplay), OLED_HEIGHT - LINE_FROM_BOTTOM, id3.trackDisplay);
+      u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width(id3.trackDisplay) - OFFSET_RIGHT, OLED_HEIGHT - LINE_FROM_BOTTOM, id3.trackDisplay);
 
     } while (u8g2.nextPage());
 
@@ -331,10 +331,10 @@ void oled_logo_xbm(void)
   do
   {
     u8g2.setFont(FONT_NORMAL);
-    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("Pavillon"), 12, "Pavillon");
-    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("d'écoute"), 25, "d'écoute");
-    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("HEROS"), 45, "HEROS");
-    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("LIMITE"), 55, "LIMITE");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("Pavillon") - OFFSET_RIGHT, 12, "Pavillon");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("d'écoute") - OFFSET_RIGHT, 25, "d'écoute");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("HEROS") - OFFSET_RIGHT, 45, "HEROS");
+    u8g2.drawUTF8(OLED_WIDTH - u8g2.getUTF8Width("LIMITE") - OFFSET_RIGHT, 55, "LIMITE");
     u8g2.setDrawColor(1);
     u8g2.setBitmapMode(1);
     u8g2.drawXBM(0, 0, LOGO_WIDTH, LOGO_HEIGHT, logo_bits);

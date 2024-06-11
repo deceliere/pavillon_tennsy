@@ -87,6 +87,15 @@
 #define SS_VU_ENABLE 0x0200 // address pour activer le Vu metre
 #define SCI_STATUS 0x01		// address du status du Vu metre
 
+union twobyte
+{
+	uint16_t word;
+	uint8_t byte[2];
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// vs1053B.cpp
+////////////////////////////////////////////////////////////////////////////////
 
 File currentTrack;
 boolean playingMusic;
@@ -102,15 +111,6 @@ Adafruit_TPA2016 audioamp = Adafruit_TPA2016();
 char *soundfile;
 String soundfile_str; // wip TBC
 
-union twobyte
-{
-	uint16_t word;
-	uint8_t byte[2];
-};
-
-////////////////////////////////////////////////////////////////////////////////
-// vs1053B.cpp
-////////////////////////////////////////////////////////////////////////////////
 #define vs1053_CONTROL_SPI_SETTING SPISettings(250000, MSBFIRST, SPI_MODE0) // 2.5 MHz SPI speed Control
 #define vs1053_DATA_SPI_SETTING SPISettings(8000000, MSBFIRST, SPI_MODE0)	// 8 MHz SPI speed Data
 
@@ -1115,22 +1115,21 @@ void setup()
 	else
 	{
 		message_oled("vs1053 found");
-		// DPRINTLN(F("vs1053 found"));
+		delay(DELAY_STARTUP_SCREENS);
+		DPRINTLN(F("vs1053 found"));
 	}
-	delay(DELAY_STARTUP_SCREENS);
-
 	while (!SD.begin(SDCS))
 	{
 		message_oled("SD card not found");
 	} // initialise the SD card
 	message_oled("SD card found");
-	delay(500);
+	delay(DELAY_STARTUP_SCREENS);
 	LoadUserCode();		 // patch pour avoir le Vu metre
 	vs1053setVUmeter(1); // allumer les infos du Vu metre
 	if (vs1053getVUmeter())
 	{
 		message_oled("Vu meter OK");
-		delay(500);
+		delay(DELAY_STARTUP_SCREENS);
 	}
 	else
 	{
