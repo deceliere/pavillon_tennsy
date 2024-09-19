@@ -10,9 +10,10 @@
 // #define NO_VOL_POT /* working without volume pot connected */
 // #define SCROLLING_TEST /* working scolling text - cut startup sequence */
 #define VERSION_PAVILLON "2.2 - 2024.06.11"
+#define GIT_VERSION "36e87a7 240919" // a recuperer manuellement > $python3 extra_scripts/get_version.py 
 #define OLED_XBM_TEST
 #define LOGO_STARTUP
-#define UPPER_TITLE // capitilize id3v2 title
+// #define UPPER_TITLE // capitilize id3v2 title
 // #define LOGO_STUCK
 #define RANDOM_FIRST_TRACK
 // #define CHECK_FET_LAMP // intensite de la lampe par vol pot + wip pour exponentiel

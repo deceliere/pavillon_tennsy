@@ -1073,7 +1073,9 @@ void setup()
 		DPRINTLN(F("Oled not found"));
 	else
 		DPRINTLN(F("Oled init"));
-	message_oled(strcat("version ", VERSION_PAVILLON)); // tmp wip
+	message_oled(strcat("version ", VERSION_PAVILLON)); 
+	delay(2 * DELAY_STARTUP_SCREENS);
+	message_oled(strcat("git ", GIT_VERSION)); 
 	delay(2 * DELAY_STARTUP_SCREENS);
 	audioamp.begin();
 	if (!audioamp.begin())
@@ -1138,6 +1140,12 @@ void setup()
 	}
 	fileCount = listFiles();
 	itoa(fileCount, id3.fileTotal, 10);
+	if (!fileCount)
+	{
+		message_oled("no valid MP3 found...");
+		while(1)
+			;
+	}
 	message_oled(strcat("filecount= ", id3.fileTotal));
 	delay(DELAY_STARTUP_SCREENS);
 	DPRINT(F("fileCount:"));
