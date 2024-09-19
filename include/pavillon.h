@@ -8,7 +8,7 @@
 // #define DEVEL
 // #define WAIT_DEVICES
 // #define NO_VOL_POT /* working without volume pot connected */
-// #define SCROLLING_TEST /* working scolling text - cut startup sequence */
+// #define SCROLLING_TEST /* test scolling text - cut startup sequence */
 #define VERSION_PAVILLON "2.3 - 2024.09.19"
 #define GIT_VERSION "06d80c0 240919" // a recuperer manuellement > $python3 extra_scripts/get_version.py 
 #define OLED_XBM_TEST
