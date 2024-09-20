@@ -1,4 +1,26 @@
+#ifndef VS1053B_H
+#define VS1053B_H
+
 #include <Arduino.h>
+
+// Connect SCLK, MISO and MOSI to standard hardware SPI pins.
+#define SCLK 13 // SPI Clock shared with SD card
+#define MISO 12 // Input data from vs1053 or SD card
+#define MOSI 11 // Output data to vs1053 or SD card
+
+// These are the pins used for the Adafruit vs1053B breakout module
+#define XRST 9	// vs1053 reset (output)
+#define XCS 10	// vs1053 chip select (output) // aka CS on vs1053
+#define XDCS 8	// vs1053 Data select (output)
+#define XDREQ 3 // vs1053 Data Ready an Interrupt pin (input)
+// #define SDCS  BUILTIN_SDCARD   // Use Teensy built-in card
+//  For Teensy 3.5, 3.6, 4.0, 4.1 better to use its built-in SDCard
+#define SDCS 4 // Use vs1053 SDCard Card chip select pin
+
+////////////////////////////////////////////////////////////////
+// Configure interrupt for Data XDREQ from vs1053
+// XDREQ is low while the receive buffer is full
+////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////
 // vs1053B.h
@@ -52,8 +74,13 @@
 #define SS_VU_ENABLE 0x0200 // address pour activer le Vu metre
 #define SCI_STATUS 0x01		// address du status du Vu metre
 
+#define vs1053_CONTROL_SPI_SETTING SPISettings(250000, MSBFIRST, SPI_MODE0) // 2.5 MHz SPI speed Control
+#define vs1053_DATA_SPI_SETTING SPISettings(8000000, MSBFIRST, SPI_MODE0)	// 8 MHz SPI speed Data
+
 union twobyte
 {
 	uint16_t word;
 	uint8_t byte[2];
 };
+
+#endif

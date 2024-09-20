@@ -154,6 +154,7 @@
 #include "Entropy.h"
 #include "ExponentMap.h"
 #include "Ramp.h" 
+#include "vs1053b.h" 
 // #include "oled_logo.h"
 
 /* test TAGLIB pour id3v2*/
@@ -166,8 +167,6 @@
 // #include <tpropertymap.h>
 // #include <iostreams.h>
 // #include <iostream.h>
-
-#endif
 
 struct s_id3
 {
@@ -228,12 +227,16 @@ void vs1053flush_cancel(flush_m mode);
 void vs1053resetPosition(void);
 void getScaledVolume(void); // voir si garder
 void getScaledVolumeSq(void);
+void vs1053StopPlaying();
+boolean vs1053Stopped();
+int8_t vs1053setVUmeter(int8_t enable);
+int8_t vs1053getVUmeter();
+uint16_t vs1053VuLevel();
 
 /* custom vs1053 */
 void playNext();
 void playPrevious();
 void playFromBegining();
-
 
 /* libft */
 void ft_bzero(void *s, size_t n);
@@ -268,3 +271,4 @@ char *decimalToUTF(File track, int start, u_int32_t fsize);
 static uint16_t spi_Read_Rate; 
 static uint16_t spi_Write_Rate;
 
+#endif
