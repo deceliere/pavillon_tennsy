@@ -1,5 +1,0 @@
-# TODO List
-- [ ] implémenter ID3v2.2
-- [ ] nettoyer les printf!! / cleaner le code
-- [ ] automatiser le hash du commit en macro
-- [ ] sortir les VA1053B ccp + header en extern
